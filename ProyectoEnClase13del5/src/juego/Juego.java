@@ -53,11 +53,15 @@ public class Juego extends InterfaceJuego
 		}
 		
 		if(entorno.estaPresionada(entorno.TECLA_ARRIBA) && p.getY()-p.getAlto()/2>=0) {
-			p.moverArriba();
+			if(p.colisionaPorArriba(o)==false) {
+				p.moverArriba();
+			}
 		}
 		
 		if(entorno.estaPresionada(entorno.TECLA_ABAJO) && p.getY()+p.getAlto()/2<=entorno.alto()) {
-			p.moverAbajo();
+			if(p.colisionaPorDebajo(o)==false) {
+				p.moverAbajo();
+			}
 		}
 		
 	}

@@ -43,37 +43,14 @@ public class Juego extends InterfaceJuego
 		p.dibujar(entorno);
 		o.dibujar(entorno);
 		
-		//Capturar Teclas
+				 	
+		
+		controlDeColisionesYMovimientoDelJugador(entorno, p, o);
 		if(p.getDisparo()!=null) {
 			p.getDisparo().dibujar(entorno);
 		}
 		
-		if(entorno.estaPresionada(entorno.TECLA_IZQUIERDA) && p.getX()-p.getAncho()/2>0) {
-			if(p.colisionaPorIzquierda(o)==false) {
-				p.moverIzquierda();							
-			}
-		}
-		if(entorno.estaPresionada(entorno.TECLA_DERECHA) && p.getX()+p.getAncho()/2<entorno.ancho()) {
-			if(p.colisionaPorDerecha(o)==false) {
-				p.moverDerecha();							
-			}
-		}
 		
-		if(entorno.estaPresionada(entorno.TECLA_ARRIBA) && p.getY()-p.getAlto()/2>=0) {
-			if(p.colisionaPorArriba(o)==false) {
-				p.moverArriba();
-			}
-		}
-		
-		if(entorno.estaPresionada(entorno.TECLA_ABAJO) && p.getY()+p.getAlto()/2<=entorno.alto()) {
-			if(p.colisionaPorDebajo(o)==false) {
-				p.moverAbajo();
-			}
-		}
-		
-		if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO) && p.getDisparo()==null) {
-			p.disparo(entorno);
-		}
 		
 		//movimiento del proyectil
 		if (p.getDisparo()!=null) {
@@ -86,7 +63,35 @@ public class Juego extends InterfaceJuego
 			System.out.println("eliminado");
 		}
 	}
+// funcion que controla las colisiones dado un entorno personaje o obstaculo
+	public static void controlDeColisionesYMovimientoDelJugador(Entorno entorno, Personaje p, Obstaculo o) {
+	if(entorno.estaPresionada(entorno.TECLA_IZQUIERDA) && p.getX()-p.getAncho()/2>0) {
+		if(!p.colisionaPorIzquierda(o)) {
+			p.moverIzquierda();							
+		}
+	}
+	if(entorno.estaPresionada(entorno.TECLA_DERECHA) && p.getX()+p.getAncho()/2<entorno.ancho()) {
+		if(!p.colisionaPorDerecha(o)) {
+			p.moverDerecha();							
+		}
+	}
+		if(entorno.estaPresionada(entorno.TECLA_ARRIBA) && p.getY()-p.getAlto()/2>=0) {
+		if(!p.colisionaPorArriba(o)) {
+			p.moverArriba();
+		}
+	}
 	
+	if(entorno.estaPresionada(entorno.TECLA_ABAJO) && p.getY()+p.getAlto()/2<=entorno.alto()) {
+		if(!p.colisionaPorDebajo(o)) {
+			p.moverAbajo();
+		}
+	}
+	
+	if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO) && p.getDisparo()==null) {
+		p.disparo(entorno);
+	}
+}
+
 
 	@SuppressWarnings("unused")
 	public static void main(String[] args)

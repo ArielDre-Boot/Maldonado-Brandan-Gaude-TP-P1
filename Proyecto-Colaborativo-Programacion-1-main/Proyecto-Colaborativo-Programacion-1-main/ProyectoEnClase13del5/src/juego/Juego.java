@@ -2,6 +2,7 @@ package juego;
 
 
 import java.awt.Color;
+import java.util.LinkedList;
 
 import entorno.Entorno;
 import entorno.InterfaceJuego;
@@ -11,7 +12,7 @@ public class Juego extends InterfaceJuego
 	// El objeto Entorno que controla el tiempo y otros
 	private Entorno entorno;
 	private Personaje p;
-	private Obstaculo o;
+	private LinkedList<Obstaculo> obstaculos;
 	// Variables y métodos propios de cada grupo
 	// ...
 	
@@ -22,7 +23,18 @@ public class Juego extends InterfaceJuego
 		// Inicializar lo que haga falta para el juego
 		// ...
 		p = new Personaje(400,300,20,50);
-		o = new Obstaculo(200,500,100,10);
+	
+		Obstaculo o = new Obstaculo(200,500,100,10);
+		Obstaculo o2 = new Obstaculo(350,450,100,10);
+		Obstaculo o3 = new Obstaculo(500,400,100,10);
+		Obstaculo o4 = new Obstaculo(650,350,100,10);
+		Obstaculo o5 = new Obstaculo(500,250,100,10);
+		obstaculos=new LinkedList<Obstaculo>();
+		obstaculos.add(o);
+		obstaculos.add(o2);
+		obstaculos.add(o3);
+		obstaculos.add(o4);
+		obstaculos.add(o5);
 
 		// Inicia el juego!
 		this.entorno.iniciar();
@@ -36,22 +48,49 @@ public class Juego extends InterfaceJuego
 	 * (ver el enunciado del TP para mayor detalle).
 	 */
 	public void tick()
-	{
-		// Procesamiento de un instante de tiempo
-		// ...
-	
-		//Dibujar objetros
-		p.dibujar(entorno);
-		o.dibujar(entorno);
-		
-		controlDeColisionesYMovimientoDelJugador(entorno, p, o);
-		controlDelSalto(p, o);
-		controlDelProyectil(p, entorno);
-			
-		
-	
-	}
+{
+    p.dibujar(entorno);
 
+    boolean bloqueaIzquierda = false;
+    boolean bloqueaDerecha = false;
+    boolean bloqueaAbajo = false;
+    boolean bloqueaArriba = false;
+
+    for (Obstaculo obstaculo : obstaculos) {
+
+        obstaculo.dibujar(entorno);
+     
+        if (p.colisionaPorIzquierda(obstaculo)) {
+            bloqueaIzquierda = true;
+        }
+
+        if (p.colisionaPorDerecha(obstaculo)) {
+            bloqueaDerecha = true;
+        }
+
+        if (p.colisionaPorDebajo(obstaculo)) {
+            bloqueaAbajo = true;
+        }
+
+        if (p.colisionaPorArriba(obstaculo)) {
+            bloqueaArriba = true;
+        }
+
+      
+    }
+
+    controlMovimientoJugador(
+        entorno,
+        p,
+        bloqueaIzquierda,
+        bloqueaDerecha,
+        bloqueaAbajo,
+        bloqueaArriba
+    );
+    controlDelSalto(p,bloqueaArriba);
+
+    controlDelProyectil(p, entorno);
+}
 	public static void controlDelProyectil(Personaje p, Entorno entorno) {
 		if(p.getDisparo()!=null) {
 			p.getDisparo().dibujar(entorno);
@@ -70,41 +109,53 @@ public class Juego extends InterfaceJuego
 			System.out.println("eliminado");
 		}
 	}// funcion que controla las colisiones dado un entorno personaje o obstaculo
-	public static void controlDeColisionesYMovimientoDelJugador(Entorno entorno, Personaje p, Obstaculo o) {
-	
-		if(entorno.sePresiono(entorno.TECLA_ARRIBA) && p.getY()-p.getAlto()/2>=0 ) {
-			if(!p.colisionaPorArriba(o) && (p.colisionaPorDebajo(o) || p.getY()+p.getAlto()/2==entorno.alto())) {
-				p.setEstaSaltando(true);
-				p.setSaltoY(p.getY()-250);
-				
-			}
-		}
-	if(entorno.estaPresionada(entorno.TECLA_IZQUIERDA) && p.getX()-p.getAncho()/2>0) {
-		if(!p.colisionaPorIzquierda(o)) {
-			p.moverIzquierda();							
-		}
-	}
-	
-	if(entorno.estaPresionada(entorno.TECLA_DERECHA) && p.getX()+p.getAncho()/2<entorno.ancho()+2) {
-		if(!p.colisionaPorDerecha(o)) {
-			p.moverDerecha();							
-		}
-	}
-	
-	
-	if(p.getTieneGravedad() && p.getY()+p.getAlto()/2<=entorno.alto()-2) {
-		if(!p.colisionaPorDebajo(o)) {
-			p.moverAbajo();
-		}
-	}
-	
-	if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO) && p.getDisparo()==null) {
-		p.disparo(entorno);
-	}
+	public static void controlMovimientoJugador(
+    Entorno entorno,
+    Personaje p,
+    boolean bloqueaIzquierda,
+    boolean bloqueaDerecha,
+    boolean bloqueaAbajo,
+    boolean bloqueaArriba
+) {
+
+    if(entorno.sePresiono(entorno.TECLA_ARRIBA)
+        && !bloqueaArriba
+        && (bloqueaAbajo || p.getY()+p.getAlto()/2 >= entorno.alto())) {
+
+        p.setEstaSaltando(true);
+        p.setSaltoY(p.getY()-200);
+    }
+
+    if(entorno.estaPresionada(entorno.TECLA_IZQUIERDA)
+        && p.getX()-p.getAncho()/2>0
+        && !bloqueaIzquierda) {
+
+        p.moverIzquierda();
+    }
+
+    if(entorno.estaPresionada(entorno.TECLA_DERECHA)
+        && p.getX()+p.getAncho()/2<entorno.ancho()+2
+        && !bloqueaDerecha) {
+
+        p.moverDerecha();
+    }
+
+    if(p.getTieneGravedad()
+        && p.getY()+p.getAlto()/2<=entorno.alto()-2
+        && !bloqueaAbajo) {
+
+        p.moverAbajo();
+    }
+
+    if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)
+        && p.getDisparo()==null) {
+
+        p.disparo(entorno);
+    }
 }
-	public static void controlDelSalto(Personaje p ,Obstaculo o) {
+	public static void controlDelSalto(Personaje p , boolean bloqueaArriba) {
 		if(p.isEstaSaltando()) {
-			if(!p.colisionaPorArriba(o)) {
+			if(!bloqueaArriba) {
 				p.setTieneGravedad(false);
 				p.saltar();
 				if(p.getY()<=p.getSaltoY()) {

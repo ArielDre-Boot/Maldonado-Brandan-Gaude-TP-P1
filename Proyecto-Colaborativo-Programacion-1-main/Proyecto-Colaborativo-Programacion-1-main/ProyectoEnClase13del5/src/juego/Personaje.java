@@ -10,16 +10,45 @@ public class Personaje {
 	private int y;
 	private int ancho;
 	private int alto;
+	private int saltoY;
 	private  Proyectil disparo;
-	
+	private boolean tieneGravedad ;
+	private boolean estaSaltando;
 	public Personaje(int x, int y, int ancho, int alto) {
 		this.x = x;
 		this.y = y;
+		this.saltoY=0;
 		this.ancho = ancho;
 		this.alto = alto;
 		this.disparo=null;
+		this.tieneGravedad=true;
+		this.estaSaltando=false;
 	}
 	
+	public boolean isEstaSaltando() {
+		return estaSaltando;
+	}
+
+	public void setEstaSaltando(boolean estaSaltando) {
+		this.estaSaltando = estaSaltando;
+	}
+
+	public boolean getTieneGravedad() {
+		return tieneGravedad;
+	}
+
+	public void setTieneGravedad(boolean tieneGravedad) {
+		this.tieneGravedad = tieneGravedad;
+	}
+
+	public int getSaltoY() {
+		return saltoY;
+	}
+
+	public void setSaltoY(int saltoY) {
+		this.saltoY = saltoY;
+	}
+
 	public void dibujar(Entorno e) {
 		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.RED);
 	}
@@ -31,9 +60,13 @@ public class Personaje {
 	public void moverDerecha() {
 		this.x = this.x +5;
 	}
-	
 	public void moverArriba() {
 		this.y=this.y-5;
+	}
+	public void saltar() {
+	
+		this.y=this.y-5;
+		
 	}
 	
 	public void moverAbajo() {
@@ -44,6 +77,7 @@ public class Personaje {
 	public boolean colisionaPorIzquierda(Obstaculo o) {
 		
 		if(bordeIzquierdo()<= o.bordeDerecho() && 	bordeSuperior()<=o.bordeInferior()-1) {
+			
 			if(  bordeInferior()>=o.bordeSuperior()+1 && 	bordeDerecho()>=o.bordeIzquierdo()+1) return true;
 		}
 		
@@ -52,8 +86,8 @@ public class Personaje {
 	}
 	
 public boolean colisionaPorDerecha(Obstaculo o) {
-		if(bordeDerecho()>= o.bordeIzquierdo()&& bordeIzquierdo()<= o.bordeIzquierdo()) {
-			if(bordeInferior()>=o.bordeSuperior()-1 && bordeSuperior()<=o.bordeInferior()-1) return true;				
+		if(bordeDerecho()>= o.bordeIzquierdo()&& bordeIzquierdo()<= o.bordeIzquierdo()-1) {
+			if(bordeInferior()>=o.bordeSuperior()+1 && bordeSuperior()<=o.bordeInferior()-1) return true;				
 		}
 		return false;
 	}

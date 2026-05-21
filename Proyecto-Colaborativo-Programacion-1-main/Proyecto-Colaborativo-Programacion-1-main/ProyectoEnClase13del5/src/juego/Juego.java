@@ -108,7 +108,25 @@ public class Juego extends InterfaceJuego
 			p.setDisparo(null);
 			System.out.println("eliminado");
 		}
-	}// funcion que controla las colisiones dado un entorno personaje o obstaculo
+		//colision del lado derecho
+		if (p.getDisparo()!=null && p.getDisparo().getX()>entorno.ancho()) {
+			p.setDisparo(null);
+			System.out.println("eliminado");
+		}
+			//colision por la parte superior
+		if (p.getDisparo()!=null && p.getDisparo().getY()<0) {
+			p.setDisparo(null);
+			System.out.println("eliminado");
+		}
+			//colision por la parte inferior
+		if (p.getDisparo()!=null && p.getDisparo().getY()>entorno.alto()) {
+			p.setDisparo(null);
+			System.out.println("eliminado");
+		}
+			
+	}
+
+	// funcion que controla las colisiones dado un entorno personaje o obstaculo
 	public static void controlMovimientoJugador(
     Entorno entorno,
     Personaje p,

@@ -13,6 +13,7 @@ public class Juego extends InterfaceJuego
 	private Entorno entorno;
 	private Personaje p;
 	private LinkedList<Obstaculo> obstaculos;
+	Obstaculo seMueve;
 	// Variables y métodos propios de cada grupo
 	// ...
 	
@@ -23,7 +24,7 @@ public class Juego extends InterfaceJuego
 		// Inicializar lo que haga falta para el juego
 		// ...
 		p = new Personaje(400,300,20,50);
-	
+		
 		Obstaculo o = new Obstaculo(200,500,100,10);
 		Obstaculo o2 = new Obstaculo(350,450,100,10);
 		Obstaculo o3 = new Obstaculo(500,400,100,10);
@@ -35,7 +36,7 @@ public class Juego extends InterfaceJuego
 		obstaculos.add(o3);
 		obstaculos.add(o4);
 		obstaculos.add(o5);
-
+		
 		// Inicia el juego!
 		this.entorno.iniciar();
 	
@@ -74,10 +75,31 @@ public class Juego extends InterfaceJuego
 
         if (p.colisionaPorArriba(obstaculo)) {
             bloqueaArriba = true;
-        }
-
-      
+        }      
     }
+    //Repetición de los niveles
+    ////Me faltó ver como hacer para que cuando salen por derecha, cada nivel tenga una ubicación random
+    for(Obstaculo a: obstaculos) {
+    	if(p.getEnMovimiento()) {
+    		int cuantoRetrocede=a.getX()-2;
+    		a.setX(cuantoRetrocede);
+    		}
+    	if(a.bordeIzquierdo()<0) {
+    		a.setX(entorno.ancho());
+    		}
+    	if (entorno.estaPresionada(entorno.TECLA_DERECHA)) {
+    		p.setEnMovimiento(true);
+    	}
+    	else {
+    		p.setEnMovimiento(false);
+    	}
+  
+    }
+    
+    if(p.getX()>entorno.ancho()/2){
+		p.setX((entorno.ancho()/2)+10);
+	}
+
 
     controlMovimientoJugador(
         entorno,
@@ -91,6 +113,7 @@ public class Juego extends InterfaceJuego
 
     controlDelProyectil(p, entorno);
 }
+	
 	public static void controlDelProyectil(Personaje p, Entorno entorno) {
 		if(p.getDisparo()!=null) {
 			p.getDisparo().dibujar(entorno);
@@ -133,10 +156,8 @@ public class Juego extends InterfaceJuego
     boolean bloqueaIzquierda,
     boolean bloqueaDerecha,
     boolean bloqueaAbajo,
-    boolean bloqueaArriba
-) {
-
-    if(entorno.sePresiono(entorno.TECLA_ARRIBA)
+    boolean bloqueaArriba){
+	if(entorno.sePresiono(entorno.TECLA_ARRIBA)
         && !bloqueaArriba
         && (bloqueaAbajo || p.getY()+p.getAlto()/2 >= entorno.alto())) {
 

@@ -14,6 +14,7 @@ public class Personaje {
 	private  Proyectil disparo;
 	private boolean tieneGravedad ;
 	private boolean estaSaltando;
+	private boolean seMueve;
 	public Personaje(int x, int y, int ancho, int alto) {
 		this.x = x;
 		this.y = y;
@@ -23,8 +24,14 @@ public class Personaje {
 		this.disparo=null;
 		this.tieneGravedad=true;
 		this.estaSaltando=false;
+		this.seMueve=false;
 	}
-	
+	public boolean getEnMovimiento() {
+		return seMueve;
+	}
+	public void setEnMovimiento(boolean a) {
+		this.seMueve=a;
+	}
 	public boolean isEstaSaltando() {
 		return estaSaltando;
 	}

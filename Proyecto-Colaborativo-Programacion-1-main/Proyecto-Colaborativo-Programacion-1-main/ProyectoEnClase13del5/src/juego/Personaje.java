@@ -115,8 +115,13 @@ public class Personaje {
 		return false;
 	}
 	
-	//aqui se agrego el rebote de el personaje para que no se quede atrapado
-
+	//aqui se agrego para teletransportar en caso de que el personaje toque el borde inferior de la pantalla
+	public void siElPersonajeTocaElBordeInferiorDeLaPantalla() {
+		if (this.y >= 575) {
+			this.y = 100;
+			this.x = 300;
+		}
+	}
 	
 	//disparo
 	public void disparo(Entorno e) {

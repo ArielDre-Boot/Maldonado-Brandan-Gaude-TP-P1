@@ -85,7 +85,8 @@ public class Personaje {
 		
 		if(bordeIzquierdo()<= o.bordeDerecho() && 	bordeSuperior()<=o.bordeInferior()-1) {
 			
-			if(  bordeInferior()>=o.bordeSuperior()+1 && 	bordeDerecho()>=o.bordeIzquierdo()+1) return true;
+			if(  bordeInferior()>=o.bordeSuperior()+1 && 	bordeDerecho()>=o.bordeIzquierdo()+1)
+				return true;
 		}
 		
 		

@@ -137,7 +137,7 @@ public class Juego extends InterfaceJuego
 }	
 	
 	public static void detectaElMovimiento(Entorno a, Personaje b) {
-    	if (a.estaPresionada(a.TECLA_DERECHA)) {
+    	if (a.estaPresionada(a.TECLA_DERECHA) && b.getX()>=400) { //se agrego "b.getX()>=400" para que solo se mueba si esta a mitad de pantalla
     		b.setEnMovimiento(true);
     	}
     	else {

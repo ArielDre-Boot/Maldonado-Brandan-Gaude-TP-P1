@@ -134,6 +134,8 @@ public class Juego extends InterfaceJuego
     controlDelSalto(p,bloqueaArriba);
 
     controlDelProyectil(p, entorno);
+
+	p.siElPersonajeTocaElBordeInferiorDeLaPantalla(); //aqui puse que el personaje se teletransporde caundo se cae
 }	
 	
 	public static void detectaElMovimiento(Entorno a, Personaje b) {

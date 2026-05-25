@@ -83,17 +83,23 @@ public class Personaje {
 	
 	public boolean colisionaPorIzquierda(Obstaculo o) {
 		
-		if(bordeIzquierdo()<= o.bordeDerecho() && 	bordeSuperior()<=o.bordeInferior()-1) {
-			if(  bordeInferior()>=o.bordeSuperior()+1 && 	bordeDerecho()>=o.bordeIzquierdo()+1)
+		if(bordeIzquierdo()<= o.bordeDerecho() && bordeDerecho()>=(o.getX())) { 
+			if(bordeInferior()>=o.bordeSuperior()+1 && bordeSuperior()<=o.bordeInferior()-1) {
+				rebote(+5);
+				System.out.println("+5");
 				return true;
-		}	
+			}	
+		}
 		return false;
 	}
 	
 	public boolean colisionaPorDerecha(Obstaculo o) {
-		if(bordeDerecho()>= o.bordeIzquierdo()&& bordeIzquierdo()<= o.bordeIzquierdo()-1) {
+		if(bordeDerecho()>= o.bordeIzquierdo()&& bordeIzquierdo()<= o.getX()) {
 			if(bordeInferior()>=o.bordeSuperior()+1 && bordeSuperior()<=o.bordeInferior()-1) {
-				return true;				
+				rebote(-5);
+				System.out.println("-5");
+				return true;	
+			}
 		}
 		return false;
 	}
@@ -113,6 +119,11 @@ public class Personaje {
 				return true;				
 		}
 		return false;
+	}
+
+	//aqui se agrego el rebote de el personaje para que no se quede atrapado
+	public void rebote(int a) {
+		this.x += a;
 	}
 	
 	//aqui se agrego para teletransportar en caso de que el personaje toque el borde inferior de la pantalla

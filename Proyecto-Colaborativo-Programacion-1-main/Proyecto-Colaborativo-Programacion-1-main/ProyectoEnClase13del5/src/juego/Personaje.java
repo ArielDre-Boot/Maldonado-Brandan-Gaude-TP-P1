@@ -15,6 +15,8 @@ public class Personaje {
 	private boolean tieneGravedad ;
 	private boolean estaSaltando;
 	private boolean seMueve;
+	private int velocidadX=5;
+	private int velocidadY=5;
 	public Personaje(int x, int y, int ancho, int alto) {
 		this.x = x;
 		this.y = y;
@@ -24,6 +26,7 @@ public class Personaje {
 		this.disparo=null;
 		this.tieneGravedad=true;
 		this.estaSaltando=false;
+		
 		this.seMueve=false;
 	}
 	public boolean getEnMovimiento() {
@@ -61,23 +64,23 @@ public class Personaje {
 	}
 	
 	public void moverIzquierda() {
-		this.x = this.x -5;
+		this.x = this.x -velocidadX;
 	}
 	
 	public void moverDerecha() {
-		this.x = this.x +5;
+		this.x = this.x +velocidadX;
 	}
 	public void moverArriba() {
-		this.y=this.y-5;
+		this.y=this.y-velocidadY;
 	}
 	public void saltar() {
 	
-		this.y=this.y-5;
+		this.y=this.y-velocidadY;
 		
 	}
 	
 	public void moverAbajo() {
-		this.y=this.y+5;
+		this.y=this.y+velocidadY;
 	}
 	
 	
@@ -93,9 +96,20 @@ public class Personaje {
 	}
 	
 public boolean colisionaPorDerecha(Obstaculo o) {
-		if(bordeDerecho()>= o.bordeIzquierdo()&& bordeIzquierdo()<= o.bordeIzquierdo()-1) {
-			if(bordeInferior()>=o.bordeSuperior()+1 && bordeSuperior()<=o.bordeInferior()-1) return true;				
+	
+
+
+	
+	  if(bordeDerecho()>= o.bordeIzquierdo()&& bordeIzquierdo()<= o.bordeIzquierdo()-1) {
+			if(bordeInferior()>=o.bordeSuperior()+1 && bordeSuperior()<=o.bordeInferior()-1) {
+				
+				return true;
+			};				
 		}
+		
+		  
+		
+		
 		return false;
 	}
 	

@@ -23,7 +23,7 @@ public class Juego extends InterfaceJuego
 		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
 		// Inicializar lo que haga falta para el juego
 		// ...
-		p = new Personaje(400,300,20,50);
+		p = new Personaje(140,300,20,50);
 		
 		Obstaculo o = new Obstaculo(200,500,100,10);
 		Obstaculo o2 = new Obstaculo(350,450,100,10);
@@ -56,32 +56,13 @@ public class Juego extends InterfaceJuego
     boolean bloqueaDerecha = false;
     boolean bloqueaAbajo = false;
     boolean bloqueaArriba = false;
-
-    for (Obstaculo obstaculo : obstaculos) {
-
-        obstaculo.dibujar(entorno);
-     
-        if (p.colisionaPorIzquierda(obstaculo)) {
-            bloqueaIzquierda = true;
-        }
-
-        if (p.colisionaPorDerecha(obstaculo)) {
-            bloqueaDerecha = true;
-        }
-
-        if (p.colisionaPorDebajo(obstaculo)) {
-            bloqueaAbajo = true;
-        }
-
-        if (p.colisionaPorArriba(obstaculo)) {
-            bloqueaArriba = true;
-        }      
-    }
+   
+   
     //Repetición de los niveles
     ////Me faltó ver como hacer para que cuando salen por derecha, cada nivel tenga una ubicación random
     for(Obstaculo a: obstaculos) {
-    	if(p.getEnMovimiento()) {
-    		int cuantoRetrocede=a.getX()-2;
+    	if(p.getEnMovimiento() && p.getX()>entorno.ancho()/2) {
+    		int cuantoRetrocede=a.getX()-5;
     		a.setX(cuantoRetrocede);
     		}
     	if(a.bordeIzquierdo()<0) {
@@ -95,9 +76,29 @@ public class Juego extends InterfaceJuego
     	}
   
     }
+ for (Obstaculo obstaculo : obstaculos) {
+    	
+        obstaculo.dibujar(entorno);
+      
+        if (p.colisionaPorIzquierda(obstaculo)) {
+            bloqueaIzquierda = true;
+        }
+ 
+        if (p.colisionaPorDerecha(obstaculo)) {
+            bloqueaDerecha = true;
+        }
+
+        if (p.colisionaPorDebajo(obstaculo)) {
+            bloqueaAbajo = true;
+        }
+
+        if (p.colisionaPorArriba(obstaculo)) {
+            bloqueaArriba = true;
+        }      
+    }
     
     if(p.getX()>entorno.ancho()/2){
-		p.setX((entorno.ancho()/2)+10);
+	bloqueaDerecha=true;
 	}
 
 

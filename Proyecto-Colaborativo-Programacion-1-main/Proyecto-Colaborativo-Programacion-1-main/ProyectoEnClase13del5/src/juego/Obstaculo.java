@@ -26,6 +26,7 @@ public class Obstaculo {
 	
 	
 	public int bordeDerecho() {
+		
 		return this.x+this.ancho/2;
 	}
 	public int bordeIzquierdo() {

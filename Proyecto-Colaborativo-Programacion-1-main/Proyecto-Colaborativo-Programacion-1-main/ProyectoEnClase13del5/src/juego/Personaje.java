@@ -15,6 +15,7 @@ public class Personaje {
 	private boolean tieneGravedad ;
 	private boolean estaSaltando;
 	private boolean seMueve;
+	private int vida = 10;
 	public Personaje(int x, int y, int ancho, int alto) {
 		this.x = x;
 		this.y = y;
@@ -216,5 +217,7 @@ public class Personaje {
 		this.disparo = disparo;
 	}
 	
-
+	public int getVida() {
+		return vida;
+	}
 }

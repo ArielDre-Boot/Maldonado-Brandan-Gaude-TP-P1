@@ -25,6 +25,8 @@ public class Obstaculo {
 	
 	
 	
+	
+	
 	public int bordeDerecho() {
 		
 		return this.x+this.ancho/2;
@@ -72,7 +74,6 @@ public class Obstaculo {
 	public void setAlto(int alto) {
 		this.alto = alto;
 	}
-	
 	
 	
 	

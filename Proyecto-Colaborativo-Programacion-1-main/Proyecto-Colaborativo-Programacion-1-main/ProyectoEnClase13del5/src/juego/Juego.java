@@ -1,6 +1,6 @@
 package juego;
 
-
+import java.util.Random;
 import java.awt.Color;
 import java.util.LinkedList;
 
@@ -13,7 +13,8 @@ public class Juego extends InterfaceJuego
 	private Entorno entorno;
 	private Personaje p;
 	private LinkedList<Obstaculo> obstaculos;
-	Obstaculo seMueve;
+	private LinkedList<Obstaculo> obstaculos1;
+	private LinkedList<MostradorDeVida> vidas;
 	// Variables y métodos propios de cada grupo
 	// ...
 	
@@ -25,17 +26,32 @@ public class Juego extends InterfaceJuego
 		// ...
 		p = new Personaje(140,300,20,50);
 		
-		Obstaculo o = new Obstaculo(200,500,100,10);
-		Obstaculo o2 = new Obstaculo(350,450,100,10);
-		Obstaculo o3 = new Obstaculo(500,400,100,10);
-		Obstaculo o4 = new Obstaculo(650,350,100,10);
-		Obstaculo o5 = new Obstaculo(500,250,100,10);
+		Obstaculo o = new Obstaculo(150,500,200,20); //obstaculo inferior izquierdo 
+		Obstaculo o2 = new Obstaculo(150,400,200,20); //obstaculo superior izquierdo
+		Obstaculo o3 = new Obstaculo(450,400,200,20); //obstaculo superior del medio
+		Obstaculo o4 = new Obstaculo(600,500,300,20);//obstaculo inferior derecho
+		Obstaculo o5= new Obstaculo(650,400, 120,20); //obstaculo superior derecho
+		Obstaculo o7 = new Obstaculo(170,595,340,40);
+		Obstaculo o8 = new Obstaculo(660,595,400,40);
+		
 		obstaculos=new LinkedList<Obstaculo>();
 		obstaculos.add(o);
 		obstaculos.add(o2);
 		obstaculos.add(o3);
 		obstaculos.add(o4);
 		obstaculos.add(o5);
+		
+		obstaculos1=new LinkedList<Obstaculo>();
+		obstaculos1.add(o7);
+		obstaculos1.add(o8);
+
+		//Creara la lista para mostrar la vida
+		 vidas = new LinkedList<MostradorDeVida>();
+		//se crean las vidas
+		for(int j = 0; j < p.getVida(); j++) {
+			MostradorDeVida v = new MostradorDeVida(j*50+50, 50);
+			vidas.add(v);
+		}
 		
 		// Inicia el juego!
 		this.entorno.iniciar();
@@ -50,31 +66,56 @@ public class Juego extends InterfaceJuego
 	 */
 	public void tick()
 {
+	for (MostradorDeVida vida:vidas) {
+		vida.dibujar(entorno);
+	}
+	
     p.dibujar(entorno);
 
     boolean bloqueaIzquierda = false;
     boolean bloqueaDerecha = false;
     boolean bloqueaAbajo = false;
     boolean bloqueaArriba = false;
-   
-   
-    //Repetición de los niveles
-    ////Me faltó ver como hacer para que cuando salen por derecha, cada nivel tenga una ubicación random
+
+
+
+    for (Obstaculo obstaculo : obstaculos) {
+
+        obstaculo.dibujar(entorno);
+     
+        if (p.colisionaPorIzquierda(obstaculo)) {
+            bloqueaIzquierda = true;
+        }
+
+        if (p.colisionaPorDerecha(obstaculo)) {
+            bloqueaDerecha = true;
+        }
+
+        if (p.colisionaPorDebajo(obstaculo)) {
+            bloqueaAbajo = true;
+        }
+
+        if (p.colisionaPorArriba(obstaculo)) {
+            bloqueaArriba = true;
+        }      
+    }
+    //Repetición de los niveles superiores
+    
+    detectaElMovimiento(entorno,p);
+
     for(Obstaculo a: obstaculos) {
-    	if(p.getEnMovimiento() && p.getX()>entorno.ancho()/2) {
-    		int cuantoRetrocede=a.getX()-5;
-    		a.setX(cuantoRetrocede);
+
+    	if(p.getEnMovimiento()) {
+    	    a.setX(a.getX()-2);
+
     		}
-    	if(a.bordeIzquierdo()<0) {
-    		a.setX(entorno.ancho());
-    		}
-    	if (entorno.estaPresionada(entorno.TECLA_DERECHA)) {
-    		p.setEnMovimiento(true);
+    	if(a.bordeDerecho()<0) {
+    		Random ran=new Random();
+    		int r= ran.nextInt(entorno.alto());
+    		a.setX(entorno.ancho()+r);
+    		
     	}
-    	else {
-    		p.setEnMovimiento(false);
-    	}
-  
+    		
     }
  for (Obstaculo obstaculo : obstaculos) {
     	
@@ -97,8 +138,28 @@ public class Juego extends InterfaceJuego
         }      
     }
     
+    //Repetición de los niveles base
+    
+    /*detectaElMovimiento(entorno,p);
+    for (Obstaculo o: obstaculos1) {
+    	o.dibujar(entorno);
+    	}
+    
+    for(Obstaculo b: obstaculos1) {
+    	if(p.getEnMovimiento()) {
+    		b.setX(b.getX()-2);
+    	}
+    	if(b.bordeDerecho()<0) {
+    		b.setX(entorno.ancho());
+    	}	
+    }*/
+    //posicion del personaje en mitad de pantalla
     if(p.getX()>entorno.ancho()/2){
-	bloqueaDerecha=true;
+
+		p.setX((entorno.ancho()/2));
+	
+		
+
 	}
 
 
@@ -113,8 +174,21 @@ public class Juego extends InterfaceJuego
     controlDelSalto(p,bloqueaArriba);
 
     controlDelProyectil(p, entorno);
-}
+
+	p.siElPersonajeTocaElBordeInferiorDeLaPantalla(); //aqui puse que el personaje se teletransporde caundo se cae
+}	
 	
+	public static void detectaElMovimiento(Entorno a, Personaje b) {
+    	if (a.estaPresionada(a.TECLA_DERECHA) && b.getX()>=400) { //se agrego "b.getX()>=400" para que solo se mueba si esta a mitad de pantalla
+    		b.setEnMovimiento(true);
+    	}
+    	else {
+    		b.setEnMovimiento(false);
+    	}
+    	if(a.estaPresionada(a.TECLA_DERECHA) && a.estaPresionada(a.TECLA_IZQUIERDA)) {
+    		b.setEnMovimiento(false);
+    	}
+    	}
 	public static void controlDelProyectil(Personaje p, Entorno entorno) {
 		if(p.getDisparo()!=null) {
 			p.getDisparo().dibujar(entorno);

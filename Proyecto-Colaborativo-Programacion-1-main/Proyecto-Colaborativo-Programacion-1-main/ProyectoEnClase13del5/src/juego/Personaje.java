@@ -15,8 +15,10 @@ public class Personaje {
 	private boolean tieneGravedad ;
 	private boolean estaSaltando;
 	private boolean seMueve;
-	private int velocidadX=5;
-	private int velocidadY=5;
+    private int velocidadX=5;
+    private int velocidadY=5;
+	private int vida = 10;
+
 	public Personaje(int x, int y, int ancho, int alto) {
 		this.x = x;
 		this.y = y;
@@ -86,25 +88,25 @@ public class Personaje {
 	
 	public boolean colisionaPorIzquierda(Obstaculo o) {
 		
-		if(bordeIzquierdo()<= o.bordeDerecho() && 	bordeSuperior()<=o.bordeInferior()-1) {
-			
-			if(  bordeInferior()>=o.bordeSuperior()+1 && 	bordeDerecho()>=o.bordeIzquierdo()+1) return true;
+		if(bordeIzquierdo()<= o.bordeDerecho() && bordeDerecho()>=(o.getX())) { 
+			if(bordeInferior()>=o.bordeSuperior()+1 && bordeSuperior()<=o.bordeInferior()-1) {
+				rebote(+5);
+				System.out.println("+5");
+				return true;
+			}	
 		}
-		
-		
 		return false;
 	}
 	
-public boolean colisionaPorDerecha(Obstaculo o) {
-	
 
-
-	
-	  if(bordeDerecho()>= o.bordeIzquierdo()&& bordeIzquierdo()<= o.bordeIzquierdo()-1) {
+	public boolean colisionaPorDerecha(Obstaculo o) {
+		if(bordeDerecho()>= o.bordeIzquierdo()&& bordeIzquierdo()<= o.getX()) {
 			if(bordeInferior()>=o.bordeSuperior()+1 && bordeSuperior()<=o.bordeInferior()-1) {
-				
-				return true;
-			};				
+				rebote(-5);
+				System.out.println("-5");
+				return true;	
+			}
+
 		}
 		
 		  
@@ -116,20 +118,39 @@ public boolean colisionaPorDerecha(Obstaculo o) {
 	// aqui se agregaron mas coliciones, especificamente si coliciona por debajo o por arriba
 	public boolean colisionaPorArriba(Obstaculo o) {
 		if(bordeSuperior()<= o.bordeInferior()&& bordeInferior()>= o.bordeSuperior()+1) {
-			if(bordeDerecho()>=o.bordeIzquierdo()+1 && bordeIzquierdo()<=o.bordeDerecho()-1)return true;				
+			if(bordeDerecho()>=o.bordeIzquierdo()+1 && bordeIzquierdo()<=o.bordeDerecho()-1) {
+				return true;				
 		}
+		
+	}
 		return false;
 	}
-	
+			
 	public boolean colisionaPorDebajo(Obstaculo o) {
-		if(bordeInferior()>= o.bordeSuperior()&& bordeSuperior()<= o.bordeInferior()-1) {
-			if(bordeIzquierdo()<=o.bordeDerecho()-1 && bordeDerecho()>=o.bordeIzquierdo()+1) return true;				
+	  if(bordeInferior()>= o.bordeSuperior()&& bordeSuperior()<= o.bordeInferior()-1) {
+			if(bordeIzquierdo()<=o.bordeDerecho()-1 && bordeDerecho()>=o.bordeIzquierdo()+1) {
+				return true;				
 		}
-		return false;
+	  }
+
+	return false;
+	
+	}
+
+		
+		
+	//aqui se agrego el rebote de el personaje para que no se quede atrapado
+	public void rebote(int a) {
+		this.x += a;
 	}
 	
-	//aqui se agrego el rebote de el personaje para que no se quede atrapado
-
+	//aqui se agrego para teletransportar en caso de que el personaje toque el borde inferior de la pantalla
+	public void siElPersonajeTocaElBordeInferiorDeLaPantalla() {
+		if (this.y >= 575) {
+			this.y = 100;
+			this.x = 300;
+		}
+	}
 	
 	//disparo
 	public void disparo(Entorno e) {
@@ -213,5 +234,7 @@ public boolean colisionaPorDerecha(Obstaculo o) {
 		this.disparo = disparo;
 	}
 	
-
+	public int getVida() {
+		return vida;
+	}
 }

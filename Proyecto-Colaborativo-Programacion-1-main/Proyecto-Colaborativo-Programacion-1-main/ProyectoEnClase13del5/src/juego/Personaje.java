@@ -15,7 +15,7 @@ public class Personaje {
 	private boolean tieneGravedad ;
 	private boolean estaSaltando;
 	private boolean seMueve;
-	private Obstaculo aparicionDeObstaculo;
+	/*private Obstaculo aparicionDeObstaculo;*/
 	public Personaje(int x, int y, int ancho, int alto) {
 		this.x = x;
 		this.y = y;

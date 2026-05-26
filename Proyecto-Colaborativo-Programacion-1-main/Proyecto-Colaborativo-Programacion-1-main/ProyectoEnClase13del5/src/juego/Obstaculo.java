@@ -9,7 +9,7 @@ public class Obstaculo {
 	private int y;
 	private int ancho;
 	private int alto;
-	private boolean enPantalla;
+	/*private boolean enPantalla;*/
 	
 	public Obstaculo(int x, int y, int ancho, int alto) {
 		this.x = x;

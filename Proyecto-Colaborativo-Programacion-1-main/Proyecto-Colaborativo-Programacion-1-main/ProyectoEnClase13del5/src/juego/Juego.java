@@ -86,7 +86,7 @@ public class Juego extends InterfaceJuego
             bloqueaArriba = true;
         }      
     }
-    ///Limites de colisión de los niveles (obstaculos) de la base i
+    ///Limites de colisión de los niveles (obstaculos) de la base 
     for (Obstaculo o: obstaculos1) {
     	
     	o.dibujar(entorno);

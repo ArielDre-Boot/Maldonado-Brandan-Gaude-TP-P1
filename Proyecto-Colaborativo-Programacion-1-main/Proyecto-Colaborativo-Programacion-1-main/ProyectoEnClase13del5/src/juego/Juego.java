@@ -14,7 +14,11 @@ public class Juego extends InterfaceJuego
 	private Personaje p;
 	private LinkedList<Obstaculo> obstaculos;
 	private LinkedList<Obstaculo> obstaculos1;
+
 	/*private Obstaculo nuevoObstaculo;*/
+
+	private LinkedList<MostradorDeVida> vidas;
+
 	// Variables y métodos propios de cada grupo
 	// ...
 	
@@ -24,7 +28,7 @@ public class Juego extends InterfaceJuego
 		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
 		// Inicializar lo que haga falta para el juego
 		// ...
-		p = new Personaje(400,300,20,50);
+		p = new Personaje(140,300,20,50);
 		
 		Obstaculo o = new Obstaculo(150,500,200,20); //obstaculo inferior izquierdo 
 		Obstaculo o2 = new Obstaculo(150,400,200,20); //obstaculo superior izquierdo
@@ -45,6 +49,16 @@ public class Juego extends InterfaceJuego
 		obstaculos1.add(o7);
 		obstaculos1.add(o8);
 
+
+
+		//Creara la lista para mostrar la vida
+		 vidas = new LinkedList<MostradorDeVida>();
+		//se crean las vidas
+		for(int j = 0; j < p.getVida(); j++) {
+			MostradorDeVida v = new MostradorDeVida(j*50+50, 50);
+			vidas.add(v);
+		}
+
 		// Inicia el juego!
 		this.entorno.iniciar();
 	
@@ -58,7 +72,11 @@ public class Juego extends InterfaceJuego
 	 */
 	public void tick()
 {
-	
+
+	for (MostradorDeVida vida:vidas) {
+		vida.dibujar(entorno);
+	}
+
 	
     p.dibujar(entorno);
     
@@ -67,6 +85,8 @@ public class Juego extends InterfaceJuego
     boolean bloqueaDerecha = false;
     boolean bloqueaAbajo = false;
     boolean bloqueaArriba = false;
+
+
 
     for (Obstaculo obstaculo : obstaculos) {
 
@@ -112,9 +132,12 @@ public class Juego extends InterfaceJuego
   
     //Repetición de los niveles superiores
     detectaElMovimiento(entorno,p);
+
     for(Obstaculo a: obstaculos) {
+
     	if(p.getEnMovimiento()) {
     	    a.setX(a.getX()-2);
+
     		}
     	if(a.bordeDerecho()<0) {
     		Random ran=new Random();
@@ -123,6 +146,26 @@ public class Juego extends InterfaceJuego
     		
     	}
     		
+    }
+ for (Obstaculo obstaculo : obstaculos) {
+    	
+        obstaculo.dibujar(entorno);
+      
+        if (p.colisionaPorIzquierda(obstaculo)) {
+            bloqueaIzquierda = true;
+        }
+ 
+        if (p.colisionaPorDerecha(obstaculo)) {
+            bloqueaDerecha = true;
+        }
+
+        if (p.colisionaPorDebajo(obstaculo)) {
+            bloqueaAbajo = true;
+        }
+
+        if (p.colisionaPorArriba(obstaculo)) {
+            bloqueaArriba = true;
+        }      
     }
     
     //Repetición de los niveles base
@@ -143,9 +186,11 @@ public class Juego extends InterfaceJuego
  
     //posicion del personaje en mitad de pantalla
     if(p.getX()>entorno.ancho()/2){
+
 		p.setX((entorno.ancho()/2));
 	
 		
+
 	}
 
 

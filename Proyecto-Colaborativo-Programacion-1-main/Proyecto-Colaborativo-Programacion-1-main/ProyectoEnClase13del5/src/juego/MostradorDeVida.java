@@ -20,7 +20,7 @@ public class MostradorDeVida {
 	}
 	
 	public void dibujar(Entorno e) {
-		e.dibujarImagen(imagen, x, y, 0);
+		e.dibujarImagen(imagen, x, y, 0,0.08);
 	}
 	
 	

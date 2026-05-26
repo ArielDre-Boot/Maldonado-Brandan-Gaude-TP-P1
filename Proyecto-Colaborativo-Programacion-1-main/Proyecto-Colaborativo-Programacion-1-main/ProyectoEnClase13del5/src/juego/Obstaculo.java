@@ -32,6 +32,7 @@ public class Obstaculo {
 		this.enPantalla=b;
 	}*/
 	public int bordeDerecho() {
+		
 		return this.x+this.ancho/2;
 	}
 	

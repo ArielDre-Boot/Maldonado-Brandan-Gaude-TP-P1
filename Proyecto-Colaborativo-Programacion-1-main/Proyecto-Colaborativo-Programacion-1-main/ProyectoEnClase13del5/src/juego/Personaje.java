@@ -15,6 +15,7 @@ public class Personaje {
 	private boolean tieneGravedad ;
 	private boolean estaSaltando;
 	private boolean seMueve;
+	private Obstaculo aparicionDeObstaculo;
 	public Personaje(int x, int y, int ancho, int alto) {
 		this.x = x;
 		this.y = y;
@@ -25,7 +26,16 @@ public class Personaje {
 		this.tieneGravedad=true;
 		this.estaSaltando=false;
 		this.seMueve=false;
+		/*this.aparicionDeObstaculo=null;*/
 	}
+	/*public Obstaculo setAparicionDobstaculos() {
+		return this.aparicionDeObstaculo;
+	}
+	public static void aparicionObstaculos(Obstaculo o, Personaje j, Entorno entorno) {
+		if(!j.getEnMovimiento() && entorno.sePresiono(entorno.TECLA_DERECHA)) {
+			j.setEnMovimiento(true);
+		}
+	}*/
 	public boolean getEnMovimiento() {
 		return seMueve;
 	}
@@ -82,7 +92,6 @@ public class Personaje {
 	
 	
 	public boolean colisionaPorIzquierda(Obstaculo o) {
-		
 		if(bordeIzquierdo()<= o.bordeDerecho() && bordeDerecho()>=(o.getX())) { 
 			if(bordeInferior()>=o.bordeSuperior()+1 && bordeSuperior()<=o.bordeInferior()-1) {
 				rebote(+5);
@@ -109,15 +118,16 @@ public class Personaje {
 		if(bordeSuperior()<= o.bordeInferior()&& bordeInferior()>= o.bordeSuperior()+1) {
 			if(bordeDerecho()>=o.bordeIzquierdo()+1 && bordeIzquierdo()<=o.bordeDerecho()-1) {
 				return true;				
-		}
+		}}
 		return false;
 	}
+		
 	
 	public boolean colisionaPorDebajo(Obstaculo o) {
 		if(bordeInferior()>= o.bordeSuperior()&& bordeSuperior()<= o.bordeInferior()-1) {
 			if(bordeIzquierdo()<=o.bordeDerecho()-1 && bordeDerecho()>=o.bordeIzquierdo()+1) {
 				return true;				
-		}
+		}}
 		return false;
 	}
 

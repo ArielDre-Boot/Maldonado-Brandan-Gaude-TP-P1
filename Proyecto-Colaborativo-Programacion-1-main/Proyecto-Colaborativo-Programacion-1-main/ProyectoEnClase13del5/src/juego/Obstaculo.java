@@ -9,43 +9,48 @@ public class Obstaculo {
 	private int y;
 	private int ancho;
 	private int alto;
-
+	private boolean enPantalla;
 	
 	public Obstaculo(int x, int y, int ancho, int alto) {
 		this.x = x;
 		this.y = y;
 		this.ancho = ancho;
 		this.alto = alto;
-		
+		/*this.enPantalla=false;*/
 	}
 
+	
+	
 	public void dibujar(Entorno e) {
 		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.gray);
 	}
 	
-	
-	
-	
-	
+	/*public boolean getEnPantalla() {
+		return enPantalla;
+	}
+	public void setEnPantalla(boolean b) {
+		this.enPantalla=b;
+	}*/
 	public int bordeDerecho() {
 		return this.x+this.ancho/2;
 	}
+	
 	public int bordeIzquierdo() {
 		return this.x-this.ancho/2;
 	}
+	
 	public int bordeInferior() {
 		return this.y+this.alto/2;
 	}
+	
 	public int bordeSuperior() {
 		return this.y-this.alto/2;
 	}
 	
-	
-
 	public int getX() {
 		return x;
 	}
-
+	
 	public void setX(int x) {
 		this.x = x;
 	}
@@ -73,8 +78,4 @@ public class Obstaculo {
 	public void setAlto(int alto) {
 		this.alto = alto;
 	}
-	
-	
-	
-
 }

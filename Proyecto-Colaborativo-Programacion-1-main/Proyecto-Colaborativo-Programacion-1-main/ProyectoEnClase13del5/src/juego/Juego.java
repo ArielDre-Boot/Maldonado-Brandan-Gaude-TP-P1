@@ -14,7 +14,7 @@ public class Juego extends InterfaceJuego
 	private Personaje p;
 	private LinkedList<Obstaculo> obstaculos;
 	private LinkedList<Obstaculo> obstaculos1;
-
+	/*private Obstaculo nuevoObstaculo;*/
 	// Variables y métodos propios de cada grupo
 	// ...
 	
@@ -44,6 +44,7 @@ public class Juego extends InterfaceJuego
 		obstaculos1=new LinkedList<Obstaculo>();
 		obstaculos1.add(o7);
 		obstaculos1.add(o8);
+		
 		// Inicia el juego!
 		this.entorno.iniciar();
 	
@@ -58,7 +59,8 @@ public class Juego extends InterfaceJuego
 	public void tick()
 {
     p.dibujar(entorno);
-
+    
+    ///Limites de colisión de los niveles(obstaculos) superiores
     boolean bloqueaIzquierda = false;
     boolean bloqueaDerecha = false;
     boolean bloqueaAbajo = false;
@@ -84,8 +86,29 @@ public class Juego extends InterfaceJuego
             bloqueaArriba = true;
         }      
     }
+    ///Limites de colisión de los niveles (obstaculos) de la base i
+    for (Obstaculo o: obstaculos1) {
+    	
+    	o.dibujar(entorno);
+    	
+    	if(p.colisionaPorIzquierda(o)){
+    		bloqueaIzquierda=true;
+    	}
+    	
+    	if(p.colisionaPorDerecha(o)) {
+    		bloqueaDerecha=true;
+    	}
+    	
+    	if(p.colisionaPorArriba(o)) {
+    		bloqueaArriba=true;
+    	}
+    	
+    	if(p.colisionaPorDebajo(o)) {
+    		bloqueaAbajo=true;
+    	}
+    }
+  
     //Repetición de los niveles superiores
-    
     detectaElMovimiento(entorno,p);
     for(Obstaculo a: obstaculos) {
     	if(p.getEnMovimiento()) {
@@ -101,20 +124,21 @@ public class Juego extends InterfaceJuego
     }
     
     //Repetición de los niveles base
-    
-    /*detectaElMovimiento(entorno,p);
-    for (Obstaculo o: obstaculos1) {
-    	o.dibujar(entorno);
-    	}
-    
+    detectaElMovimiento(entorno,p);
     for(Obstaculo b: obstaculos1) {
-    	if(p.getEnMovimiento()) {
-    		b.setX(b.getX()-2);
-    	}
-    	if(b.bordeDerecho()<0) {
-    		b.setX(entorno.ancho());
-    	}	
-    }*/
+    		if(p.getEnMovimiento()) {
+    			b.setX(b.getX()-2);
+    			/*b.setEnPantalla(true);*/
+    		}
+    		/*if(!b.getEnPantalla()){
+    			obsAuxiliar(nuevoObstaculo);}*/	
+    		if(b.bordeDerecho()<0) {
+    			b.setX(entorno.ancho());
+	    	}	
+    		
+    }
+	   
+ 
     //posicion del personaje en mitad de pantalla
     if(p.getX()>entorno.ancho()/2){
 		p.setX((entorno.ancho()/2));
@@ -194,28 +218,28 @@ public class Juego extends InterfaceJuego
     boolean bloqueaArriba){
 	if(entorno.sePresiono(entorno.TECLA_ARRIBA)
         && !bloqueaArriba
-        && (bloqueaAbajo || p.getY()+p.getAlto()/2 >= entorno.alto())) {
+        && (bloqueaAbajo || p.bordeInferior() >= entorno.alto())) {
 
         p.setEstaSaltando(true);
         p.setSaltoY(p.getY()-200);
     }
 
     if(entorno.estaPresionada(entorno.TECLA_IZQUIERDA)
-        && p.getX()-p.getAncho()/2>0
+        && p.bordeIzquierdo()>0
         && !bloqueaIzquierda) {
 
         p.moverIzquierda();
     }
 
     if(entorno.estaPresionada(entorno.TECLA_DERECHA)
-        && p.getX()+p.getAncho()/2<entorno.ancho()+2
+        && p.bordeDerecho()<entorno.ancho()+2
         && !bloqueaDerecha) {
 
         p.moverDerecha();
     }
 
     if(p.getTieneGravedad()
-        && p.getY()+p.getAlto()/2<=entorno.alto()-2
+        && p.bordeInferior()<=entorno.alto()-2
         && !bloqueaAbajo) {
 
         p.moverAbajo();
@@ -243,6 +267,19 @@ public class Juego extends InterfaceJuego
 			
 		}
 	}
+	
+	  
+	/*public void obsAuxiliar(Obstaculo o) {
+			o= new Obstaculo (660,595,300,40);
+			o.dibujar(entorno);
+			if(p.getEnMovimiento()) {
+				o.setX(o.getX()-2);	
+			}
+				}*/
+			
+		
+
+	
 
 
 	@SuppressWarnings("unused")

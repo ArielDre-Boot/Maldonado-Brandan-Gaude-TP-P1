@@ -14,7 +14,9 @@ public class Juego extends InterfaceJuego
 	private Personaje p;
 	private LinkedList<Obstaculo> obstaculos;
 	private LinkedList<Obstaculo> obstaculos1;
-
+	private int limiteEnemigos=7;
+	private int enemigosVivos=0;
+    private LinkedList<Enemigo> enemigos;
 	/*private Obstaculo nuevoObstaculo;*/
 
 	private LinkedList<MostradorDeVida> vidas;
@@ -30,6 +32,10 @@ public class Juego extends InterfaceJuego
 		// ...
 		p = new Personaje(140,300,20,50);
 		
+	
+	    enemigos=new LinkedList<Enemigo>();
+
+
 		Obstaculo o = new Obstaculo(150,500,200,20); //obstaculo inferior izquierdo 
 		Obstaculo o2 = new Obstaculo(150,400,200,20); //obstaculo superior izquierdo
 		Obstaculo o3 = new Obstaculo(450,400,200,20); //obstaculo superior del medio
@@ -38,6 +44,9 @@ public class Juego extends InterfaceJuego
 		Obstaculo o7 = new Obstaculo(170,595,340,40);
 		Obstaculo o8 = new Obstaculo(660,595,400,40);
 		
+		
+		
+
 		obstaculos=new LinkedList<Obstaculo>();
 		obstaculos.add(o);
 		obstaculos.add(o2);
@@ -72,12 +81,55 @@ public class Juego extends InterfaceJuego
 	 */
 	public void tick()
 {
+		while(enemigosVivos<limiteEnemigos) {
+			Random randomEnemigos=new Random();
+		   int numeroAleatorio=randomEnemigos.nextInt(0,2);
+		   int posAleatoria=randomEnemigos.nextInt(550-300+1)+300;
+		   int posAleatoria2=randomEnemigos.nextInt(200-100+1)+100;
+		   if(numeroAleatorio==0) {
+			 	enemigos.add(new Enemigo(entorno.ancho()+posAleatoria2, posAleatoria, 40, 40,"izquierda"));
+		   }else {
+			
+				enemigos.add( new Enemigo(0-posAleatoria2, posAleatoria, 40, 40,"derecha"));
+		   }
+		   enemigosVivos++;
+		}
+		for (int i=0;i<enemigos.size();i++) {
+			Enemigo enemigo=enemigos.get(i);	
+			if(enemigo!=null) {
+				enemigo.dibujar(entorno);
+				if(enemigo.getDireccion().equals("izquierda")) {
+					enemigo.moverIzquierda();
+					if(enemigo.esDestruiblePorIzquierda(entorno)) {
+						enemigos.set(i,null);
+						enemigosVivos--;
+					
+					}
+				
+				}
+				else {
+					enemigo.moverDerecha();		
+					if(enemigo.esDestruibleDerecha(entorno)) {
+						enemigos.set(i,null);
+						enemigosVivos--;
+					}
+					
+				
+				}
+		
+		}
+				
+		}
+	
+		
+
+		
 
 	for (MostradorDeVida vida:vidas) {
 		vida.dibujar(entorno);
 	}
 
-	
+
     p.dibujar(entorno);
     
     ///Limites de colisión de los niveles(obstaculos) superiores
@@ -208,6 +260,7 @@ public class Juego extends InterfaceJuego
 
 	p.siElPersonajeTocaElBordeInferiorDeLaPantalla(); //aqui puse que el personaje se teletransporde caundo se cae
 }	
+
 	
 	public static void detectaElMovimiento(Entorno a, Personaje b) {
     	if (a.estaPresionada(a.TECLA_DERECHA) && b.getX()>=400) { //se agrego "b.getX()>=400" para que solo se mueba si esta a mitad de pantalla

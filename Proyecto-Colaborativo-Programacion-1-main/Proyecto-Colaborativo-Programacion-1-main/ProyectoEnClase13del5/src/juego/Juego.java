@@ -44,7 +44,7 @@ public class Juego extends InterfaceJuego
 		obstaculos1=new LinkedList<Obstaculo>();
 		obstaculos1.add(o7);
 		obstaculos1.add(o8);
-		
+
 		// Inicia el juego!
 		this.entorno.iniciar();
 	
@@ -58,6 +58,8 @@ public class Juego extends InterfaceJuego
 	 */
 	public void tick()
 {
+	
+	
     p.dibujar(entorno);
     
     ///Limites de colisión de los niveles(obstaculos) superiores

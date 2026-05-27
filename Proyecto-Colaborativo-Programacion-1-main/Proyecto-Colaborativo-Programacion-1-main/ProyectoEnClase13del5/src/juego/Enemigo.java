@@ -65,6 +65,32 @@ public class Enemigo {
     public int bordeDerecho() {
     	return this.x+this.ancho/2;
     }
+    public int bordeSuperior () {
+    	return this.y-this.alto/2;
+    }
+    public int bordeInferior() {
+    	return this.y+this.alto/2;
+    }
+	public boolean colisionaConElJugador(Personaje p) {
+	
+		if(bordeIzquierdo()<= p.bordeDerecho() && bordeDerecho()>=(p.getX()) && bordeSuperior()<=p.bordeInferior() && bordeInferior()>=p.bordeSuperior()) { 
+			return true;
+		}
+		return false;
+	}
+	public boolean colisionaConObstaculo(Obstaculo o) {
+		
+		if(bordeInferior()>= o.bordeSuperior() && bordeSuperior()<=o.bordeInferior()
+				) { 
+			return true;
+		}
+		return false;
+	}
+	
+
+	
+
+
 	public int getX() {
 		return x;
 	}

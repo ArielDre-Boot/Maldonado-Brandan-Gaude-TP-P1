@@ -14,7 +14,7 @@ public class Juego extends InterfaceJuego
 	private Personaje p;
 	private LinkedList<Obstaculo> obstaculos;
 	private LinkedList<Obstaculo> obstaculos1;
-	private int limiteEnemigos=7;
+	private int limiteEnemigos=10;
 	private int enemigosVivos=0;
     private LinkedList<Enemigo> enemigos;
 	/*private Obstaculo nuevoObstaculo;*/
@@ -81,47 +81,8 @@ public class Juego extends InterfaceJuego
 	 */
 	public void tick()
 {
-		while(enemigosVivos<limiteEnemigos) {
-			Random randomEnemigos=new Random();
-		   int numeroAleatorio=randomEnemigos.nextInt(0,2);
-		   int posAleatoria=randomEnemigos.nextInt(550-300+1)+300;
-		   int posAleatoria2=randomEnemigos.nextInt(200-100+1)+100;
-		   if(numeroAleatorio==0) {
-			 	enemigos.add(new Enemigo(entorno.ancho()+posAleatoria2, posAleatoria, 40, 40,"izquierda"));
-		   }else {
-			
-				enemigos.add( new Enemigo(0-posAleatoria2, posAleatoria, 40, 40,"derecha"));
-		   }
-		   enemigosVivos++;
-		}
-		for (int i=0;i<enemigos.size();i++) {
-			Enemigo enemigo=enemigos.get(i);	
-			if(enemigo!=null) {
-				enemigo.dibujar(entorno);
-				if(enemigo.getDireccion().equals("izquierda")) {
-					enemigo.moverIzquierda();
-					if(enemigo.esDestruiblePorIzquierda(entorno)) {
-						enemigos.set(i,null);
-						enemigosVivos--;
-					
-					}
-				
-				}
-				else {
-					enemigo.moverDerecha();		
-					if(enemigo.esDestruibleDerecha(entorno)) {
-						enemigos.set(i,null);
-						enemigosVivos--;
-					}
-					
-				
-				}
 		
-		}
-				
-		}
 	
-		
 
 		
 
@@ -181,6 +142,70 @@ public class Juego extends InterfaceJuego
     		bloqueaAbajo=true;
     	}
     }
+  //Generacion de los enemigos de forma aleatoria
+    while(enemigosVivos<limiteEnemigos) {
+		Random randomEnemigos=new Random();
+		   int numeroAleatorio=randomEnemigos.nextInt(0,2);
+		   int posAleatoria=randomEnemigos.nextInt(550-300+1)+300;
+		   int posAleatoria2=randomEnemigos.nextInt(200-100+1)+100;
+		   if(numeroAleatorio==0) {
+			   Enemigo e=new Enemigo(entorno.ancho()+posAleatoria2, posAleatoria, 40, 40,"izquierda");
+				
+			   enemigos.add(e);
+		   }else {
+			   Enemigo e= new Enemigo(0-posAleatoria2, posAleatoria, 40, 40,"derecha");
+				
+			   enemigos.add(e);
+		   }
+		   enemigosVivos++;
+		}
+    // Dibujo de los enemigos y control de colisiones entre los obstacuos y el jugador
+	for (int i=0;i<enemigos.size();i++) {
+			Enemigo enemigo=enemigos.get(i);
+			
+		
+			if(enemigo!=null) {
+				for(Obstaculo o :obstaculos) {
+					if(enemigo.colisionaConObstaculo(o)) {
+				
+						enemigos.set(i,null);
+						  enemigosVivos--;
+						  break;
+					}
+		
+					
+				}
+				enemigo.dibujar(entorno);
+				
+				if (enemigo.colisionaConElJugador(p)) {
+		            enemigos.set(i, null);
+		        	enemigosVivos--;
+		            
+		        }else {
+		        	if(enemigo.getDireccion().equals("izquierda")) {
+						enemigo.moverIzquierda();
+						if(enemigo.esDestruiblePorIzquierda(entorno)) {
+							enemigos.set(i,null);
+							enemigosVivos--;
+						
+						}
+					
+					}
+					else {
+						enemigo.moverDerecha();		
+						if(enemigo.esDestruibleDerecha(entorno)) {
+							enemigos.set(i,null);
+							enemigosVivos--;
+						}
+						
+					
+					}
+		        }
+				
+		
+		}
+				
+		}
   
     //Repetición de los niveles superiores
     detectaElMovimiento(entorno,p);

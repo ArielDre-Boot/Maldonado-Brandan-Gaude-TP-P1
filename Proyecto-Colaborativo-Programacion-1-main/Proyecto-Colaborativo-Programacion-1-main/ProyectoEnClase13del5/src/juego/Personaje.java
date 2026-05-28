@@ -18,7 +18,7 @@ public class Personaje {
     private int velocidadX=5;
     private int velocidadY=5;
 	private int vida = 10;
-
+	private boolean llegoAlCastillo;
 	public Personaje(int x, int y, int ancho, int alto) {
 		this.x = x;
 		this.y = y;
@@ -28,8 +28,8 @@ public class Personaje {
 		this.disparo=null;
 		this.tieneGravedad=true;
 		this.estaSaltando=false;
-		
 		this.seMueve=false;
+		this.llegoAlCastillo=false;
 	}
 	public boolean getEnMovimiento() {
 		return seMueve;
@@ -191,8 +191,6 @@ public class Personaje {
 	
 	
 	
-	
-	
 
 	public int getX() {
 		return x;
@@ -236,5 +234,11 @@ public class Personaje {
 	
 	public int getVida() {
 		return vida;
+	}
+	public boolean getLlegoCastillo() {
+		return this.llegoAlCastillo;
+	}
+	public void setLlegoCastillo(boolean v) {
+		this.llegoAlCastillo=v;
 	}
 }

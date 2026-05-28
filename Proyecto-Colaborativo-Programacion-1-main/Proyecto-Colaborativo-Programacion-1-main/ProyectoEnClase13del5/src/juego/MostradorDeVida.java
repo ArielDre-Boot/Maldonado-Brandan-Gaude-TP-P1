@@ -9,8 +9,8 @@ import java.awt.*;
 public class MostradorDeVida {
 	private int x;
 	private int y;
-	
 	private Image imagen;
+	
 	public MostradorDeVida(int x, int y) {
 		this.x = x;
 		this.y = y;

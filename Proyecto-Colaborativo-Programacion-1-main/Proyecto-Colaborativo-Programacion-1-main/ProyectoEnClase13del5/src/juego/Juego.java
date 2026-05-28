@@ -2,6 +2,7 @@ package juego;
 
 import java.util.Random;
 import java.awt.Color;
+import java.awt.Image;
 import java.util.LinkedList;
 
 import entorno.Entorno;
@@ -12,10 +13,12 @@ public class Juego extends InterfaceJuego
 	// El objeto Entorno que controla el tiempo y otros
 	private Entorno entorno;
 	private Personaje p;
-	private LinkedList<Obstaculo> obstaculos;
-	private LinkedList<Obstaculo> obstaculos1;
-
-	/*private Obstaculo nuevoObstaculo;*/
+	private Obstaculo[] obstaculos;
+	private Obstaculo[] obstaculos1;
+	private Image imagenFondo;
+	private Obstaculo obsExtra;
+	/*private Obstaculo [] arregloDeObstaculos;
+	private Obstaculo nuevoObstaculo;*/
 
 	private LinkedList<MostradorDeVida> vidas;
 
@@ -35,19 +38,19 @@ public class Juego extends InterfaceJuego
 		Obstaculo o3 = new Obstaculo(450,400,200,20); //obstaculo superior del medio
 		Obstaculo o4 = new Obstaculo(600,500,300,20);//obstaculo inferior derecho
 		Obstaculo o5= new Obstaculo(650,400, 120,20); //obstaculo superior derecho
-		Obstaculo o7 = new Obstaculo(170,595,340,40);
-		Obstaculo o8 = new Obstaculo(660,595,400,40);
+		Obstaculo o7 = new Obstaculo(170,595,340,40); //obstaculo base izquierdo
+		Obstaculo o8 = new Obstaculo(660,595,400,40); //obstaculo base derecho
 		
-		obstaculos=new LinkedList<Obstaculo>();
-		obstaculos.add(o);
-		obstaculos.add(o2);
-		obstaculos.add(o3);
-		obstaculos.add(o4);
-		obstaculos.add(o5);
+		obstaculos= new Obstaculo[5];
+		obstaculos[0]=o;
+		obstaculos[1]=o2;
+		obstaculos[2]=o3;
+		obstaculos[3]=o4;
+		obstaculos[4]=o5;
 		
-		obstaculos1=new LinkedList<Obstaculo>();
-		obstaculos1.add(o7);
-		obstaculos1.add(o8);
+		obstaculos1=new Obstaculo[2];
+		obstaculos1[0]=o7;
+		obstaculos1[1]=o8;
 
 
 
@@ -132,42 +135,19 @@ public class Juego extends InterfaceJuego
   
     //Repetición de los niveles superiores
     detectaElMovimiento(entorno,p);
-
-    for(Obstaculo a: obstaculos) {
-
-    	if(p.getEnMovimiento()) {
-    	    a.setX(a.getX()-2);
+    	for(Obstaculo a: obstaculos) {
+    		if(p.getEnMovimiento()) {
+    			a.setX(a.getX()-2);
 
     		}
-    	if(a.bordeDerecho()<0) {
-    		Random ran=new Random();
-    		int r= ran.nextInt(entorno.alto());
-    		a.setX(entorno.ancho()+r);
-    		
+    		if(a.bordeDerecho()<0) {
+    			Random ran=new Random();
+    			int r= ran.nextInt(entorno.alto());
+    			a.setX(entorno.ancho()+r/2);
     	}
     		
     }
- for (Obstaculo obstaculo : obstaculos) {
-    	
-        obstaculo.dibujar(entorno);
-      
-        if (p.colisionaPorIzquierda(obstaculo)) {
-            bloqueaIzquierda = true;
-        }
  
-        if (p.colisionaPorDerecha(obstaculo)) {
-            bloqueaDerecha = true;
-        }
-
-        if (p.colisionaPorDebajo(obstaculo)) {
-            bloqueaAbajo = true;
-        }
-
-        if (p.colisionaPorArriba(obstaculo)) {
-            bloqueaArriba = true;
-        }      
-    }
-    
     //Repetición de los niveles base
     detectaElMovimiento(entorno,p);
     for(Obstaculo b: obstaculos1) {
@@ -178,11 +158,12 @@ public class Juego extends InterfaceJuego
     		/*if(!b.getEnPantalla()){
     			obsAuxiliar(nuevoObstaculo);}*/	
     		if(b.bordeDerecho()<0) {
-    			b.setX(entorno.ancho());
+    			Random ran=new Random();
+        		int r= ran.nextInt(entorno.alto());
+    			b.setX(entorno.ancho()+r/2);
 	    	}	
     		
     }
-	   
  
     //posicion del personaje en mitad de pantalla
     if(p.getX()>entorno.ancho()/2){
@@ -209,6 +190,8 @@ public class Juego extends InterfaceJuego
 	p.siElPersonajeTocaElBordeInferiorDeLaPantalla(); //aqui puse que el personaje se teletransporde caundo se cae
 }	
 	
+	
+	
 	public static void detectaElMovimiento(Entorno a, Personaje b) {
     	if (a.estaPresionada(a.TECLA_DERECHA) && b.getX()>=400) { //se agrego "b.getX()>=400" para que solo se mueba si esta a mitad de pantalla
     		b.setEnMovimiento(true);
@@ -218,7 +201,7 @@ public class Juego extends InterfaceJuego
     	}
     	if(a.estaPresionada(a.TECLA_DERECHA) && a.estaPresionada(a.TECLA_IZQUIERDA)) {
     		b.setEnMovimiento(false);
-    	}
+    		}
     	}
 	public static void controlDelProyectil(Personaje p, Entorno entorno) {
 		if(p.getDisparo()!=null) {
@@ -314,8 +297,7 @@ public class Juego extends InterfaceJuego
 			
 		}
 	}
-	
-	  
+  
 	/*public void obsAuxiliar(Obstaculo o) {
 			o= new Obstaculo (660,595,300,40);
 			o.dibujar(entorno);
@@ -323,11 +305,7 @@ public class Juego extends InterfaceJuego
 				o.setX(o.getX()-2);	
 			}
 				}*/
-			
-		
-
 	
-
 
 	@SuppressWarnings("unused")
 	public static void main(String[] args)

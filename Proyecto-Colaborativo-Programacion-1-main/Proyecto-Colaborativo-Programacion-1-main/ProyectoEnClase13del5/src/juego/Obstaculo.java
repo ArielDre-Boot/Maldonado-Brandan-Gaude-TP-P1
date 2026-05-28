@@ -1,6 +1,8 @@
 package juego;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 import entorno.Entorno;
 
@@ -79,4 +81,12 @@ public class Obstaculo {
 	public void setAlto(int alto) {
 		this.alto = alto;
 	}
+	public int setBordeDerecho(int a) {
+		return (this.x+this.ancho/2)+a;
+	}
+	public int setBordeIzquierdo(int a) {
+		return (this.x+this.ancho/2)+a;
+	}
+	
+	
 }

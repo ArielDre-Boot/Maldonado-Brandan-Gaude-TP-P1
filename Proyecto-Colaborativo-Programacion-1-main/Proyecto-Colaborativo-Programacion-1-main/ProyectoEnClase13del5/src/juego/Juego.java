@@ -19,7 +19,9 @@ public class Juego extends InterfaceJuego
     private LinkedList<Enemigo> enemigos;
 	/*private Obstaculo nuevoObstaculo;*/
 
-	private LinkedList<MostradorDeVida> vidas;
+	private Escritor t;
+
+	private MostradorDeVida[] vidas = new MostradorDeVida[10];
 
 	// Variables y métodos propios de cada grupo
 	// ...
@@ -60,13 +62,14 @@ public class Juego extends InterfaceJuego
 
 
 
-		//Creara la lista para mostrar la vida
-		 vidas = new LinkedList<MostradorDeVida>();
 		//se crean las vidas
 		for(int j = 0; j < p.getVida(); j++) {
 			MostradorDeVida v = new MostradorDeVida(j*50+50, 50);
-			vidas.add(v);
+			vidas[j]=v;
 		}
+
+		//crea el texto
+		t = new Escritor(325, 350, "Winer", "Loser")
 
 		// Inicia el juego!
 		this.entorno.iniciar();
@@ -82,9 +85,9 @@ public class Juego extends InterfaceJuego
 	public void tick()
 {
 		
-	
-
-		
+	for (int j = 0; j < p.getVida(); j++) {
+		vidas[j].dibujar(entorno);
+	}
 
 	for (MostradorDeVida vida:vidas) {
 		vida.dibujar(entorno);

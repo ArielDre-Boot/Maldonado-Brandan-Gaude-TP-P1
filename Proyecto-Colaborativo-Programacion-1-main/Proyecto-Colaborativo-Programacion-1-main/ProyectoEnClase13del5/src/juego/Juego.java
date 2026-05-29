@@ -34,7 +34,7 @@ public class Juego extends InterfaceJuego
 		
 	
 	    enemigos=new LinkedList<Enemigo>();
-
+	
 
 		Obstaculo o = new Obstaculo(150,500,200,20); //obstaculo inferior izquierdo 
 		Obstaculo o2 = new Obstaculo(150,400,200,20); //obstaculo superior izquierdo
@@ -147,7 +147,7 @@ public class Juego extends InterfaceJuego
 		Random randomEnemigos=new Random();
 		   int numeroAleatorio=randomEnemigos.nextInt(0,2);
 		   int posAleatoria=randomEnemigos.nextInt(550-300+1)+300;
-		   int posAleatoria2=randomEnemigos.nextInt(200-100+1)+100;
+		   int posAleatoria2=randomEnemigos.nextInt(200- 100+1)+100;
 		   if(numeroAleatorio==0) {
 			   Enemigo e=new Enemigo(entorno.ancho()+posAleatoria2, posAleatoria, 40, 40,"izquierda");
 				
@@ -162,9 +162,20 @@ public class Juego extends InterfaceJuego
     // Dibujo de los enemigos y control de colisiones entre los obstacuos y el jugador
 	for (int i=0;i<enemigos.size();i++) {
 			Enemigo enemigo=enemigos.get(i);
-			
+		
 		
 			if(enemigo!=null) {
+				if(p.getDisparo()!=null) {
+					if(p.getDisparo().colisionaDisparoConEnemigo(enemigo)) {
+						enemigo=null;
+						enemigos.set(i, enemigo);
+						p.setDisparo(null);
+						break;
+					}
+					
+					
+				}
+		
 				for(Obstaculo o :obstaculos) {
 					if(enemigo.colisionaConObstaculo(o)) {
 				
@@ -308,6 +319,7 @@ public class Juego extends InterfaceJuego
 		//movimiento del proyectil
 		if (p.getDisparo()!=null) {
 			p.getDisparo().mover();
+		
 		}
 		
 		//colicsiones del proyectil

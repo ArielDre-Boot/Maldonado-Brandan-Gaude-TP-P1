@@ -15,8 +15,7 @@ public class Juego extends InterfaceJuego
 	private Personaje p;
 	private Obstaculo[] obstaculos;
 	private Obstaculo[] obstaculos1;
-	private Image imagenFondo;
-	private Obstaculo obsExtra;
+
 	/*private Obstaculo [] arregloDeObstaculos;
 	private Obstaculo nuevoObstaculo;*/
 

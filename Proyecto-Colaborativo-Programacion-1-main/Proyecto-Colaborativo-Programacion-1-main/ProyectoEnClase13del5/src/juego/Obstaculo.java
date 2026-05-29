@@ -1,9 +1,6 @@
 package juego;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.LinkedList;
-
 import entorno.Entorno;
 
 public class Obstaculo {

@@ -5,12 +5,14 @@ import java.awt.Color;
 import java.util.LinkedList;
 
 import entorno.Entorno;
+import entorno.Herramientas;
 import entorno.InterfaceJuego;
 
 public class Juego extends InterfaceJuego
 {
 	// El objeto Entorno que controla el tiempo y otros
 	private Entorno entorno;
+	
 	private Personaje p;
 	private LinkedList<Obstaculo> obstaculos;
 	private LinkedList<Obstaculo> obstaculos1;
@@ -31,6 +33,8 @@ public class Juego extends InterfaceJuego
 	{
 		// Inicializa el objeto entorno
 		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
+
+	
 		// Inicializar lo que haga falta para el juego
 		// ...
 		p = new Personaje(140,300,20,50);

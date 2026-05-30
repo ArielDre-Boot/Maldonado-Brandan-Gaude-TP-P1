@@ -89,12 +89,11 @@ public class Juego extends InterfaceJuego
 	public void tick()
 {
 		
-	for (int j = 0; j < p.getVida(); j++) {
-		vidas[j].dibujar(entorno);
-	}
 
-	for (MostradorDeVida vida:vidas) {
-		vida.dibujar(entorno);
+	for (MostradorDeVida vida: this.vidas) {
+		if (v != null) {
+			vida.dibujar(entorno);
+		}
 	}
 
 
@@ -196,7 +195,7 @@ public class Juego extends InterfaceJuego
 					if(enemigo.colisionaConObstaculo(o)) {
 						enemigo=null;
 						enemigos[i]=enemigo;
-						  enemigosVivos--;
+						enemigosVivos--;
 						break;
 					}
 		
@@ -208,6 +207,7 @@ public class Juego extends InterfaceJuego
 						enemigo=null;
 						enemigos[i]=enemigo;
 			        	enemigosVivos--;
+						vidas = convertirANUllLaVida(entorno, vidas);
 			            
 			        }else {
 			        	if(enemigo.getDireccion().equals("izquierda")) {
@@ -317,7 +317,10 @@ public class Juego extends InterfaceJuego
 
     controlDelProyectil(p, entorno);
 
-	p.siElPersonajeTocaElBordeInferiorDeLaPantalla(); //aqui puse que el personaje se teletransporde caundo se cae
+	if (p.siElPersonajeTocaElBordeInferiorDeLaPantalla() == true)//aqui puse que el personaje se teletransporde caundo se cae
+	{
+		vidas = convertirANUllLaVida(entorno, vidas);
+	}
 }	
 
 	

@@ -19,6 +19,7 @@ public class Personaje {
     private int velocidadY=5;
 	private int vida = 10;
 	private boolean llegoAlCastillo;
+	
 	public Personaje(int x, int y, int ancho, int alto) {
 		this.x = x;
 		this.y = y;
@@ -136,6 +137,7 @@ public class Personaje {
 	return false;
 	
 	}
+	
 
 		
 		

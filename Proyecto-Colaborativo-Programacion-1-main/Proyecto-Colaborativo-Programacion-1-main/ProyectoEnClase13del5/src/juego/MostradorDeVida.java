@@ -14,7 +14,6 @@ public class MostradorDeVida {
 	public MostradorDeVida(int x, int y) {
 		this.x = x;
 		this.y = y;
-		
 		ImageIcon icono = new ImageIcon(getClass().getResource("Corazon.png"));
         this.imagen = icono.getImage();
 	}
@@ -23,8 +22,6 @@ public class MostradorDeVida {
 		e.dibujarImagen(imagen, x, y, 0,0.08);
 	}
 	
-	
-
 	public int getX() {
 		return x;
 	}

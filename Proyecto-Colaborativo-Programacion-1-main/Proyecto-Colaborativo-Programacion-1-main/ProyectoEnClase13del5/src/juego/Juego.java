@@ -431,7 +431,16 @@ public class Juego extends InterfaceJuego
 		}
 	}
 	
-	  
+	public static MostradorDeVida[] convertirANUllLaVida(Entorno e, MostradorDeVida[] v) {
+		boolean yaSeQuito = false;
+		for (int i = v.length-1; i > -1; i = i -1) {
+			if (v[i]!=null && yaSeQuito == false) {
+				yaSeQuito = true;
+				v[i] = null;
+			}
+		}
+		return v;
+	}
 	/*public void obsAuxiliar(Obstaculo o) {
 			o= new Obstaculo (660,595,300,40);
 			o.dibujar(entorno);

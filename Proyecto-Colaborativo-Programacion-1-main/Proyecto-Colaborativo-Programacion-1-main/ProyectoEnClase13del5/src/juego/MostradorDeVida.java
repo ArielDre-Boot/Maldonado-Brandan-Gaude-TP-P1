@@ -3,6 +3,7 @@ package juego;
 import javax.swing.*;
 
 import entorno.Entorno;
+import entorno.Herramientas;
 
 import java.awt.*;
 
@@ -15,10 +16,10 @@ public class MostradorDeVida {
 		this.x = x;
 		this.y = y;
 		
-		ImageIcon icono = new ImageIcon(getClass().getResource("Corazon.png"));
-        this.imagen = icono.getImage();
+		Image icono= Herramientas.cargarImagen("juego/Corazon.jpg");
+        this.imagen = icono;
 	}
-	
+
 	public void dibujar(Entorno e) {
 		e.dibujarImagen(imagen, x, y, 0,0.08);
 	}

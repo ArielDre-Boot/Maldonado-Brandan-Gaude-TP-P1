@@ -18,7 +18,7 @@ public class Juego extends InterfaceJuego
 	private LinkedList<Obstaculo> obstaculos1;
 	private int limiteEnemigos=10;
 	private int enemigosVivos=0;
-  
+	private Castillo castillo;
     private Enemigo[] enemigos= new Enemigo[10];
 	/*private Obstaculo nuevoObstaculo;*/
 
@@ -27,19 +27,20 @@ public class Juego extends InterfaceJuego
 	private MostradorDeVida[] vidas = new MostradorDeVida[10];
 
 	// Variables y métodos propios de cada grupo
-	// ...
-	
+	// ..
 	Juego()
 	{
 		// Inicializa el objeto entorno
 		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
+	
 
+	
 	
 		// Inicializar lo que haga falta para el juego
 		// ...
 		p = new Personaje(140,300,20,50);
 		
-	
+		castillo= new Castillo(400, 500,100, 100);
 	
 
 		Obstaculo o = new Obstaculo(150,500,200,20); //obstaculo inferior izquierdo 
@@ -89,6 +90,8 @@ public class Juego extends InterfaceJuego
 	public void tick()
 {
 		
+		castillo.dibujar(entorno);
+		
 	for (int j = 0; j < p.getVida(); j++) {
 		vidas[j].dibujar(entorno);
 	}
@@ -105,9 +108,14 @@ public class Juego extends InterfaceJuego
     boolean bloqueaDerecha = false;
     boolean bloqueaAbajo = false;
     boolean bloqueaArriba = false;
+	entorno.cambiarFont("Arial", 30, Color.WHITE);
 
-
-
+	   p.colisionaCastillo(castillo);
+	    if(p.isGano()) {
+	    	
+			t.dibujar('W', entorno);
+		};
+	
     for (Obstaculo obstaculo : obstaculos) {
 
         obstaculo.dibujar(entorno);
@@ -151,7 +159,7 @@ public class Juego extends InterfaceJuego
     }
   //Generacion de los enemigos de forma aleatoria
       for (int i=0;i<enemigos.length;i++) {
-    	  if(enemigos[i]==null && enemigosVivos<limiteEnemigos) {
+    	  if(enemigos[i]==null && enemigosVivos<limiteEnemigos && !p.isGano()) {
     			Random randomEnemigos=new Random();
     			   int numeroAleatorio=randomEnemigos.nextInt(0,2);
     			   int posAleatoria=randomEnemigos.nextInt(550-300+1)+300;
@@ -303,22 +311,28 @@ public class Juego extends InterfaceJuego
 		
 
 	}
+ 
+    if(!p.isGano()) {
+    	  controlMovimientoJugador(
+    		        entorno,
+    		        p,
+    		        bloqueaIzquierda,
+    		        bloqueaDerecha,
+    		        bloqueaAbajo,
+    		        bloqueaArriba
+    		    );
+    		    controlDelSalto(p,bloqueaArriba);
 
-
-    controlMovimientoJugador(
-        entorno,
-        p,
-        bloqueaIzquierda,
-        bloqueaDerecha,
-        bloqueaAbajo,
-        bloqueaArriba
-    );
-    controlDelSalto(p,bloqueaArriba);
-
-    controlDelProyectil(p, entorno);
-
+    		    controlDelProyectil(p, entorno);
+    }
+  
+  
+    
+   
 	p.siElPersonajeTocaElBordeInferiorDeLaPantalla(); //aqui puse que el personaje se teletransporde caundo se cae
+	
 }	
+	
 
 	
 	public static void detectaElMovimiento(Entorno a, Personaje b) {

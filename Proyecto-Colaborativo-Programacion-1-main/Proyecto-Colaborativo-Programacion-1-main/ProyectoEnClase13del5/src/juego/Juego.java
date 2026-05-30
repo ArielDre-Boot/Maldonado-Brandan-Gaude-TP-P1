@@ -25,7 +25,7 @@ public class Juego extends InterfaceJuego
 	private double y;
 	private double angulo;
 	private double escala;
-	private ImagenFondo imagen;
+	private Image imagen;
 	// Variables y métodos propios de cada grupo
 	// ...
 	
@@ -33,6 +33,8 @@ public class Juego extends InterfaceJuego
 	{
 		// Inicializa el objeto entorno
 		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
+
+	
 		// Inicializar lo que haga falta para el juego
 		// ...
 		p = new Personaje(140,300,20,50);
@@ -44,7 +46,7 @@ public class Juego extends InterfaceJuego
 		Obstaculo o5= new Obstaculo(650,400, 120,20); //obstaculo superior derecho
 		Obstaculo o7 = new Obstaculo(170,595,340,40); //obstaculo base izquierdo
 		Obstaculo o8 = new Obstaculo(660,595,400,40); //obstaculo base derecho
-		imagen= new ImagenFondo(0,0);
+		imagen=Herramientas.cargarImagen("juego/fondo.jpg");
 		obstaculos= new Obstaculo[5];
 		obstaculos[0]=o;
 		obstaculos[1]=o2;
@@ -80,16 +82,17 @@ public class Juego extends InterfaceJuego
 	 */
 	public void tick()
 {
-		
-	for (int j = 0; j < p.getVida(); j++) {
-		vidas[j].dibujar(entorno);
-	}
+	entorno.dibujarImagen(imagen,entorno.ancho()/2,entorno.alto()/2,0,1);
 
-	for (MostradorDeVida vida:vidas) {
-		vida.dibujar(entorno);
+	for (MostradorDeVida vida: this.vidas) {
+		if (vida!= null) {
+			vida.dibujar(entorno);
+		}
 	}
+	
 
-	imagen.dibujarImagen(entorno);
+	
+	/*imagen.dibujarImagen(entorno);*/
     p.dibujar(entorno);
     
     ///Limites de colisión de los niveles(obstaculos) superiores
@@ -188,7 +191,7 @@ public class Juego extends InterfaceJuego
 					if(enemigo.colisionaConObstaculo(o)) {
 						enemigo=null;
 						enemigos[i]=enemigo;
-						  enemigosVivos--;
+						enemigosVivos--;
 						break;
 					}
 		
@@ -200,6 +203,7 @@ public class Juego extends InterfaceJuego
 						enemigo=null;
 						enemigos[i]=enemigo;
 			        	enemigosVivos--;
+						vidas = convertirANUllLaVida(entorno, vidas);
 			            
 			        }else {
 			        	if(enemigo.getDireccion().equals("izquierda")) {
@@ -286,7 +290,10 @@ public class Juego extends InterfaceJuego
 
     controlDelProyectil(p, entorno);
 
-	p.siElPersonajeTocaElBordeInferiorDeLaPantalla(); //aqui puse que el personaje se teletransporde caundo se cae
+	if (p.siElPersonajeTocaElBordeInferiorDeLaPantalla() == true)//aqui puse que el personaje se teletransporde caundo se cae
+	{
+		vidas = convertirANUllLaVida(entorno, vidas);
+	}
 }	
 
 	
@@ -399,7 +406,17 @@ public class Juego extends InterfaceJuego
 		}
 	}
 	
-	
+	public static MostradorDeVida[] convertirANUllLaVida(Entorno e, MostradorDeVida[] v) {
+		boolean yaSeQuito = false;
+		for (int i = v.length-1; i > -1; i = i -1) {
+			if (v[i]!=null && yaSeQuito == false) {
+				yaSeQuito = true;
+				v[i] = null;
+			}
+		}
+		return v;
+	}
+
 	/*public void obsAuxiliar(Obstaculo o) {
 			o= new Obstaculo (660,595,300,40);
 			o.dibujar(entorno);

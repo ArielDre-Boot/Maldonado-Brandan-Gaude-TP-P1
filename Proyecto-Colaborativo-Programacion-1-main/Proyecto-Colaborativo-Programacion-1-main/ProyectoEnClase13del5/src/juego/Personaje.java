@@ -147,11 +147,13 @@ public class Personaje {
 	}
 	
 	//aqui se agrego para teletransportar en caso de que el personaje toque el borde inferior de la pantalla
-	public void siElPersonajeTocaElBordeInferiorDeLaPantalla() {
+	public boolean siElPersonajeTocaElBordeInferiorDeLaPantalla() {
 		if (this.y >= 575) {
 			this.y = 100;
 			this.x = 300;
+			return false;
 		}
+		return true;
 	}
 	
 	//disparo

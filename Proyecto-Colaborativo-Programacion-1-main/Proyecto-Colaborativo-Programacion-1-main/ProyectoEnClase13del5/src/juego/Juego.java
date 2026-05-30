@@ -2,6 +2,7 @@ package juego;
 
 import java.util.Random;
 import java.awt.Color;
+import java.awt.Image;
 import java.util.LinkedList;
 
 import entorno.Entorno;
@@ -20,6 +21,7 @@ public class Juego extends InterfaceJuego
 	private int enemigosVivos=0;
 	private Castillo castillo;
     private Enemigo[] enemigos= new Enemigo[10];
+    private Image imagen;
 	/*private Obstaculo nuevoObstaculo;*/
 
 	private Escritor t;
@@ -51,7 +53,7 @@ public class Juego extends InterfaceJuego
 		Obstaculo o7 = new Obstaculo(170,595,340,40);
 		Obstaculo o8 = new Obstaculo(660,595,400,40);
 		
-		
+		imagen=Herramientas.cargarImagen("juego/fondo.jpg");
 		
 
 		obstaculos=new LinkedList<Obstaculo>();
@@ -91,7 +93,7 @@ public class Juego extends InterfaceJuego
 {
 		
 
-
+		entorno.dibujarImagen(imagen, entorno.ancho()/2, entorno.alto()/2, 0,1 );
 	for (MostradorDeVida vida: this.vidas) {
 		if (vida != null) {
 			vida.dibujar(entorno);

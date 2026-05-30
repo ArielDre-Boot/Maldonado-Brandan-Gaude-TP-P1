@@ -90,14 +90,12 @@ public class Juego extends InterfaceJuego
 	public void tick()
 {
 		
-		castillo.dibujar(entorno);
-		
-	for (int j = 0; j < p.getVida(); j++) {
-		vidas[j].dibujar(entorno);
-	}
 
-	for (MostradorDeVida vida:vidas) {
-		vida.dibujar(entorno);
+
+	for (MostradorDeVida vida: this.vidas) {
+		if (vida != null) {
+			vida.dibujar(entorno);
+		}
 	}
 
 
@@ -108,13 +106,7 @@ public class Juego extends InterfaceJuego
     boolean bloqueaDerecha = false;
     boolean bloqueaAbajo = false;
     boolean bloqueaArriba = false;
-	entorno.cambiarFont("Arial", 30, Color.WHITE);
-
-	   p.colisionaCastillo(castillo);
-	    if(p.isGano()) {
-	    	
-			t.dibujar('W', entorno);
-		};
+	
 	
     for (Obstaculo obstaculo : obstaculos) {
 
@@ -204,7 +196,7 @@ public class Juego extends InterfaceJuego
 					if(enemigo.colisionaConObstaculo(o)) {
 						enemigo=null;
 						enemigos[i]=enemigo;
-						  enemigosVivos--;
+						enemigosVivos--;
 						break;
 					}
 		
@@ -216,6 +208,7 @@ public class Juego extends InterfaceJuego
 						enemigo=null;
 						enemigos[i]=enemigo;
 			        	enemigosVivos--;
+						vidas = convertirANUllLaVida(entorno, vidas);
 			            
 			        }else {
 			        	if(enemigo.getDireccion().equals("izquierda")) {
@@ -302,7 +295,11 @@ public class Juego extends InterfaceJuego
     		
     }
 	   
- 
+   castillo.dibujar(entorno);
+   if(p.isGano()) {
+   	
+		t.dibujar('W', entorno);
+	};
     //posicion del personaje en mitad de pantalla
     if(p.getX()>entorno.ancho()/2){
 
@@ -323,14 +320,23 @@ public class Juego extends InterfaceJuego
     		    );
     		    controlDelSalto(p,bloqueaArriba);
 
+
     		    controlDelProyectil(p, entorno);
-    }
-  
-  
-    
    
-	p.siElPersonajeTocaElBordeInferiorDeLaPantalla(); //aqui puse que el personaje se teletransporde caundo se cae
 	
+
+    	
+
+    			   p.colisionaCastillo(castillo);
+    			
+  
+
+	if (p.siElPersonajeTocaElBordeInferiorDeLaPantalla())//aqui puse que el personaje se teletransporde caundo se cae
+	{
+		vidas = convertirANUllLaVida(entorno, vidas);
+	}
+    }
+
 }	
 	
 
@@ -442,7 +448,16 @@ public class Juego extends InterfaceJuego
 		}
 	}
 	
-	  
+	public static MostradorDeVida[] convertirANUllLaVida(Entorno e, MostradorDeVida[] v) {
+		boolean yaSeQuito = false;
+		for (int i = v.length-1; i > -1; i = i -1) {
+			if (v[i]!=null && yaSeQuito == false) {
+				yaSeQuito = true;
+				v[i] = null;
+			}
+		}
+		return v;
+	}
 	/*public void obsAuxiliar(Obstaculo o) {
 			o= new Obstaculo (660,595,300,40);
 			o.dibujar(entorno);

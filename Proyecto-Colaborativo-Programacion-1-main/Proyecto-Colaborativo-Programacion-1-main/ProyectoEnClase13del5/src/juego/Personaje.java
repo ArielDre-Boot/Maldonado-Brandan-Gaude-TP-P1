@@ -20,7 +20,7 @@ public class Personaje {
 	private int vida = 10;
     private boolean gano;
 	private boolean perdio;
-    private Barrera rayo;
+    private Barrera barrera;
 	public Personaje(int x, int y, int ancho, int alto) {
 		this.x = x;
 		this.y = y;
@@ -264,4 +264,14 @@ public class Personaje {
 	public int getVida() {
 		return vida;
 	}
+	public void setSeMueve(boolean seMueve) {
+		this.seMueve = seMueve;
+	}
+	public boolean isPerdio() {
+		return perdio;
+	}
+	public void setPerdio(boolean perdio) {
+		this.perdio = perdio;
+	}
+	
 }

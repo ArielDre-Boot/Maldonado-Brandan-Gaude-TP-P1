@@ -19,12 +19,12 @@ public class Escritor {
 		
 	}
 	
-	public void dibujar(String a, Entorno e) {
+	public void dibujar(char c, Entorno e) {
 		e.cambiarFont("Arial", 50, Color.cyan);
-		if (a.equals("W")) {
+		if (c=='W') {
 			e.escribirTexto(textoGanador, x, y);		
 		}
-		if (a.equals("L")) {
+		if (c=='L') {
 			e.escribirTexto(textoPerdedor, x, y);
 		}
 	}

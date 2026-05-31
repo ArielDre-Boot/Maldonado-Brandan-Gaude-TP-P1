@@ -19,7 +19,7 @@ public class Personaje {
     private int velocidadY=5;
 	private int vida = 10;
 	private boolean llegoAlCastillo;
-	
+    private boolean gano;
 	public Personaje(int x, int y, int ancho, int alto) {
 		this.x = x;
 		this.y = y;
@@ -29,6 +29,7 @@ public class Personaje {
 		this.disparo=null;
 		this.tieneGravedad=true;
 		this.estaSaltando=false;
+		this.gano=false;
 		this.seMueve=false;
 		this.llegoAlCastillo=false;
 	}
@@ -100,7 +101,7 @@ public class Personaje {
 	}
 	
 
-	public boolean colisionaPorDerecha(Obstaculo o) {
+	public boolean colisionaPorDerecha(Obstaculo o ) {
 		if(bordeDerecho()>= o.bordeIzquierdo()&& bordeIzquierdo()<= o.getX()) {
 			if(bordeInferior()>=o.bordeSuperior()+1 && bordeSuperior()<=o.bordeInferior()-1) {
 				rebote(-5);
@@ -138,9 +139,23 @@ public class Personaje {
 	
 	}
 	
-
+	public void colisionaCastillo(Castillo c ) {
+		if(bordeIzquierdo()<= c.bordeDerecho() && bordeDerecho()>=(c.bordeIzquierdo())) { 
+			if(bordeInferior()>=c.bordeSuperior()+1 && bordeSuperior()<=c.bordeInferior()-1) {
+			
+				this.gano=true;
+			}	
+		}
+	
+	}
 		
 		
+	public boolean isGano() {
+		return this.gano;
+	}
+	public void setGano(boolean gano) {
+		this.gano = gano;
+	}
 	//aqui se agrego el rebote de el personaje para que no se quede atrapado
 	public void rebote(int a) {
 		this.x += a;
@@ -151,9 +166,11 @@ public class Personaje {
 		if (this.y >= 575) {
 			this.y = 100;
 			this.x = 300;
-			return false;
+			return true;
+
 		}
-		return true;
+
+		return false;
 	}
 	
 	//disparo

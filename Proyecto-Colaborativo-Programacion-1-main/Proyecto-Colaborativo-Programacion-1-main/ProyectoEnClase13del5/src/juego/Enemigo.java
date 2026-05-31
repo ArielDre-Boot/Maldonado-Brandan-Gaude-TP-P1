@@ -78,7 +78,6 @@ public class Enemigo {
 		return false;
 	}
 	public boolean colisionaConObstaculo(Obstaculo o) {
-		
 		if(bordeInferior()>= o.bordeSuperior() && bordeSuperior()<=o.bordeInferior()
 				) { 
 			return true;

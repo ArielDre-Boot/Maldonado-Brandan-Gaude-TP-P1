@@ -14,10 +14,11 @@ public class Juego extends InterfaceJuego
 	// El objeto Entorno que controla el tiempo y otros
 	private Entorno entorno;
 	private Personaje p;
-	private Obstaculo[] obstaculos;
-	private Obstaculo[] obstaculos1;
+	private Obstaculo[] obstaculos= new Obstaculo[20];
+	private Obstaculo[] obstaculos1=new Obstaculo[10];
 	private int limiteEnemigos=10;
 	private int enemigosVivos=0;
+	private Castillo castillo;
     private Enemigo[] enemigos= new Enemigo[10];
 	private Escritor t;
 	private MostradorDeVida[] vidas = new MostradorDeVida[10];
@@ -27,18 +28,22 @@ public class Juego extends InterfaceJuego
 	private double escala;
 	private Image imagen;
 	// Variables y métodos propios de cada grupo
-	// ...
-	
+	// ..
 	Juego()
 	{
 		// Inicializa el objeto entorno
 		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
+	
 
+	
 	
 		// Inicializar lo que haga falta para el juego
 		// ...
 		p = new Personaje(140,300,20,50);
 
+		
+		castillo= new Castillo(400, 500,100, 100);
+	
 		Obstaculo o = new Obstaculo(150,500,200,20); //obstaculo inferior izquierdo 
 		Obstaculo o2 = new Obstaculo(150,400,200,20); //obstaculo superior izquierdo
 		Obstaculo o3 = new Obstaculo(450,400,200,20); //obstaculo superior del medio
@@ -47,16 +52,7 @@ public class Juego extends InterfaceJuego
 		Obstaculo o7 = new Obstaculo(170,595,340,40); //obstaculo base izquierdo
 		Obstaculo o8 = new Obstaculo(660,595,400,40); //obstaculo base derecho
 		imagen=Herramientas.cargarImagen("juego/fondo.jpg");
-		obstaculos= new Obstaculo[5];
-		obstaculos[0]=o;
-		obstaculos[1]=o2;
-		obstaculos[2]=o3;
-		obstaculos[3]=o4;
-		obstaculos[4]=o5;
-
-		obstaculos1=new Obstaculo[2];
-		obstaculos1[0]=o7;
-		obstaculos1[1]=o8;
+		
 
 
 
@@ -65,7 +61,8 @@ public class Juego extends InterfaceJuego
 			MostradorDeVida v = new MostradorDeVida(j*50+50, 50);
 			vidas[j]=v;
 		}
-
+		//creacion de los niveles superiores
+	
 		//crea el texto
 		t = new Escritor(325, 350, "Winer", "Loser");
 
@@ -82,8 +79,8 @@ public class Juego extends InterfaceJuego
 	 */
 	public void tick()
 {
-	entorno.dibujarImagen(imagen,entorno.ancho()/2,entorno.alto()/2,0,1);
 
+	entorno.dibujarImagen(imagen,entorno.ancho()/2,entorno.alto()/2,0,1);
 	for (MostradorDeVida vida: this.vidas) {
 		if (vida!= null) {
 			vida.dibujar(entorno);
@@ -100,13 +97,14 @@ public class Juego extends InterfaceJuego
     boolean bloqueaDerecha = false;
     boolean bloqueaAbajo = false;
     boolean bloqueaArriba = false;
-
-
-
+	
+	
     for (Obstaculo obstaculo : obstaculos) {
-
+    	if(obstaculo!=null) {
+    		
+    	
         obstaculo.dibujar(entorno);
-     
+        
         if (p.colisionaPorIzquierda(obstaculo)) {
             bloqueaIzquierda = true;
         }
@@ -122,10 +120,11 @@ public class Juego extends InterfaceJuego
         if (p.colisionaPorArriba(obstaculo)) {
             bloqueaArriba = true;
         }      
+    	}
     }
     ///Limites de colisión de los niveles (obstaculos) de la base 
     for (Obstaculo o: obstaculos1) {
-    	
+    	if(o!=null) {
     	o.dibujar(entorno);
     	
     	if(p.colisionaPorIzquierda(o)){
@@ -143,10 +142,11 @@ public class Juego extends InterfaceJuego
     	if(p.colisionaPorDebajo(o)) {
     		bloqueaAbajo=true;
     	}
+    	}
     }
   //Generacion de los enemigos de forma aleatoria
       for (int i=0;i<enemigos.length;i++) {
-    	  if(enemigos[i]==null && enemigosVivos<limiteEnemigos) {
+    	  if(enemigos[i]==null && enemigosVivos<limiteEnemigos && !p.isGano()) {
     			Random randomEnemigos=new Random();
     			   int numeroAleatorio=randomEnemigos.nextInt(0,2);
     			   int posAleatoria=randomEnemigos.nextInt(550-300+1)+300;
@@ -188,7 +188,7 @@ public class Juego extends InterfaceJuego
 				}
 		
 				for(Obstaculo o :obstaculos) {
-					if(enemigo.colisionaConObstaculo(o)) {
+					if(o!=null && enemigo.colisionaConObstaculo(o)) {
 						enemigo=null;
 						enemigos[i]=enemigo;
 						enemigosVivos--;
@@ -236,10 +236,32 @@ public class Juego extends InterfaceJuego
 		}
 				
 		}
+	
   
     //Repetición de los niveles superiores
     detectaElMovimiento(entorno,p);
-    	for(Obstaculo a: obstaculos) {
+	int valorY=400; 
+	int anchoObstaculo= 120; 
+	int altoObstaculo=20;
+	for(int i=0; i<obstaculos.length; i++) {
+		Random valoresRandoms= new Random(); 
+		int numerosRan= valoresRandoms.nextInt(401-200+1)+200;
+		if(obstaculos[i]==null) { 
+			Obstaculo o= new Obstaculo (400*i+numerosRan, valorY, anchoObstaculo, altoObstaculo); 
+			obstaculos[i]=o; } 
+		else if (obstaculos[i]!=null && p.getEnMovimiento()){ 
+			obstaculos[i].setX(obstaculos[i].getX()-2); } 
+		if(obstaculos[i]!=null && obstaculos[i].bordeIzquierdo()<0){ 
+				obstaculos[i]=null;}
+
+	}
+
+
+
+    
+    
+    
+    /*for(Obstaculo a: obstaculos) {
     		if(p.getEnMovimiento()) {
     			a.setX(a.getX()-2);}
     		if(a.bordeDerecho()<0) {
@@ -248,25 +270,32 @@ public class Juego extends InterfaceJuego
     			a.setX(entorno.ancho()+r/2);
     	}
     		
-    }
+    }*/
  
     //Repetición de los niveles base
     detectaElMovimiento(entorno,p);
-    for(Obstaculo b: obstaculos1) {
-    		if(p.getEnMovimiento()) {
-    			b.setX(b.getX()-2);
-    			/*b.setEnPantalla(true);*/
-    		}
-    		/*if(!b.getEnPantalla()){
-    			obsAuxiliar(nuevoObstaculo);}*/	
-    		if(b.bordeDerecho()<0) {
-    			Random ran=new Random();
-        		int r= ran.nextInt(entorno.alto());
-    			b.setX(entorno.ancho()+r/2);
-	    	}	
-    		
-    }
- 
+   
+	for(int i=0; i<obstaculos1.length; i++) {
+		Random valoresRandoms= new Random(); 
+		int numerosRan= valoresRandoms.nextInt(401-200+1)+200;
+		if(obstaculos1[i]==null &&  !p.getEnMovimiento()) { 
+			Obstaculo o= new Obstaculo (entorno.ancho()+numerosRan, valorY+100, anchoObstaculo, altoObstaculo); 
+			obstaculos1[i]=o; } 
+		if (obstaculos1[i]!=null && p.getEnMovimiento()){ 
+			obstaculos1[i].setX(obstaculos1[i].getX()-2); } 
+		
+
+	}
+
+    
+    
+    
+   castillo.dibujar(entorno);
+   if(p.isGano()) {
+   	
+		t.dibujar('W', entorno);
+	};
+
     //posicion del personaje en mitad de pantalla
     if(p.getX()>entorno.ancho()/2){
 
@@ -275,7 +304,18 @@ public class Juego extends InterfaceJuego
 		
 
 	}
-    
+
+    if(!p.isGano()) {
+    	  controlMovimientoJugador(
+    		        entorno,
+    		        p,
+    		        bloqueaIzquierda,
+    		        bloqueaDerecha,
+    		        bloqueaAbajo,
+    		        bloqueaArriba
+    		    );
+    		    controlDelSalto(p,bloqueaArriba);
+
 
     
     controlMovimientoJugador(
@@ -287,14 +327,18 @@ public class Juego extends InterfaceJuego
         bloqueaArriba
     );
     controlDelSalto(p,bloqueaArriba);
-
     controlDelProyectil(p, entorno);
+    p.colisionaCastillo(castillo);
+    			
 
-	if (p.siElPersonajeTocaElBordeInferiorDeLaPantalla() == true)//aqui puse que el personaje se teletransporde caundo se cae
+	if (p.siElPersonajeTocaElBordeInferiorDeLaPantalla())//aqui puse que el personaje se teletransporde caundo se cae
 	{
 		vidas = convertirANUllLaVida(entorno, vidas);
 	}
-}	
+    }}
+    
+
+	
 
 	
 	
@@ -416,7 +460,29 @@ public class Juego extends InterfaceJuego
 		}
 		return v;
 	}
-
+	/*public static Obstaculo nivelesSuperiores(Obstaculo [] obstaculos , Personaje p) {
+		int valorY=400;
+		int anchoObstaculo= 120;
+		int altoObstaculo=20;
+		for(int i=0; i<obstaculos.length;i++) {
+			Obstaculo obs= new Obstaculo(400*i, valorY, anchoObstaculo, altoObstaculo);
+			obstaculos[i]=obs;
+		for(int a=0; a<obstaculos.length; a++) {
+    		if (obstaculos[a]!=null && p.getEnMovimiento()){
+    			obstaculos[a].setX(obstaculos[a].getX()-2);
+    		}
+    		if(obstaculos[i].bordeDerecho()<0) {
+    			obstaculos[i]=null;
+    		}
+    		if(obstaculos[a]==null) {
+		    	Obstaculo nuevoObs= new Obstaculo(400*a, 400, 120, 20 );
+		    	obstaculos[a]= nuevoObs;
+    			}
+    		}
+			}
+		}*/
+	 
+		
 	/*public void obsAuxiliar(Obstaculo o) {
 			o= new Obstaculo (660,595,300,40);
 			o.dibujar(entorno);

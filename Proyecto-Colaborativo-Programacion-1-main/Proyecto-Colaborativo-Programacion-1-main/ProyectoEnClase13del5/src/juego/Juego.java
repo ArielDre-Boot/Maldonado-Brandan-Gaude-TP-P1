@@ -210,7 +210,7 @@ public class Juego extends InterfaceJuego
 						enemigo=null;
 						enemigos[i]=enemigo;
 			        	enemigosVivos--;
-						vidas = convertirANUllLaVida(entorno, vidas);
+						vidas = convertirANUllLaVida(entorno, vidas, p);
 			            
 			        }else {
 			        	if(enemigo.getDireccion().equals("izquierda")) {
@@ -334,11 +334,11 @@ public class Juego extends InterfaceJuego
 
     			p.colisionaCastillo(castillo);
     			
-  
+	}
 
 	if (p.siElPersonajeTocaElBordeInferiorDeLaPantalla())//aqui puse que el personaje se teletransporde caundo se cae
 	{
-		vidas = convertirANUllLaVida(entorno, vidas);
+		vidas = convertirANUllLaVida(entorno, vidas, p);
 	}
     if (p.isPerdio() == true) {
 		t.dibujar('L', entorno);	

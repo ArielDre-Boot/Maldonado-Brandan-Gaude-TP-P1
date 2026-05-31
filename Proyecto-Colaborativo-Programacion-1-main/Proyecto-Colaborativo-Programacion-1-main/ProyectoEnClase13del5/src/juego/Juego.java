@@ -297,7 +297,10 @@ public class Juego extends InterfaceJuego
     		
     }
 	   
-   castillo.dibujar(entorno);
+    castillo.dibujar(entorno);
+	if (p.isSeMueve() == true) {
+		castillo.setX(castillo.getX() - 1);
+	}
    if(p.isGano()) {
    	
 		t.dibujar('W', entorno);

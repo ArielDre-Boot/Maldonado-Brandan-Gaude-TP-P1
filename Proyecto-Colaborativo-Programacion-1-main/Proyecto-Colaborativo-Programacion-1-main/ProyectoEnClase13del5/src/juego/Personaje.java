@@ -273,5 +273,14 @@ public class Personaje {
 	public void setPerdio(boolean perdio) {
 		this.perdio = perdio;
 	}
+	public Barrera getBarrera() {
+		return barrera;
+	}
+	public void setBarrera(Barrera barrera) {
+		this.barrera = barrera;
+	}
+	public boolean isSeMueve() {
+		return seMueve;
+	}
 	
 }

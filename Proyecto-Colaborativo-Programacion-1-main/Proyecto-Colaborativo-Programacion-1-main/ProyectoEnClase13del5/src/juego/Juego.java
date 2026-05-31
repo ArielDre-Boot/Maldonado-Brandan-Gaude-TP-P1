@@ -470,7 +470,7 @@ public class Juego extends InterfaceJuego
 		}
 	}
 	
-	public static MostradorDeVida[] convertirANUllLaVida(Entorno e, MostradorDeVida[] v) {
+	public static MostradorDeVida[] convertirANUllLaVida(Entorno e, MostradorDeVida[] v, Personaje p) {
 		boolean yaSeQuito = false;
 		for (int i = v.length-1; i > -1; i = i -1) {
 			if (v[i]!=null && yaSeQuito == false) {

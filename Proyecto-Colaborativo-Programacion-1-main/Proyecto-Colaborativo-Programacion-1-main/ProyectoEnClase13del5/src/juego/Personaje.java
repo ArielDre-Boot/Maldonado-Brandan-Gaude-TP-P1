@@ -19,6 +19,8 @@ public class Personaje {
     private int velocidadY=5;
 	private int vida = 10;
     private boolean gano;
+	private boolean perdio;
+    private Barrera rayo;
 	public Personaje(int x, int y, int ancho, int alto) {
 		this.x = x;
 		this.y = y;
@@ -26,9 +28,11 @@ public class Personaje {
 		this.ancho = ancho;
 		this.alto = alto;
 		this.disparo=null;
+		this.barrera=null;
 		this.tieneGravedad=true;
 		this.estaSaltando=false;
 		this.gano=false;
+		this.perdio=false;
 		this.seMueve=false;
 	}
 	public boolean getEnMovimiento() {
@@ -64,6 +68,8 @@ public class Personaje {
 	public void dibujar(Entorno e) {
 		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.RED);
 	}
+
+	
 	
 	public void moverIzquierda() {
 		this.x = this.x -velocidadX;
@@ -175,6 +181,10 @@ public class Personaje {
 		int yMouse = e.mouseY();
 		
 		this.disparo = new Proyectil(this.x , this.y , 30, xMouse, yMouse);
+	}
+
+	public void creacionDeRayo(Entorno e, int tiempo) {
+		this.barrera = new Barrera(this.x, this.y, 10, 100, tiempo);
 	}
 	
 	public int bordeDerecho() {

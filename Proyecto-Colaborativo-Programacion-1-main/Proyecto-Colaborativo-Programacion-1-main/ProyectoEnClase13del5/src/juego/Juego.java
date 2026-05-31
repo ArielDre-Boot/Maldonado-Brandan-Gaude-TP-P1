@@ -326,10 +326,10 @@ public class Juego extends InterfaceJuego
     		    controlDelProyectil(p, entorno);
    
 	
-
+				controlDelBarrera(entorno, p);
     	
 
-    			   p.colisionaCastillo(castillo);
+    			p.colisionaCastillo(castillo);
     			
   
 
@@ -337,7 +337,9 @@ public class Juego extends InterfaceJuego
 	{
 		vidas = convertirANUllLaVida(entorno, vidas);
 	}
-    }
+    if (p.isPerdio() == true) {
+		t.dibujar('L', entorno);	
+	}
 
 }	
 	
@@ -390,6 +392,17 @@ public class Juego extends InterfaceJuego
 			
 	}
 
+	public static void controlDelBarrera(Entorno e, Personaje p) {
+		if (p.getBarrera() != null) {
+			p.getBarrera().dibujar(e);
+			p.getBarrera().movimiento(p.getX(), p.getY());
+			p.getBarrera().actualizarTiempoDeAparicion(e, e.tiempo());
+		}
+		if (p.getBarrera() != null && p.getBarrera().getTiempoActual() >= p.getBarrera().getTiempoDeDesaparicion()) {
+			p.setBarrera(null);;
+		}
+	}
+
 	// funcion que controla las colisiones dado un entorno personaje o obstaculo
 	public static void controlMovimientoJugador(
     Entorno entorno,
@@ -432,6 +445,10 @@ public class Juego extends InterfaceJuego
 
         p.disparo(entorno);
     }
+
+	if (entorno.sePresionoBoton(entorno.BOTON_DERECHO) && p.getDisparo() == null) {
+		p.creacionDeRayo(entorno, entorno.tiempo());
+	}
 }
 	public static void controlDelSalto(Personaje p , boolean bloqueaArriba) {
 		if(p.isEstaSaltando()) {
@@ -456,6 +473,9 @@ public class Juego extends InterfaceJuego
 			if (v[i]!=null && yaSeQuito == false) {
 				yaSeQuito = true;
 				v[i] = null;
+			}
+			if (v[0] == null) {
+				p.setPerdio(true);
 			}
 		}
 		return v;

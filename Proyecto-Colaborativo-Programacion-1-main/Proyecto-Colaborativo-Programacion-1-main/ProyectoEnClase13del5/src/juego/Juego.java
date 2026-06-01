@@ -215,9 +215,15 @@ public class Juego extends InterfaceJuego
 						enemigosVivos--;
 						break;
 					}
-		
-					
 				}
+
+				if (enemigo != null && enemigo.colisionaConBarrera(p)) {
+					enemigo=null;
+					enemigos[i]=enemigo;
+					enemigosVivos--;
+					break;
+				}
+				
 				if(enemigo!=null) {
 					enemigo.dibujar(entorno);
 					if (enemigo.colisionaConElJugador(p)) {

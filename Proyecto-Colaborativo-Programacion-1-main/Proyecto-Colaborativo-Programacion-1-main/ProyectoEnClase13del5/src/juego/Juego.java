@@ -14,8 +14,9 @@ public class Juego extends InterfaceJuego
 	// El objeto Entorno que controla el tiempo y otros
 	private Entorno entorno;
 	private Personaje p;
-	private Obstaculo[] obstaculos= new Obstaculo[20];
-	private Obstaculo[] obstaculos1=new Obstaculo[10];
+	private Obstaculo[] obstaculosSuperiores= new Obstaculo[10];
+	private Obstaculo[] obstaculosInferiores=new Obstaculo[10];
+	private Obstaculo[] obstaculosBase= new Obstaculo[10];
 	private int limiteEnemigos=10;
 	private int enemigosVivos=0;
 	private Castillo castillo;
@@ -92,58 +93,78 @@ public class Juego extends InterfaceJuego
 	/*imagen.dibujarImagen(entorno);*/
     p.dibujar(entorno);
     
-    ///Limites de colisión de los niveles(obstaculos) superiores
+    ///Valores booleanos usados para los limites
     boolean bloqueaIzquierda = false;
     boolean bloqueaDerecha = false;
     boolean bloqueaAbajo = false;
     boolean bloqueaArriba = false;
 	
-	
-    for (Obstaculo obstaculo : obstaculos) {
+  ///Limites de colisión de la linea de los niveles(obstaculos) superiores
+    for (Obstaculo obstaculo : obstaculosSuperiores) {
     	if(obstaculo!=null) {
     		
-    	
-        obstaculo.dibujar(entorno);
+    		obstaculo.dibujar(entorno);
         
-        if (p.colisionaPorIzquierda(obstaculo)) {
-            bloqueaIzquierda = true;
-        }
+    		if (p.colisionaPorIzquierda(obstaculo)) {
+    			bloqueaIzquierda = true;
+    		}
 
-        if (p.colisionaPorDerecha(obstaculo)) {
-            bloqueaDerecha = true;
-        }
+    		if (p.colisionaPorDerecha(obstaculo)) {
+    			bloqueaDerecha = true;
+    		}
 
-        if (p.colisionaPorDebajo(obstaculo)) {
-            bloqueaAbajo = true;
-        }
+    		if (p.colisionaPorDebajo(obstaculo)) {
+    			bloqueaAbajo = true;
+    		}
 
-        if (p.colisionaPorArriba(obstaculo)) {
-            bloqueaArriba = true;
-        }      
+    		if (p.colisionaPorArriba(obstaculo)) {
+    			bloqueaArriba = true;
+    		}      
     	}
     }
-    ///Limites de colisión de los niveles (obstaculos) de la base 
-    for (Obstaculo o: obstaculos1) {
+   
+    ///Limites de colisión de la linea de niveles inferiores 
+    for (Obstaculo o: obstaculosInferiores) {
     	if(o!=null) {
-    	o.dibujar(entorno);
+    		o.dibujar(entorno);
     	
-    	if(p.colisionaPorIzquierda(o)){
-    		bloqueaIzquierda=true;
-    	}
+    		if(p.colisionaPorIzquierda(o)){
+    			bloqueaIzquierda=true;
+    		}
     	
-    	if(p.colisionaPorDerecha(o)) {
-    		bloqueaDerecha=true;
-    	}
+    		if(p.colisionaPorDerecha(o)) {
+    			bloqueaDerecha=true;
+    		}
     	
-    	if(p.colisionaPorArriba(o)) {
-    		bloqueaArriba=true;
-    	}
+    		if(p.colisionaPorArriba(o)) {
+    			bloqueaArriba=true;
+    		}
     	
-    	if(p.colisionaPorDebajo(o)) {
-    		bloqueaAbajo=true;
-    	}
+    		if(p.colisionaPorDebajo(o)) {
+    			bloqueaAbajo=true;
+    		}
     	}
     }
+    
+    //Limites de las lineas de niveles de la base del juego
+    for(Obstaculo obs: obstaculosBase) {
+    	if(obs!=null) {
+    		obs.dibujar(entorno);
+    		if(p.colisionaPorArriba(obs)) {
+    			bloqueaArriba=true;
+    		}
+    		if(p.colisionaPorDebajo(obs)) {
+    			bloqueaAbajo=true;
+    		}
+    		if(p.colisionaPorDerecha(obs)) {
+    			bloqueaDerecha=true;
+    		}
+    		if(p.colisionaPorIzquierda(obs)) {
+    			bloqueaIzquierda=true;
+    		}
+    	}
+    }  
+    
   //Generacion de los enemigos de forma aleatoria
       for (int i=0;i<enemigos.length;i++) {
     	  if(enemigos[i]==null && enemigosVivos<limiteEnemigos && !p.isGano()) {
@@ -187,7 +208,7 @@ public class Juego extends InterfaceJuego
 					
 				}
 		
-				for(Obstaculo o :obstaculos) {
+				for(Obstaculo o :obstaculosSuperiores) {
 					if(o!=null && enemigo.colisionaConObstaculo(o)) {
 						enemigo=null;
 						enemigos[i]=enemigo;
@@ -203,7 +224,7 @@ public class Juego extends InterfaceJuego
 						enemigo=null;
 						enemigos[i]=enemigo;
 			        	enemigosVivos--;
-						vidas = convertirANUllLaVida(entorno, vidas);
+						vidas = convertirANUllLaVida(entorno, vidas, p);
 			            
 			        }else {
 			        	if(enemigo.getDireccion().equals("izquierda")) {
@@ -238,28 +259,21 @@ public class Juego extends InterfaceJuego
 		}
 	
   
-    //Repetición de los niveles superiores
+    //Repetición de la linea superior de niveles
     detectaElMovimiento(entorno,p);
 	int valorY=400; 
-	int anchoObstaculo= 120; 
+	int anchoObstaculo= 80; 
 	int altoObstaculo=20;
-	for(int i=0; i<obstaculos.length; i++) {
+	for(int i=0; i<obstaculosSuperiores.length; i++) {
 		Random valoresRandoms= new Random(); 
-		int numerosRan= valoresRandoms.nextInt(401-200+1)+200;
-		if(obstaculos[i]==null) { 
-			Obstaculo o= new Obstaculo (400*i+numerosRan, valorY, anchoObstaculo, altoObstaculo); 
-			obstaculos[i]=o; } 
-		else if (obstaculos[i]!=null && p.getEnMovimiento()){ 
-			obstaculos[i].setX(obstaculos[i].getX()-2); } 
-		if(obstaculos[i]!=null && obstaculos[i].bordeIzquierdo()<0){ 
-				obstaculos[i]=null;}
-
+		int numerosRan= valoresRandoms.nextInt(501-200+1)+200;
+		int numerosRan1= valoresRandoms.nextInt(200-100+1)+100;
+		if(obstaculosSuperiores[i]==null && !p.getEnMovimiento()) { 
+			Obstaculo o= new Obstaculo (500*i+numerosRan, valorY, anchoObstaculo+numerosRan1, altoObstaculo); 
+			obstaculosSuperiores[i]=o; } 
+		if (obstaculosSuperiores[i]!=null && p.getEnMovimiento()){ 
+			obstaculosSuperiores[i].setX(obstaculosSuperiores[i].getX()-2); } 
 	}
-
-
-
-    
-    
     
     /*for(Obstaculo a: obstaculos) {
     		if(p.getEnMovimiento()) {
@@ -272,25 +286,40 @@ public class Juego extends InterfaceJuego
     		
     }*/
  
-    //Repetición de los niveles base
-    detectaElMovimiento(entorno,p);
-   
-	for(int i=0; i<obstaculos1.length; i++) {
+    //Repetición de la linea inferior de niveles
+    detectaElMovimiento(entorno,p); 
+    int anchoObstaculo1= 120;
+	for(int i=0; i<obstaculosInferiores.length; i++) {
+		int valorY1=500;
 		Random valoresRandoms= new Random(); 
 		int numerosRan= valoresRandoms.nextInt(401-200+1)+200;
-		if(obstaculos1[i]==null &&  !p.getEnMovimiento()) { 
-			Obstaculo o= new Obstaculo (entorno.ancho()+numerosRan, valorY+100, anchoObstaculo, altoObstaculo); 
-			obstaculos1[i]=o; } 
-		if (obstaculos1[i]!=null && p.getEnMovimiento()){ 
-			obstaculos1[i].setX(obstaculos1[i].getX()-2); } 
-		
-
+		int numerosRan1= valoresRandoms.nextInt(150-50+1)+100;
+		if(obstaculosInferiores[i]==null &&  !p.getEnMovimiento()) { 
+			Obstaculo o= new Obstaculo (400*i+numerosRan, valorY1, anchoObstaculo1+numerosRan1, altoObstaculo); 
+			obstaculosInferiores[i]=o; } 
+		if (obstaculosInferiores[i]!=null && p.getEnMovimiento()){ 
+			obstaculosInferiores[i].setX(obstaculosInferiores[i].getX()-2); 
+			} 
 	}
-
+	//Repeticion de la linea de las bases 
+	detectaElMovimiento(entorno,p);
+	for(int i=0; i<obstaculosBase.length; i++) {
+		Random ran= new Random();
+		int numerosRandoms= ran.nextInt(50-20+1)+20;
+		if(obstaculosBase[i]==null && !p.getEnMovimiento()) {
+			Obstaculo o= new Obstaculo(400*i,595,290+numerosRandoms,40);
+			obstaculosBase[i]=o;}
+		if(obstaculosBase[i]!=null && p.getEnMovimiento()) {
+			obstaculosBase[i].setX(obstaculosBase[i].getX()-2);
+		}
+	}
+		
     
-    
-    
-   castillo.dibujar(entorno);
+   
+    castillo.dibujar(entorno);
+	if (p.isSeMueve() == true) {
+		castillo.setX(castillo.getX() - 1);
+	}
    if(p.isGano()) {
    	
 		t.dibujar('W', entorno);
@@ -315,29 +344,27 @@ public class Juego extends InterfaceJuego
     		        bloqueaArriba
     		    );
     		    controlDelSalto(p,bloqueaArriba);
+    		    
 
+    		    controlDelProyectil(p, entorno);
+   
+	
+				controlDelBarrera(entorno, p);
+    	
 
-    
-    controlMovimientoJugador(
-        entorno,
-        p,
-        bloqueaIzquierda,
-        bloqueaDerecha,
-        bloqueaAbajo,
-        bloqueaArriba
-    );
-    controlDelSalto(p,bloqueaArriba);
-    controlDelProyectil(p, entorno);
-    p.colisionaCastillo(castillo);
+    			p.colisionaCastillo(castillo);
     			
+	}
 
 	if (p.siElPersonajeTocaElBordeInferiorDeLaPantalla())//aqui puse que el personaje se teletransporde caundo se cae
 	{
-		vidas = convertirANUllLaVida(entorno, vidas);
+		vidas = convertirANUllLaVida(entorno, vidas, p);
 	}
-    }}
-    
+    if (p.isPerdio() == true) {
+		t.dibujar('L', entorno);	
+	}
 
+}	
 	
 
 	
@@ -390,6 +417,17 @@ public class Juego extends InterfaceJuego
 			
 	}
 
+	public static void controlDelBarrera(Entorno e, Personaje p) {
+		if (p.getBarrera() != null) {
+			p.getBarrera().dibujar(e);
+			p.getBarrera().movimiento(p.getX(), p.getY());
+			p.getBarrera().actualizarTiempoDeAparicion(e, e.tiempo());
+		}
+		if (p.getBarrera() != null && p.getBarrera().getTiempoActual() >= p.getBarrera().getTiempoDeDesaparicion()) {
+			p.setBarrera(null);;
+		}
+	}
+
 	// funcion que controla las colisiones dado un entorno personaje o obstaculo
 	public static void controlMovimientoJugador(
     Entorno entorno,
@@ -432,6 +470,10 @@ public class Juego extends InterfaceJuego
 
         p.disparo(entorno);
     }
+
+	if (entorno.sePresionoBoton(entorno.BOTON_DERECHO) && p.getDisparo() == null) {
+		p.creacionDeRayo(entorno, entorno.tiempo());
+	}
 }
 	public static void controlDelSalto(Personaje p , boolean bloqueaArriba) {
 		if(p.isEstaSaltando()) {
@@ -449,13 +491,16 @@ public class Juego extends InterfaceJuego
 			
 		}
 	}
-	
-	public static MostradorDeVida[] convertirANUllLaVida(Entorno e, MostradorDeVida[] v) {
+
+	public static MostradorDeVida[] convertirANUllLaVida(Entorno e, MostradorDeVida[] v, Personaje p) {
 		boolean yaSeQuito = false;
 		for (int i = v.length-1; i > -1; i = i -1) {
 			if (v[i]!=null && yaSeQuito == false) {
 				yaSeQuito = true;
 				v[i] = null;
+			}
+			if (v[0] == null) {
+				p.setPerdio(true);
 			}
 		}
 		return v;

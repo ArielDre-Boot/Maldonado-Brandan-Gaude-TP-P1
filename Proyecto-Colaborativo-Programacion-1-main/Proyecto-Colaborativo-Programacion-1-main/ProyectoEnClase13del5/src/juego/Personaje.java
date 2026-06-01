@@ -20,6 +20,9 @@ public class Personaje {
 	private int vida = 10;
 	private boolean llegoAlCastillo;
     private boolean gano;
+	private boolean perdio;
+    private Barrera barrera;
+    
 	public Personaje(int x, int y, int ancho, int alto) {
 		this.x = x;
 		this.y = y;
@@ -27,9 +30,11 @@ public class Personaje {
 		this.ancho = ancho;
 		this.alto = alto;
 		this.disparo=null;
+		this.barrera=null;
 		this.tieneGravedad=true;
 		this.estaSaltando=false;
 		this.gano=false;
+		this.perdio=false;
 		this.seMueve=false;
 		this.llegoAlCastillo=false;
 	}
@@ -66,6 +71,8 @@ public class Personaje {
 	public void dibujar(Entorno e) {
 		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.RED);
 	}
+
+	
 	
 	public void moverIzquierda() {
 		this.x = this.x -velocidadX;
@@ -180,6 +187,10 @@ public class Personaje {
 		
 		this.disparo = new Proyectil(this.x , this.y , 30, xMouse, yMouse);
 	}
+
+	public void creacionDeRayo(Entorno e, int tiempo) {
+		this.barrera = new Barrera(this.x, this.y, 10, 100, tiempo);
+	}
 	
 	public int bordeDerecho() {
 		return this.x+this.ancho/2;
@@ -256,10 +267,29 @@ public class Personaje {
 	public int getVida() {
 		return vida;
 	}
+
 	public boolean getLlegoCastillo() {
 		return this.llegoAlCastillo;
 	}
 	public void setLlegoCastillo(boolean v) {
 		this.llegoAlCastillo=v;
+	}
+	public void setSeMueve(boolean seMueve) {
+		this.seMueve = seMueve;
+	}
+	public boolean isPerdio() {
+		return perdio;
+	}
+	public void setPerdio(boolean perdio) {
+		this.perdio = perdio;
+	}
+	public Barrera getBarrera() {
+		return barrera;
+	}
+	public void setBarrera(Barrera barrera) {
+		this.barrera = barrera;
+	}
+	public boolean isSeMueve() {
+		return seMueve;
 	}
 }

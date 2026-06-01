@@ -16,7 +16,7 @@ public class Juego extends InterfaceJuego
 	private Personaje p;
 	private Obstaculo[] obstaculosSuperiores= new Obstaculo[10];
 	private Obstaculo[] obstaculosInferiores=new Obstaculo[10];
-	private Obstaculo[] obstaculosBase= new Obstaculo[10];
+	private Obstaculo[] obstaculosBase= new Obstaculo[12];
 	private int limiteEnemigos=10;
 	private int enemigosVivos=0;
 	private Castillo castillo;
@@ -43,7 +43,7 @@ public class Juego extends InterfaceJuego
 		p = new Personaje(140,300,20,50);
 
 		
-		castillo= new Castillo(400, 500,100, 100);
+		castillo= new Castillo(400, 525,100, 100);
 	
 		Obstaculo o = new Obstaculo(150,500,200,20); //obstaculo inferior izquierdo 
 		Obstaculo o2 = new Obstaculo(150,400,200,20); //obstaculo superior izquierdo
@@ -317,6 +317,10 @@ public class Juego extends InterfaceJuego
 			obstaculosBase[i]=o;}
 		if(obstaculosBase[i]!=null && p.getEnMovimiento()) {
 			obstaculosBase[i].setX(obstaculosBase[i].getX()-2);
+		}
+		if (i == obstaculosBase.length -1) {
+			castillo.setX(obstaculosBase[i].getX());
+			//castillo.setY(obstaculosBase[i].getY() + castillo.bordeInferior());
 		}
 	}
 		

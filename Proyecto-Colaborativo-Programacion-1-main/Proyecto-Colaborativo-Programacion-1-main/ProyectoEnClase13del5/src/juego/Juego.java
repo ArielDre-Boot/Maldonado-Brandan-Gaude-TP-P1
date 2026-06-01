@@ -3,8 +3,6 @@ package juego;
 import java.util.Random;
 import java.awt.Color;
 import java.awt.Image;
-import java.util.LinkedList;
-
 import entorno.Entorno;
 import entorno.Herramientas;
 import entorno.InterfaceJuego;
@@ -27,7 +25,8 @@ public class Juego extends InterfaceJuego
 	private double y;
 	private double angulo;
 	private double escala;
-	private Image imagen;
+	private Image imagenFondo;
+
 	// Variables y métodos propios de cada grupo
 	// ..
 	Juego()
@@ -52,7 +51,7 @@ public class Juego extends InterfaceJuego
 		Obstaculo o5= new Obstaculo(650,400, 120,20); //obstaculo superior derecho
 		Obstaculo o7 = new Obstaculo(170,595,340,40); //obstaculo base izquierdo
 		Obstaculo o8 = new Obstaculo(660,595,400,40); //obstaculo base derecho
-		imagen=Herramientas.cargarImagen("juego/fondo.jpg");
+		imagenFondo=Herramientas.cargarImagen("juego/fondo1.jpg");
 		
 
 
@@ -79,9 +78,9 @@ public class Juego extends InterfaceJuego
 	 * (ver el enunciado del TP para mayor detalle).
 	 */
 	public void tick()
-{
-
-	entorno.dibujarImagen(imagen,entorno.ancho()/2,entorno.alto()/2,0,1);
+{  
+	
+	entorno.dibujarImagen(imagenFondo,entorno.ancho()/2,entorno.alto()/2,0,1);
 	for (MostradorDeVida vida: this.vidas) {
 		if (vida!= null) {
 			vida.dibujar(entorno);
@@ -259,7 +258,7 @@ public class Juego extends InterfaceJuego
 		}
 	
   
-    //Repetición de la linea superior de niveles
+    //Creacion y repetición de la linea superior de niveles
     detectaElMovimiento(entorno,p);
 	int valorY=400; 
 	int anchoObstaculo= 80; 
@@ -286,7 +285,7 @@ public class Juego extends InterfaceJuego
     		
     }*/
  
-    //Repetición de la linea inferior de niveles
+    //Creacion y repetición de la linea inferior de niveles
     detectaElMovimiento(entorno,p); 
     int anchoObstaculo1= 120;
 	for(int i=0; i<obstaculosInferiores.length; i++) {
@@ -301,7 +300,7 @@ public class Juego extends InterfaceJuego
 			obstaculosInferiores[i].setX(obstaculosInferiores[i].getX()-2); 
 			} 
 	}
-	//Repeticion de la linea de las bases 
+	//Creacion y repeticion de la linea de las bases 
 	detectaElMovimiento(entorno,p);
 	for(int i=0; i<obstaculosBase.length; i++) {
 		Random ran= new Random();

@@ -1,13 +1,17 @@
 package juego;
 
 import java.awt.Color;
+import java.awt.Image;
+
 import entorno.Entorno;
+import entorno.Herramientas;
 
 public class Obstaculo {
 	private int x;
 	private int y;
 	private int ancho;
 	private int alto;
+
 	/*private boolean enPantalla;*/
 	
 	public Obstaculo(int x, int y, int ancho, int alto) {

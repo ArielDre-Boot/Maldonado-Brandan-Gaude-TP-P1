@@ -14,7 +14,7 @@ public class Juego extends InterfaceJuego
 	// El objeto Entorno que controla el tiempo y otros
 	private Entorno entorno;
 	private Personaje p;
-	private Obstaculo[] obstaculosSuperiores= new Obstaculo[10];
+	private Obstaculo[] obstaculosSuperiores= new Obstaculo[8];
 	private Obstaculo[] obstaculosInferiores=new Obstaculo[10];
 	private Obstaculo[] obstaculosBase= new Obstaculo[12];
 	private int limiteEnemigos=10;

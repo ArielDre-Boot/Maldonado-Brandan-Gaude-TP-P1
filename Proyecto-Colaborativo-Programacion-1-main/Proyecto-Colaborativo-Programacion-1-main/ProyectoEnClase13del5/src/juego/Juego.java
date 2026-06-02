@@ -36,12 +36,13 @@ public class Juego extends InterfaceJuego
 	private double escala;
 	private Image imagenFondo;
 
+	private Image imagenFondoTermino = null;
 
 
 	// Variables y métodos propios de cada grupo
 	// ..
 	Juego()
-	{
+	{ 
 		// Inicializa el objeto entorno
 		this.entorno = new Entorno(this, "Super Elizabeth Sis", 800, 600);
 	
@@ -90,7 +91,8 @@ public class Juego extends InterfaceJuego
 	public void tick()
 
 
-{  
+{ if (imagenFondoTermino == null) {
+	
 	entorno.dibujarImagen(imagenFondo,entorno.ancho()/2,entorno.alto()/2,0,1);
 	for (MostradorDeVida vida: this.vidas) {
 		if (vida!= null) {
@@ -493,10 +495,26 @@ if(enemigo.disparoColisionaJugador(p)){
 	{
 		vidas = convertirANUllLaVida(entorno, vidas, p);
 	}
+}
+	else {
+			entorno.dibujarImagen(imagenFondoTermino, 400, 300, 0, 0.08);
+			if (p.isPerdio()) {
+				t.dibujar('L', entorno);
+			}
+			if (p.isGano()) {
 
-	}
-	   if (p.isPerdio() ) {
-			t.dibujar('L', entorno);	
+				t.dibujar('W', entorno);
+			}
+			if (entorno.sePresiono('r') || entorno.sePresiono('R')) {
+				sumarVida(entorno, vidas, p, -1);
+				enemigos = eliminarTodosLosEnemigos(entorno, enemigos);
+				enemigosVivos -= enemigos.length;
+				p.setX(140);
+				p.setY(300);
+				imagenFondoTermino = null;
+				p.setGano(false);
+				p.setPerdio(false);
+			}
 		}
 }	
 	
@@ -677,6 +695,36 @@ if(enemigo.disparoColisionaJugador(p)){
 			}
 		}
 		return v;
+	}
+
+ 	public static MostradorDeVida[] sumarVida(Entorno e, MostradorDeVida[] v, Personaje p, int vidaSumada) {
+		boolean yaSeAgrego = false;
+		if (vidaSumada == -1) {
+			for (int i = 0; i < p.getVida(); i++) {
+				MostradorDeVida vida = new MostradorDeVida(i * 50 + 50, 50);
+				v[i] = vida;
+			}
+		}
+
+		if (vidaSumada > 0) {
+			for (int i = 0; i < p.getVida(); i++) {
+				if (v[i] == null) {
+					MostradorDeVida vida = new MostradorDeVida(i * 50 + 50, 50);
+					v[i] = vida;
+				}
+			}
+		}
+
+		return v;
+	}
+
+	public static Enemigo[] eliminarTodosLosEnemigos(Entorno e, Enemigo[] enemigos) {
+		for (int i = 0; i < enemigos.length; i++) {
+			if (enemigos[i] != null) {
+				enemigos[i] = null;
+			}
+		}
+		return enemigos;
 	}
 	
 

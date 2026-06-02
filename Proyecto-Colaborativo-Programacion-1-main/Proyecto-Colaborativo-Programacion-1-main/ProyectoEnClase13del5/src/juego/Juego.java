@@ -495,6 +495,7 @@ if(enemigo.disparoColisionaJugador(p)){
 	{
 		vidas = convertirANUllLaVida(entorno, vidas, p);
 	}
+	}
 }
 	else {
 			entorno.dibujarImagen(imagenFondoTermino, 400, 300, 0, 0.08);

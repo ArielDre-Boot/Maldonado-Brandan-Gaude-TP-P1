@@ -48,6 +48,21 @@ public class Proyectil {
 
 	    return false;
 	}
+	public boolean colisionaDisparoConEnemigo2(Enemigo2 e) {
+
+	    if (
+	        bordeDerecho() >= e.bordeIzquierdo() &&
+	        bordeIzquierdo() <= e.bordeDerecho() &&
+	        bordeInferior() >= e.bordeSuperior() &&
+	        bordeSuperior() <= e.bordeInferior()
+	    ) {
+	      
+	        return true;
+	    }
+
+	    return false;
+	}
+	
 	
 
 //	public boolean colisionaPorDerecha(Obstaculo o) {

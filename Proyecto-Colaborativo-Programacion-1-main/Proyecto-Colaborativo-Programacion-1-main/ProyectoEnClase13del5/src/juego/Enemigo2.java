@@ -4,25 +4,28 @@ import java.awt.Color;
 
 import entorno.Entorno;
 
-public class Enemigo {
+public class Enemigo2 {
 	private int x;
 	private int y;
 	private int ancho;
 	private int alto;
-    private int velocidadX=3;
+    private int velocidadX=2;
+    private int velocidadY=3;
     private String direccion;
-    
-	public Enemigo(int x, int y, int ancho, int alto,String direccion) {
+    private double aceleracion = 0.5;
+	private  Proyectil disparo;
+	private boolean disparoTocoJugador=false;
+	public Enemigo2(int x, int y, int ancho, int alto,String direccion) {
 
 		this.x = x;
 		this.y = y;
 		this.ancho = ancho;
-		this.alto = alto;
+	    this.alto = alto;
 		this.direccion=direccion;
-		
-	
+		this.disparo=null;
 	
 	}
+	
 	public String getDireccion() {
 		return direccion;
 	}
@@ -35,27 +38,30 @@ public class Enemigo {
 	public void moverIzquierda() {
 		this.x = this.x -velocidadX;
 	}
-	
 	public void moverDerecha() {
 		this.x = this.x +velocidadX;
 	}
-	public boolean esDestruibleDerecha(Entorno e) {
-		if(bordeIzquierdo()>=e.ancho() ) {
+
+	public void moverAbajo() {
+		   velocidadY += aceleracion;
+		    y += velocidadY;
+	}
+	public boolean cambiarDireccionDerecha(Entorno e) {
+		if(bordeDerecho()>=e.ancho() ) {
 		
 			return true;
-			
 		}
-		return false;
-		
+	
+		return false;	
 	}
 	
-	public boolean esDestruiblePorIzquierda(Entorno e) {
-		if(bordeDerecho()<=0) {
+	public boolean cambiarDireccionIzquierda(Entorno e) {
+		if(bordeIzquierdo()<=0) {
 		
 			return true;
 			
 		}
-		return false;
+	return false;
 		
 	}
     public int bordeIzquierdo() {
@@ -97,6 +103,24 @@ public class Enemigo {
 		}
 		return false;
 	}
+	public boolean disparoColisionaJugador(Personaje p) {
+		
+		if(this.disparo!=null && 	!disparoTocoJugador) {
+			if(this.disparo.bordeDerecho()>=p.bordeIzquierdo() && this.disparo.bordeSuperior()<=p.bordeInferior() && this.disparo.bordeInferior()>=p.bordeSuperior()&& this.disparo.bordeIzquierdo()<=p.bordeDerecho()) {
+				this.disparoTocoJugador=true;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean isDisparoTocoJugador() {
+		return disparoTocoJugador;
+	}
+
+	public void setDisparoTocoJugador(boolean disparoTocoJugador) {
+		this.disparoTocoJugador = disparoTocoJugador;
+	}
 
 	public int getX() {
 		return x;
@@ -128,5 +152,16 @@ public class Enemigo {
 	public void setVelocidadX(int velocidadX) {
 		this.velocidadX = velocidadX;
 	}
-
+	public void disparo(Personaje p) {
+		int xMouse = p.getX();
+		int yMouse = p.getY();
+		
+		this.disparo = new Proyectil(this.x , this.y , 30, xMouse, yMouse);
+	}
+	public Proyectil getDisparo() {
+		return this.disparo;
+	}
+	public void setDisparo(Proyectil disparo) {
+		this.disparo = disparo;
+	}
 }

@@ -17,23 +17,25 @@ public class Juego extends InterfaceJuego
 	private Obstaculo[] obstaculosSuperiores= new Obstaculo[8];
 	private Obstaculo[] obstaculosInferiores=new Obstaculo[10];
 	private Obstaculo[] obstaculosBase= new Obstaculo[12];
-	private int limiteEnemigos=10;
-	private int enemigosVivos=0;
+
 	private Castillo castillo;
-    private Enemigo[] enemigos= new Enemigo[10];
+    
+	private Enemigo[] enemigos= new Enemigo[7];
+
+	private int enemigosVivos=0;
+    private Enemigo2[] enemigos2=new Enemigo2[2];
+
+	private int enemigosVivos2=0;
 	private Escritor t;
 	private MostradorDeVida[] vidas = new MostradorDeVida[10];
-	private double x;
-	private double y;
-	private double angulo;
-	private double escala;
+
 	private Image imagen;
 	// Variables y métodos propios de cada grupo
 	// ..
 	Juego()
 	{
 		// Inicializa el objeto entorno
-		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
+		this.entorno = new Entorno(this, "Super Elizabeth Sis", 800, 600);
 	
 
 	
@@ -80,8 +82,9 @@ public class Juego extends InterfaceJuego
 	 */
 	public void tick()
 {
-
+	
 	entorno.dibujarImagen(imagen,entorno.ancho()/2,entorno.alto()/2,0,1);
+	
 	for (MostradorDeVida vida: this.vidas) {
 		if (vida!= null) {
 			vida.dibujar(entorno);
@@ -165,9 +168,15 @@ public class Juego extends InterfaceJuego
     	}
     }  
     
+    for(Enemigo2 enemigo2:enemigos2) {
+    	
+    	if(enemigo2!=null &&enemigo2.getDisparo()!=null) {
+     	controlDelProyectilEnemigo(enemigo2,entorno);
+    }
+    }
   //Generacion de los enemigos de forma aleatoria
       for (int i=0;i<enemigos.length;i++) {
-    	  if(enemigos[i]==null && enemigosVivos<limiteEnemigos && !p.isGano()) {
+    	  if(enemigos[i]==null && enemigosVivos<enemigos.length && !p.isGano() && !p.isPerdio()) {
     			Random randomEnemigos=new Random();
     			   int numeroAleatorio=randomEnemigos.nextInt(0,2);
     			   int posAleatoria=randomEnemigos.nextInt(550-300+1)+300;
@@ -185,11 +194,108 @@ public class Juego extends InterfaceJuego
     			   enemigosVivos++;
     	  }
       }
+      for (int i=0;i<enemigos2.length;i++) {
+    
+    	  if(enemigos2[i]==null && enemigosVivos2<enemigos2.length  && !p.isGano() && !p.isPerdio()) {
+    			Random randomEnemigos=new Random();
+    				int direccion=randomEnemigos.nextInt(0,2);
+    			   int posAleatoria=randomEnemigos.nextInt(1000-800+1)+800;
+    			   int posAleatoria2=randomEnemigos.nextInt(entorno.ancho()- 0+1)+0;
+    			   	if(direccion==0) {
+    			   	 Enemigo2 e=new Enemigo2(posAleatoria2, 0-posAleatoria, 40, 40,"derecha");
+    			     enemigos2[i]=e;
+    			   	}else {
+    			    	 Enemigo2 e=new Enemigo2(posAleatoria2, 0-posAleatoria, 40, 40,"izquierda");
+    			    	   enemigos2[i]=e;
+    			   	}
+    				  
+    					
+    				
+    				
+    			
+    			   enemigosVivos2++;
+ 
+      }
+      }
+    	 
+      for (int i = 0; i < enemigos2.length; i++) {
+
+    	    Enemigo2 enemigo = enemigos2[i];
+
+    	    if (enemigo != null) {
+    	    
+    	    	
+    	        // Colisión con disparo
+    	        if (p.getDisparo() != null &&
+    	            p.getDisparo().colisionaDisparoConEnemigo2(enemigo)) {
+
+    	            enemigos2[i] = null;
+    	            p.setDisparo(null);
+    	            enemigosVivos2--;
+    	            continue;
+    	        }
+
+    	        // Colisión con barrera
+    	        if (enemigo.colisionaConBarrera(p)) {
+
+    	            enemigos2[i] = null;
+    	            enemigosVivos2--;
+    	            continue;
+    	        }
+
+    	      
+    	        // Dibujar enemigo
+    	        enemigo.dibujar(entorno);
+
+    	        // Colisión con jugador
+    	        if (enemigo.colisionaConElJugador(p)) {
+
+    	            enemigos2[i] = null;
+    	            enemigosVivos2--;
+    	            vidas = convertirANUllLaVida(entorno, vidas, p);
+    	            continue;
+    	        }
+
+    	        // Movimiento
+    	        if (enemigo.getY() <= 50) {
+    	        	
+    	            enemigo.moverAbajo();
+    	           
+    	        }else {
+    	       
+    	        	if(enemigo.getDisparo()==null) {
+        	    		enemigo.disparo(p);
+        	    		enemigo.setDisparoTocoJugador(false);
+        	    
+        	    	}
+    	        	 if(enemigo.getDisparo()!=null) {
+         	    		enemigo.getDisparo().dibujar(entorno);
+         	    		enemigo.getDisparo().mover();
+if(enemigo.disparoColisionaJugador(p)){
+	vidas=convertirANUllLaVida(entorno, vidas, p);
+}
+         	    	}
+    	        	if(enemigo.getDireccion().equals("derecha")) {
+    	        		enemigo.moverDerecha();
+    	        		if(enemigo.cambiarDireccionDerecha(entorno)) {
+    	        			enemigo.setDireccion("izquierda");
+    	        		}
+    	        	}else {
+    	        		
+    	        		enemigo.moverIzquierda();
+    	        		if(	enemigo.cambiarDireccionIzquierda(entorno)) {
+    	        			enemigo.setDireccion("derecha");
+    	        		}
+    	        	
+    	        	}
+    	        }
+    	    }
+    	}
 //    while(enemigosVivos<limiteEnemigos) {
 
 //	
 //		}
-    // Dibujo de los enemigos y control de colisiones entre los obstacuos y el jugador
+    // Dibujo de los enemigos y control de colisiones entre los obstaculos y el jugador
 	for (int i=0;i<enemigos.length;i++) {
 			Enemigo enemigo=enemigos[i];
 		
@@ -202,18 +308,26 @@ public class Juego extends InterfaceJuego
 						enemigos[i]=enemigo;
 						p.setDisparo(null);
 						  enemigosVivos--;
-						break;
+					
 					}
 					
 					
 				}
-		
+			
 				for(Obstaculo o :obstaculosSuperiores) {
-					if(o!=null && enemigo.colisionaConObstaculo(o)) {
+					if(enemigo!=null && o!=null && enemigo.colisionaConObstaculo(o)) {
 						enemigo=null;
 						enemigos[i]=enemigo;
 						enemigosVivos--;
-						break;
+				
+					}
+				}
+				for(Obstaculo o1 :obstaculosInferiores) {
+					if(enemigo!=null &&o1!=null && enemigo.colisionaConObstaculo(o1)) {
+						enemigo=null;
+						enemigos[i]=enemigo;
+						enemigosVivos--;
+				
 					}
 				}
 
@@ -221,7 +335,7 @@ public class Juego extends InterfaceJuego
 					enemigo=null;
 					enemigos[i]=enemigo;
 					enemigosVivos--;
-					break;
+				
 				}
 				
 				if(enemigo!=null) {
@@ -266,63 +380,66 @@ public class Juego extends InterfaceJuego
 	
   
     //Repetición de la linea superior de niveles
-    detectaElMovimiento(entorno,p);
-	int valorY=400; 
-	int anchoObstaculo= 80; 
-	int altoObstaculo=20;
-	for(int i=0; i<obstaculosSuperiores.length; i++) {
-		Random valoresRandoms= new Random(); 
-		int numerosRan= valoresRandoms.nextInt(501-200+1)+200;
-		int numerosRan1= valoresRandoms.nextInt(200-100+1)+100;
-		if(obstaculosSuperiores[i]==null && !p.getEnMovimiento()) { 
-			Obstaculo o= new Obstaculo (500*i+numerosRan, valorY, anchoObstaculo+numerosRan1, altoObstaculo); 
-			obstaculosSuperiores[i]=o; } 
-		if (obstaculosSuperiores[i]!=null && p.getEnMovimiento()){ 
-			obstaculosSuperiores[i].setX(obstaculosSuperiores[i].getX()-2); } 
+	if(!p.isPerdio()) {
+		detectaElMovimiento(entorno,p);
+		int valorY=400; 
+		int anchoObstaculo= 80; 
+		int altoObstaculo=20;
+		for(int i=0; i<obstaculosSuperiores.length; i++) {
+			Random valoresRandoms= new Random(); 
+			int numerosRan= valoresRandoms.nextInt(501-200+1)+200;
+			int numerosRan1= valoresRandoms.nextInt(200-100+1)+100;
+			if(obstaculosSuperiores[i]==null && !p.getEnMovimiento()) { 
+				Obstaculo o= new Obstaculo (500*i+numerosRan, valorY, anchoObstaculo+numerosRan1, altoObstaculo); 
+				obstaculosSuperiores[i]=o; } 
+			if (obstaculosSuperiores[i]!=null && p.getEnMovimiento()){ 
+				obstaculosSuperiores[i].setX(obstaculosSuperiores[i].getX()-2); } 
+		}
+	    
+	    /*for(Obstaculo a: obstaculos) {
+	    		if(p.getEnMovimiento()) {
+	    			a.setX(a.getX()-2);}
+	    		if(a.bordeDerecho()<0) {
+	    			Random ran=new Random();
+	    			int r= ran.nextInt(entorno.alto());
+	    			a.setX(entorno.ancho()+r/2);
+	    	}
+	    		
+	    }*/
+	 
+	    //Repetición de la linea inferior de niveles
+	    detectaElMovimiento(entorno,p); 
+	    int anchoObstaculo1= 120;
+		for(int i=0; i<obstaculosInferiores.length; i++) {
+			int valorY1=500;
+			Random valoresRandoms= new Random(); 
+			int numerosRan= valoresRandoms.nextInt(401-200+1)+200;
+			int numerosRan1= valoresRandoms.nextInt(150-50+1)+100;
+			if(obstaculosInferiores[i]==null &&  !p.getEnMovimiento()) { 
+				Obstaculo o= new Obstaculo (400*i+numerosRan, valorY1, anchoObstaculo1+numerosRan1, altoObstaculo); 
+				obstaculosInferiores[i]=o; } 
+			if (obstaculosInferiores[i]!=null && p.getEnMovimiento()){ 
+				obstaculosInferiores[i].setX(obstaculosInferiores[i].getX()-2); 
+				} 
+		}
+		//Repeticion de la linea de las bases 
+		detectaElMovimiento(entorno,p);
+		for(int i=0; i<obstaculosBase.length; i++) {
+			Random ran= new Random();
+			int numerosRandoms= ran.nextInt(50-20+1)+20;
+			if(obstaculosBase[i]==null && !p.getEnMovimiento()) {
+				Obstaculo o= new Obstaculo(400*i,595,290+numerosRandoms,40);
+				obstaculosBase[i]=o;}
+			if(obstaculosBase[i]!=null && p.getEnMovimiento()) {
+				obstaculosBase[i].setX(obstaculosBase[i].getX()-2);
+			}
+			if (i == obstaculosBase.length -1) {
+				castillo.setX(obstaculosBase[i].getX());
+				//castillo.setY(obstaculosBase[i].getY() + castillo.bordeInferior());
+			}
+		}
 	}
     
-    /*for(Obstaculo a: obstaculos) {
-    		if(p.getEnMovimiento()) {
-    			a.setX(a.getX()-2);}
-    		if(a.bordeDerecho()<0) {
-    			Random ran=new Random();
-    			int r= ran.nextInt(entorno.alto());
-    			a.setX(entorno.ancho()+r/2);
-    	}
-    		
-    }*/
- 
-    //Repetición de la linea inferior de niveles
-    detectaElMovimiento(entorno,p); 
-    int anchoObstaculo1= 120;
-	for(int i=0; i<obstaculosInferiores.length; i++) {
-		int valorY1=500;
-		Random valoresRandoms= new Random(); 
-		int numerosRan= valoresRandoms.nextInt(401-200+1)+200;
-		int numerosRan1= valoresRandoms.nextInt(150-50+1)+100;
-		if(obstaculosInferiores[i]==null &&  !p.getEnMovimiento()) { 
-			Obstaculo o= new Obstaculo (400*i+numerosRan, valorY1, anchoObstaculo1+numerosRan1, altoObstaculo); 
-			obstaculosInferiores[i]=o; } 
-		if (obstaculosInferiores[i]!=null && p.getEnMovimiento()){ 
-			obstaculosInferiores[i].setX(obstaculosInferiores[i].getX()-2); 
-			} 
-	}
-	//Repeticion de la linea de las bases 
-	detectaElMovimiento(entorno,p);
-	for(int i=0; i<obstaculosBase.length; i++) {
-		Random ran= new Random();
-		int numerosRandoms= ran.nextInt(50-20+1)+20;
-		if(obstaculosBase[i]==null && !p.getEnMovimiento()) {
-			Obstaculo o= new Obstaculo(400*i,595,290+numerosRandoms,40);
-			obstaculosBase[i]=o;}
-		if(obstaculosBase[i]!=null && p.getEnMovimiento()) {
-			obstaculosBase[i].setX(obstaculosBase[i].getX()-2);
-		}
-		if (i == obstaculosBase.length -1) {
-			castillo.setX(obstaculosBase[i].getX());
-			//castillo.setY(obstaculosBase[i].getY() + castillo.bordeInferior());
-		}
-	}
 		
     
    
@@ -344,7 +461,7 @@ public class Juego extends InterfaceJuego
 
 	}
 
-    if(!p.isGano()) {
+    if(!p.isGano() && !p.isPerdio()) {
     	  controlMovimientoJugador(
     		        entorno,
     		        p,
@@ -407,22 +524,52 @@ public class Juego extends InterfaceJuego
 		//colicsiones del proyectil
 		if (p.getDisparo()!=null && p.getDisparo().getX() < 0) {
 			p.setDisparo(null);
-			System.out.println("eliminado");
+	
 		}
 		//colision del lado derecho
 		if (p.getDisparo()!=null && p.getDisparo().getX()>entorno.ancho()) {
 			p.setDisparo(null);
-			System.out.println("eliminado");
+	
 		}
 			//colision por la parte superior
 		if (p.getDisparo()!=null && p.getDisparo().getY()<0) {
 			p.setDisparo(null);
-			System.out.println("eliminado");
+		
 		}
 			//colision por la parte inferior
 		if (p.getDisparo()!=null && p.getDisparo().getY()>entorno.alto()) {
 			p.setDisparo(null);
-			System.out.println("eliminado");
+		
+		}
+			
+	}
+	public static void controlDelProyectilEnemigo(Enemigo2 e, Entorno entorno) {
+		
+		
+		
+		
+
+		
+		
+		//colicsiones del proyectil
+		if (e.getDisparo()!=null && e.getDisparo().getX() < 0) {
+			e.setDisparo(null);
+	
+		}
+		//colision del lado derecho
+		if (e.getDisparo()!=null && e.getDisparo().getX()>entorno.ancho()) {
+			e.setDisparo(null);
+	
+		}
+			//colision por la parte superior
+		if (e.getDisparo()!=null && e.getDisparo().getY()<0) {
+			e.setDisparo(null);
+		
+		}
+			//colision por la parte inferior
+		if (e.getDisparo()!=null && e.getDisparo().getY()>entorno.alto()) {
+			e.setDisparo(null);
+		
 		}
 			
 	}

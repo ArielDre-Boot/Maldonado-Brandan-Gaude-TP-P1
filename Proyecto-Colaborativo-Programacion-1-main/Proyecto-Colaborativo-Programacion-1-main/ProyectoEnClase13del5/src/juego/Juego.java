@@ -13,8 +13,8 @@ public class Juego extends InterfaceJuego
 	private Entorno entorno;
 	private Personaje p;
 	private Obstaculo[] obstaculosSuperiores= new Obstaculo[10];
-	private Obstaculo[] obstaculosInferiores=new Obstaculo[10];
-	private Obstaculo[] obstaculosBase= new Obstaculo[10];
+	private Obstaculo[] obstaculosInferiores=new Obstaculo[9];
+	private Obstaculo[] obstaculosBase= new Obstaculo[11];
 	private int limiteEnemigos=10;
 	private int enemigosVivos=0;
 	private Castillo castillo;
@@ -26,6 +26,8 @@ public class Juego extends InterfaceJuego
 	private double angulo;
 	private double escala;
 	private Image imagenFondo;
+
+
 
 	// Variables y métodos propios de cada grupo
 	// ..
@@ -42,7 +44,7 @@ public class Juego extends InterfaceJuego
 		p = new Personaje(140,300,20,50);
 
 		
-		castillo= new Castillo(400, 500,100, 100);
+		castillo= new Castillo(400, 525,100, 100);
 	
 		Obstaculo o = new Obstaculo(150,500,200,20); //obstaculo inferior izquierdo 
 		Obstaculo o2 = new Obstaculo(150,400,200,20); //obstaculo superior izquierdo
@@ -61,8 +63,7 @@ public class Juego extends InterfaceJuego
 			MostradorDeVida v = new MostradorDeVida(j*50+50, 50);
 			vidas[j]=v;
 		}
-		//creacion de los niveles superiores
-	
+		
 		//crea el texto
 		t = new Escritor(325, 350, "Winer", "Loser");
 
@@ -78,8 +79,8 @@ public class Juego extends InterfaceJuego
 	 * (ver el enunciado del TP para mayor detalle).
 	 */
 	public void tick()
+
 {  
-	
 	entorno.dibujarImagen(imagenFondo,entorno.ancho()/2,entorno.alto()/2,0,1);
 	for (MostradorDeVida vida: this.vidas) {
 		if (vida!= null) {
@@ -214,9 +215,15 @@ public class Juego extends InterfaceJuego
 						enemigosVivos--;
 						break;
 					}
-		
-					
 				}
+
+				if (enemigo != null && enemigo.colisionaConBarrera(p)) {
+					enemigo=null;
+					enemigos[i]=enemigo;
+					enemigosVivos--;
+					break;
+				}
+				
 				if(enemigo!=null) {
 					enemigo.dibujar(entorno);
 					if (enemigo.colisionaConElJugador(p)) {
@@ -266,24 +273,13 @@ public class Juego extends InterfaceJuego
 	for(int i=0; i<obstaculosSuperiores.length; i++) {
 		Random valoresRandoms= new Random(); 
 		int numerosRan= valoresRandoms.nextInt(501-200+1)+200;
-		int numerosRan1= valoresRandoms.nextInt(200-100+1)+100;
+		int numerosRan1= valoresRandoms.nextInt(150-50+1)+50;
 		if(obstaculosSuperiores[i]==null && !p.getEnMovimiento()) { 
-			Obstaculo o= new Obstaculo (500*i+numerosRan, valorY, anchoObstaculo+numerosRan1, altoObstaculo); 
+			Obstaculo o= new Obstaculo (400*i+numerosRan, valorY, anchoObstaculo+numerosRan1, altoObstaculo); 
 			obstaculosSuperiores[i]=o; } 
 		if (obstaculosSuperiores[i]!=null && p.getEnMovimiento()){ 
 			obstaculosSuperiores[i].setX(obstaculosSuperiores[i].getX()-2); } 
 	}
-    
-    /*for(Obstaculo a: obstaculos) {
-    		if(p.getEnMovimiento()) {
-    			a.setX(a.getX()-2);}
-    		if(a.bordeDerecho()<0) {
-    			Random ran=new Random();
-    			int r= ran.nextInt(entorno.alto());
-    			a.setX(entorno.ancho()+r/2);
-    	}
-    		
-    }*/
  
     //Creacion y repetición de la linea inferior de niveles
     detectaElMovimiento(entorno,p); 
@@ -292,7 +288,7 @@ public class Juego extends InterfaceJuego
 		int valorY1=500;
 		Random valoresRandoms= new Random(); 
 		int numerosRan= valoresRandoms.nextInt(401-200+1)+200;
-		int numerosRan1= valoresRandoms.nextInt(150-50+1)+100;
+		int numerosRan1= valoresRandoms.nextInt(150-50+1)+50;
 		if(obstaculosInferiores[i]==null &&  !p.getEnMovimiento()) { 
 			Obstaculo o= new Obstaculo (400*i+numerosRan, valorY1, anchoObstaculo1+numerosRan1, altoObstaculo); 
 			obstaculosInferiores[i]=o; } 
@@ -310,6 +306,13 @@ public class Juego extends InterfaceJuego
 			obstaculosBase[i]=o;}
 		if(obstaculosBase[i]!=null && p.getEnMovimiento()) {
 			obstaculosBase[i].setX(obstaculosBase[i].getX()-2);
+		}
+		if (i == obstaculosBase.length -1) {
+			castillo.setX(obstaculosBase[i].getX());
+			/*if(castillo.getX()<entorno.ancho()) {
+			castillo.setEnPantalla(true);}*/
+			
+			//castillo.setY(obstaculosBase[i].getY() + castillo.bordeInferior());
 		}
 	}
 		
@@ -379,7 +382,16 @@ public class Juego extends InterfaceJuego
     	if(a.estaPresionada(a.TECLA_DERECHA) && a.estaPresionada(a.TECLA_IZQUIERDA)) {
     		b.setEnMovimiento(false);
     		}
-    	}
+    	/*if(c.getEnPantalla()==true){
+    		for(Obstaculo obs: o) {
+    			obs.setSeMueven(false);
+    		}
+    		for (Obstaculo e: obstaculos) {
+    			e.setSeMueven(false);
+    		}
+    	}*/
+	}
+	
 	public static void controlDelProyectil(Personaje p, Entorno entorno) {
 		if(p.getDisparo()!=null) {
 			p.getDisparo().dibujar(entorno);
@@ -504,36 +516,6 @@ public class Juego extends InterfaceJuego
 		}
 		return v;
 	}
-	/*public static Obstaculo nivelesSuperiores(Obstaculo [] obstaculos , Personaje p) {
-		int valorY=400;
-		int anchoObstaculo= 120;
-		int altoObstaculo=20;
-		for(int i=0; i<obstaculos.length;i++) {
-			Obstaculo obs= new Obstaculo(400*i, valorY, anchoObstaculo, altoObstaculo);
-			obstaculos[i]=obs;
-		for(int a=0; a<obstaculos.length; a++) {
-    		if (obstaculos[a]!=null && p.getEnMovimiento()){
-    			obstaculos[a].setX(obstaculos[a].getX()-2);
-    		}
-    		if(obstaculos[i].bordeDerecho()<0) {
-    			obstaculos[i]=null;
-    		}
-    		if(obstaculos[a]==null) {
-		    	Obstaculo nuevoObs= new Obstaculo(400*a, 400, 120, 20 );
-		    	obstaculos[a]= nuevoObs;
-    			}
-    		}
-			}
-		}*/
-	 
-		
-	/*public void obsAuxiliar(Obstaculo o) {
-			o= new Obstaculo (660,595,300,40);
-			o.dibujar(entorno);
-			if(p.getEnMovimiento()) {
-				o.setX(o.getX()-2);	
-			}
-				}*/
 	
 
 	@SuppressWarnings("unused")

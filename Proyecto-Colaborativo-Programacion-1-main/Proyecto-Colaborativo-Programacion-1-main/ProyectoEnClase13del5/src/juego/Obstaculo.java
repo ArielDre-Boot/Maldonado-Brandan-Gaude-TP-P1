@@ -11,15 +11,16 @@ public class Obstaculo {
 	private int y;
 	private int ancho;
 	private int alto;
-
-	/*private boolean enPantalla;*/
+	/*private boolean seMueven;
+	private boolean enPantalla;*/
 	
 	public Obstaculo(int x, int y, int ancho, int alto) {
 		this.x = x;
 		this.y = y;
 		this.ancho = ancho;
 		this.alto = alto;
-		/*this.enPantalla=false;*/
+		/*this.seMueven=false;
+		this.enPantalla=false;*/
 	}
 
 	
@@ -88,6 +89,11 @@ public class Obstaculo {
 	public int setBordeIzquierdo(int a) {
 		return (this.x+this.ancho/2)+a;
 	}
-	
+	/*public boolean getSeMueven() {
+		return this.seMueven;
+	}
+	public void setSeMueven(boolean a) {
+		this.seMueven=a;
+	}*/
 	
 }

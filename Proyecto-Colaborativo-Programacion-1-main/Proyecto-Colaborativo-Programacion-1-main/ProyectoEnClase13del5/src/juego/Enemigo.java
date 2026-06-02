@@ -84,10 +84,17 @@ public class Enemigo {
 		}
 		return false;
 	}
-	
 
-	
-
+	public boolean colisionaConBarrera(Personaje p) {
+		if (p.getBarrera() != null) {
+			if (bordeIzquierdo() <= p.getBarrera().bordeDerecho() +20 && bordeDerecho() >= p.getBarrera().bordeDerecho()) {
+				if (bordeInferior() >= p.getBarrera().bordeSuperior() && bordeSuperior() <= p.getBarrera().bordeInferior()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
 	public int getX() {
 		return x;

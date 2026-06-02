@@ -9,12 +9,14 @@ public class Castillo{
 	private int y;
 	private int ancho;
 	private int alto;
+	/*private boolean enPantalla;*/
 	public Castillo(int x, int y, int ancho, int alto) {
 	
 		this.x = x;
 		this.y = y;
 		this.ancho = ancho;
 		this.alto = alto;
+		/*this.enPantalla=false;*/
 	}
 	public void dibujar(Entorno e) {
 		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.YELLOW);
@@ -55,5 +57,11 @@ public class Castillo{
 	public int bordeInferior() {
 		return this.y+this.alto/2;
 	}
+	/*public boolean getEnPantalla() {
+		return this.enPantalla;
+	}
+	public void setEnPantalla(boolean a) {
+		this.enPantalla=a;
+	}*/
 	
 }

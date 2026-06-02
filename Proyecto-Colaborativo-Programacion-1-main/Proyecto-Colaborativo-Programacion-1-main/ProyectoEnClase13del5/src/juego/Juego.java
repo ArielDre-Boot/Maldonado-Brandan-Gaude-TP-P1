@@ -3,8 +3,6 @@ package juego;
 import java.util.Random;
 import java.awt.Color;
 import java.awt.Image;
-import java.util.LinkedList;
-
 import entorno.Entorno;
 import entorno.Herramientas;
 import entorno.InterfaceJuego;
@@ -14,22 +12,32 @@ public class Juego extends InterfaceJuego
 	// El objeto Entorno que controla el tiempo y otros
 	private Entorno entorno;
 	private Personaje p;
+
 	private Obstaculo[] obstaculosSuperiores= new Obstaculo[8];
-	private Obstaculo[] obstaculosInferiores=new Obstaculo[10];
-	private Obstaculo[] obstaculosBase= new Obstaculo[12];
+	private Obstaculo[] obstaculosInferiores=new Obstaculo[9];
+	private Obstaculo[] obstaculosBase= new Obstaculo[11];
+
+
 
 	private Castillo castillo;
     
 	private Enemigo[] enemigos= new Enemigo[7];
 
 	private int enemigosVivos=0;
-    private Enemigo2[] enemigos2=new Enemigo2[2];
+    private Enemigo2[] enemigos2=new Enemigo2[1];
 
 	private int enemigosVivos2=0;
 	private Escritor t;
 	private MostradorDeVida[] vidas = new MostradorDeVida[10];
 
-	private Image imagen;
+	private double x;
+	private double y;
+	private double angulo;
+	private double escala;
+	private Image imagenFondo;
+
+
+
 	// Variables y métodos propios de cada grupo
 	// ..
 	Juego()
@@ -54,7 +62,7 @@ public class Juego extends InterfaceJuego
 		Obstaculo o5= new Obstaculo(650,400, 120,20); //obstaculo superior derecho
 		Obstaculo o7 = new Obstaculo(170,595,340,40); //obstaculo base izquierdo
 		Obstaculo o8 = new Obstaculo(660,595,400,40); //obstaculo base derecho
-		imagen=Herramientas.cargarImagen("juego/fondo.jpg");
+		imagenFondo=Herramientas.cargarImagen("juego/fondo1.jpg");
 		
 
 
@@ -64,8 +72,7 @@ public class Juego extends InterfaceJuego
 			MostradorDeVida v = new MostradorDeVida(j*50+50, 50);
 			vidas[j]=v;
 		}
-		//creacion de los niveles superiores
-	
+		
 		//crea el texto
 		t = new Escritor(325, 350, "Winer", "Loser");
 
@@ -81,12 +88,13 @@ public class Juego extends InterfaceJuego
 	 * (ver el enunciado del TP para mayor detalle).
 	 */
 	public void tick()
-{
-	
-	entorno.dibujarImagen(imagen,entorno.ancho()/2,entorno.alto()/2,0,1);
-	
+
+
+{  
+	entorno.dibujarImagen(imagenFondo,entorno.ancho()/2,entorno.alto()/2,0,1);
 	for (MostradorDeVida vida: this.vidas) {
 		if (vida!= null) {
+
 			vida.dibujar(entorno);
 		}
 	}
@@ -222,7 +230,7 @@ public class Juego extends InterfaceJuego
 
     	    Enemigo2 enemigo = enemigos2[i];
 
-    	    if (enemigo != null) {
+    	    if (enemigo != null && !p.isGano() && !p.isPerdio()) {
     	    
     	    	
     	        // Colisión con disparo
@@ -248,7 +256,7 @@ public class Juego extends InterfaceJuego
     	        enemigo.dibujar(entorno);
 
     	        // Colisión con jugador
-    	        if (enemigo.colisionaConElJugador(p)) {
+    	        if (enemigo.colisionaConElJugador(p) ) {
 
     	            enemigos2[i] = null;
     	            enemigosVivos2--;
@@ -378,7 +386,6 @@ if(enemigo.disparoColisionaJugador(p)){
 				
 		}
 	
-  
     //Repetición de la linea superior de niveles
 	if(!p.isPerdio()) {
 		detectaElMovimiento(entorno,p);
@@ -438,8 +445,7 @@ if(enemigo.disparoColisionaJugador(p)){
 				//castillo.setY(obstaculosBase[i].getY() + castillo.bordeInferior());
 			}
 		}
-	}
-    
+
 		
     
    
@@ -451,7 +457,7 @@ if(enemigo.disparoColisionaJugador(p)){
    	
 		t.dibujar('W', entorno);
 	};
-
+ 
     //posicion del personaje en mitad de pantalla
     if(p.getX()>entorno.ancho()/2){
 
@@ -487,10 +493,11 @@ if(enemigo.disparoColisionaJugador(p)){
 	{
 		vidas = convertirANUllLaVida(entorno, vidas, p);
 	}
-    if (p.isPerdio() == true) {
-		t.dibujar('L', entorno);	
-	}
 
+	}
+	   if (p.isPerdio() ) {
+			t.dibujar('L', entorno);	
+		}
 }	
 	
 
@@ -507,7 +514,16 @@ if(enemigo.disparoColisionaJugador(p)){
     	if(a.estaPresionada(a.TECLA_DERECHA) && a.estaPresionada(a.TECLA_IZQUIERDA)) {
     		b.setEnMovimiento(false);
     		}
-    	}
+    	/*if(c.getEnPantalla()==true){
+    		for(Obstaculo obs: o) {
+    			obs.setSeMueven(false);
+    		}
+    		for (Obstaculo e: obstaculos) {
+    			e.setSeMueven(false);
+    		}
+    	}*/
+	}
+	
 	public static void controlDelProyectil(Personaje p, Entorno entorno) {
 		if(p.getDisparo()!=null) {
 			p.getDisparo().dibujar(entorno);
@@ -662,36 +678,6 @@ if(enemigo.disparoColisionaJugador(p)){
 		}
 		return v;
 	}
-	/*public static Obstaculo nivelesSuperiores(Obstaculo [] obstaculos , Personaje p) {
-		int valorY=400;
-		int anchoObstaculo= 120;
-		int altoObstaculo=20;
-		for(int i=0; i<obstaculos.length;i++) {
-			Obstaculo obs= new Obstaculo(400*i, valorY, anchoObstaculo, altoObstaculo);
-			obstaculos[i]=obs;
-		for(int a=0; a<obstaculos.length; a++) {
-    		if (obstaculos[a]!=null && p.getEnMovimiento()){
-    			obstaculos[a].setX(obstaculos[a].getX()-2);
-    		}
-    		if(obstaculos[i].bordeDerecho()<0) {
-    			obstaculos[i]=null;
-    		}
-    		if(obstaculos[a]==null) {
-		    	Obstaculo nuevoObs= new Obstaculo(400*a, 400, 120, 20 );
-		    	obstaculos[a]= nuevoObs;
-    			}
-    		}
-			}
-		}*/
-	 
-		
-	/*public void obsAuxiliar(Obstaculo o) {
-			o= new Obstaculo (660,595,300,40);
-			o.dibujar(entorno);
-			if(p.getEnMovimiento()) {
-				o.setX(o.getX()-2);	
-			}
-				}*/
 	
 
 	@SuppressWarnings("unused")

@@ -32,6 +32,7 @@ public class Enemigo2 {
 	public void setDireccion(String direccion) {
 		this.direccion = direccion;
 	}
+	
 	public void dibujar(Entorno e) {
 		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.BLUE);
 	}
@@ -156,7 +157,8 @@ public class Enemigo2 {
 		int xMouse = p.getX();
 		int yMouse = p.getY();
 		
-		this.disparo = new Proyectil(this.x , this.y , 30, xMouse, yMouse);
+		this.disparo = new Proyectil(this.x , this.y , 20, xMouse, yMouse);
+	
 	}
 	public Proyectil getDisparo() {
 		return this.disparo;

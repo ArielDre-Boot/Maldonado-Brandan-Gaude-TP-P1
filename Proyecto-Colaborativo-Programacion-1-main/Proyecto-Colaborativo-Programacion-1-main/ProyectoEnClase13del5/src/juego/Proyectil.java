@@ -11,7 +11,7 @@ public class Proyectil {
 	private double dx;
 	private double dy;
 	
-	
+	private  int velocidad; 
 	public Proyectil(double x, double y, double diametro, int xMouse, int yMouse) {
 		this.x = x;
 		this.y = y;
@@ -19,12 +19,28 @@ public class Proyectil {
 		
 		this.dx=xMouse - this.x;
 		this.dy=yMouse - this.y;
-		
+		this.velocidad=3;
 		double distancia = Math.sqrt(dx*dx + dy*dy);
-		this.dx=this.dx / (distancia)*4;
-		this.dy=this.dy / (distancia)*4;
+		this.dx=this.dx / (distancia)*velocidad;
+		this.dy=this.dy / (distancia)*velocidad;
 	}
 	
+	public double getDx() {
+		return dx;
+	}
+
+	public void setDx(double dx) {
+		this.dx = dx;
+	}
+
+	public double getDy() {
+		return dy;
+	}
+
+	public void setDy(double dy) {
+		this.dy = dy;
+	}
+
 	public void dibujar (Entorno e) {
 		e.dibujarCirculo(x, y, diametro, Color.blue);
 	}
@@ -34,6 +50,14 @@ public class Proyectil {
 		this.y+=this.dy;
 		
 	}
+	public int getVelocidad() {
+		return velocidad;
+	}
+
+	public void setVelocidad(int velocidad) {
+		this.velocidad = velocidad;
+	}
+
 	public boolean colisionaDisparoConEnemigo(Enemigo e) {
 
 	    if (

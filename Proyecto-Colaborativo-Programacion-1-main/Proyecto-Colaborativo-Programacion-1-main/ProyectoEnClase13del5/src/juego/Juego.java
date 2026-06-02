@@ -496,6 +496,10 @@ if(enemigo.disparoColisionaJugador(p)){
 		vidas = convertirANUllLaVida(entorno, vidas, p);
 	}
 	}
+	if (p.isGano() || p.isPerdio()) {
+		Image icono= Herramientas.cargarImagen("juego/Corazon.jpg");
+        this.imagenFondoTermino = icono;
+	}
 }
 	else {
 			entorno.dibujarImagen(imagenFondoTermino, 400, 300, 0, 0.08);

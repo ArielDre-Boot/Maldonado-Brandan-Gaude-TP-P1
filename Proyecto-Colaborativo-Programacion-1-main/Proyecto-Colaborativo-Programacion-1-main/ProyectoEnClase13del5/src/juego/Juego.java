@@ -668,7 +668,7 @@ if(enemigo.disparoColisionaJugador(p)){
     if (entorno.sePresionoBoton(entorno.BOTON_DERECHO)
             && p.getBarrera()==null) {
         
-            p.creacionDeRayo(entorno, entorno.tiempo());
+            p.creacionDeBarrera(entorno, entorno.tiempo());
         }
     if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)
         && p.getDisparo()==null) {

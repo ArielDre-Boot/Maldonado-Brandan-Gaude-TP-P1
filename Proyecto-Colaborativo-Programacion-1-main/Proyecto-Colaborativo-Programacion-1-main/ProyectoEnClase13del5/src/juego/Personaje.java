@@ -188,9 +188,7 @@ public class Personaje {
 		this.disparo = new Proyectil(this.x , this.y , 30, xMouse, yMouse);
 	}
 
-	public void creacionDeRayo(Entorno e, int tiempo) {
-		this.barrera = new Barrera(this.x, this.y, 10, 100, tiempo);
-	}
+
 	
 	public int bordeDerecho() {
 		return this.x+this.ancho/2;

@@ -749,3 +749,4 @@ if(enemigo.disparoColisionaJugador(p)){
 		Juego juego = new Juego();
 	}
 }
+

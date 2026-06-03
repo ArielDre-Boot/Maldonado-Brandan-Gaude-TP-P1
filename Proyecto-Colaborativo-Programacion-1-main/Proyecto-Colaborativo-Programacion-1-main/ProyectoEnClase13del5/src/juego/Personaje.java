@@ -215,7 +215,7 @@ public class Personaje {
 	
 	
 	
-	public void creacionDeRayo(Entorno e, int tiempo) {
+	public void creacionDeBarrera(Entorno e, int tiempo) {
 		this.barrera = new Barrera(this.x, this.y, 10, 100, tiempo);
 	}
 	

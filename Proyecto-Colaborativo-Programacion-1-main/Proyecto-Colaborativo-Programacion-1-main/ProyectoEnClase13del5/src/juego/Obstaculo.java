@@ -28,10 +28,11 @@ public class Obstaculo {
 	
 	
 	public void dibujar(Entorno e) {
+		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.gray);
 		e.dibujarImagen(imagen, x, y, 0, 0.190);
 	}
 	public void dibujarBase(Entorno e) {
-	
+		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.gray);
 		e.dibujarImagen(imagen, x, y, 0, 0.5);
 	}
 	/*public boolean getEnPantalla() {

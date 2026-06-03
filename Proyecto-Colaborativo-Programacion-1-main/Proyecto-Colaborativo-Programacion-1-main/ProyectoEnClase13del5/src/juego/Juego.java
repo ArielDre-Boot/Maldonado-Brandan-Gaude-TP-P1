@@ -400,7 +400,6 @@ if(enemigo.disparoColisionaJugador(p)){
 		for(int i=0; i<obstaculosSuperiores.length; i++) {
 			Random valoresRandoms= new Random(); 
 			int numerosRan= valoresRandoms.nextInt(501-200+1)+200;
-			int numerosRan1= valoresRandoms.nextInt(200-100+1)+100;
 			if(obstaculosSuperiores[i]==null && !p.getEnMovimiento()) { 
 				Obstaculo o= new Obstaculo (500*i+numerosRan, valorY, anchoObstaculo, altoObstaculo); 
 				obstaculosSuperiores[i]=o; } 
@@ -427,7 +426,6 @@ if(enemigo.disparoColisionaJugador(p)){
 			int valorY1=500;
 			Random valoresRandoms= new Random(); 
 			int numerosRan= valoresRandoms.nextInt(401-200+1)+200;
-			int numerosRan1= valoresRandoms.nextInt(150-50+1)+50;
 			if(obstaculosInferiores[i]==null &&  !p.getEnMovimiento()) { 
 				Obstaculo o= new Obstaculo (400*i+numerosRan, valorY1, anchoObstaculo1, altoObstaculo); 
 				obstaculosInferiores[i]=o; } 
@@ -439,8 +437,6 @@ if(enemigo.disparoColisionaJugador(p)){
 		//Repeticion de la linea de las bases 
 		detectaElMovimiento(entorno,p);
 		for(int i=0; i<obstaculosBase.length; i++) {
-			Random ran= new Random();
-			int numerosRandoms= ran.nextInt(50-20+1)+20;
 			if(obstaculosBase[i]==null && !p.getEnMovimiento()) {
 				Obstaculo o= new Obstaculo(400*i,595,290,40);
 				obstaculosBase[i]=o;
@@ -669,7 +665,11 @@ if(enemigo.disparoColisionaJugador(p)){
 
         p.moverAbajo();
     }
-
+    if (entorno.sePresionoBoton(entorno.BOTON_DERECHO)
+            && p.getBarrera()==null) {
+        
+            p.creacionDeRayo(entorno, entorno.tiempo());
+        }
     if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)
         && p.getDisparo()==null) {
     	Herramientas.play("juego/disparo.wav");

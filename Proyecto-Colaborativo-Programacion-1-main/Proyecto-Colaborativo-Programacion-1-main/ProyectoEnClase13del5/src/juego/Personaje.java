@@ -1,8 +1,10 @@
 package juego;
 
 import java.awt.Color;
+import java.awt.Image;
 
 import entorno.Entorno;
+import entorno.Herramientas;
 
 
 public class Personaje {
@@ -22,7 +24,8 @@ public class Personaje {
     private boolean gano;
 	private boolean perdio;
     private Barrera barrera;
-    
+    private Image imagen;
+  
 	public Personaje(int x, int y, int ancho, int alto) {
 		this.x = x;
 		this.y = y;
@@ -37,6 +40,9 @@ public class Personaje {
 		this.perdio=false;
 		this.seMueve=false;
 		this.llegoAlCastillo=false;
+	    this.imagen = Herramientas.cargarImagen("juego/personaje1.png");
+	   
+	  
 	}
 	public boolean getEnMovimiento() {
 		return seMueve;
@@ -69,7 +75,8 @@ public class Personaje {
 	}
 
 	public void dibujar(Entorno e) {
-		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.RED);
+		e.dibujarImagen(imagen, x, y, 0, 0.17);
+	
 	}
 
 	
@@ -208,7 +215,9 @@ public class Personaje {
 	
 	
 	
-	
+	public void creacionDeRayo(Entorno e, int tiempo) {
+		this.barrera = new Barrera(this.x, this.y, 10, 100, tiempo);
+	}
 	
 	
 	

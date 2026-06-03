@@ -1,8 +1,10 @@
 package juego;
 
 import java.awt.Color;
+import java.awt.Image;
 
 import entorno.Entorno;
+import entorno.Herramientas;
 
 public class Enemigo2 {
 	private int x;
@@ -15,6 +17,7 @@ public class Enemigo2 {
     private double aceleracion = 0.5;
 	private  Proyectil disparo;
 	private boolean disparoTocoJugador=false;
+	private Image imagen;
 
 	public Enemigo2(int x, int y, int ancho, int alto,String direccion) {
 
@@ -24,6 +27,7 @@ public class Enemigo2 {
 	    this.alto = alto;
 		this.direccion=direccion;
 		this.disparo=null;
+		this.imagen=Herramientas.cargarImagen("juego/enemigoVolador.png");
 	
 	}
 	
@@ -36,6 +40,7 @@ public class Enemigo2 {
 	
 	public void dibujar(Entorno e) {
 		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.BLUE);
+		e.dibujarImagen(imagen, x, y, 0, 0.19 );
 	}
 	public void moverIzquierda() {
 		this.x = this.x -velocidadX;

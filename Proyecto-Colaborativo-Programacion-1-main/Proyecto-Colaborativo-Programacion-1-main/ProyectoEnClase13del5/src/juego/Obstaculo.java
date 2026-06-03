@@ -11,36 +11,27 @@ public class Obstaculo {
 	private int ancho;
 	private int alto;
 	private Image imagen;
-	/*private boolean seMueven;
-	private boolean enPantalla;*/
 	
 	public Obstaculo(int x, int y, int ancho, int alto) {
 		this.x = x;
 		this.y = y;
 		this.ancho = ancho;
 		this.alto = alto;
-		Image icono = Herramientas.cargarImagen("juego/baseVerde1.png");
-		this.imagen = icono;		
-		/*this.seMueven=false;
-		this.enPantalla=false;*/
+		this.imagen = Herramientas.cargarImagen("juego/baseVerde1.png");		
+	
 	}
 
 	
 	
 	public void dibujar(Entorno e) {
-		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.gray);
+
 		e.dibujarImagen(imagen, x, y, 0, 0.190);
 	}
 	public void dibujarBase(Entorno e) {
-		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.gray);
-		e.dibujarImagen(imagen, x, y, 0, 0.46);
+		
+		e.dibujarImagen(imagen, x, y, 0, 0.43);
 	}
-	/*public boolean getEnPantalla() {
-		return enPantalla;
-	}
-	public void setEnPantalla(boolean b) {
-		this.enPantalla=b;
-	}*/
+
 	public int bordeDerecho() {
 		
 		return this.x+this.ancho/2;

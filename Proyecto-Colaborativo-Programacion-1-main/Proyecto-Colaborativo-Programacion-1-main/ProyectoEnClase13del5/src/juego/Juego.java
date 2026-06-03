@@ -524,6 +524,9 @@ if(enemigo.disparoColisionaJugador(p)){
 				imagenFondoTermino = null;
 				p.setGano(false);
 				p.setPerdio(false);
+				obstaculosSuperiores=new Obstaculo[8];
+				obstaculosInferiores=new Obstaculo[9];
+				obstaculosBase=new Obstaculo[11];
 			}
 		}
 }	

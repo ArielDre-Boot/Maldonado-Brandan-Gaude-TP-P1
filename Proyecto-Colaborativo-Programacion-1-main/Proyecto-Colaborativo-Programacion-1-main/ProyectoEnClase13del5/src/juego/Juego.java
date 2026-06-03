@@ -53,6 +53,7 @@ public class Juego extends InterfaceJuego
 		// ...
 		p = new Personaje(140,300,20,50);
 
+
 		
 		castillo= new Castillo(400, 525,100, 100);
 	
@@ -392,17 +393,18 @@ if(enemigo.disparoColisionaJugador(p)){
 	if(!p.isPerdio()) {
 		detectaElMovimiento(entorno,p);
 		int valorY=400; 
-		int anchoObstaculo= 80; 
+		int anchoObstaculo= 120;
 		int altoObstaculo=20;
 		for(int i=0; i<obstaculosSuperiores.length; i++) {
 			Random valoresRandoms= new Random(); 
 			int numerosRan= valoresRandoms.nextInt(501-200+1)+200;
 			int numerosRan1= valoresRandoms.nextInt(200-100+1)+100;
 			if(obstaculosSuperiores[i]==null && !p.getEnMovimiento()) { 
-				Obstaculo o= new Obstaculo (500*i+numerosRan, valorY, anchoObstaculo+numerosRan1, altoObstaculo); 
+				Obstaculo o= new Obstaculo (500*i+numerosRan, valorY, anchoObstaculo, altoObstaculo); 
 				obstaculosSuperiores[i]=o; } 
 			if (obstaculosSuperiores[i]!=null && p.getEnMovimiento()){ 
-				obstaculosSuperiores[i].setX(obstaculosSuperiores[i].getX()-2); } 
+				obstaculosSuperiores[i].setX(obstaculosSuperiores[i].getX()-2); }
+			obstaculosSuperiores[i].dibujar(entorno);
 		}
 	    
 	    /*for(Obstaculo a: obstaculos) {
@@ -423,13 +425,14 @@ if(enemigo.disparoColisionaJugador(p)){
 			int valorY1=500;
 			Random valoresRandoms= new Random(); 
 			int numerosRan= valoresRandoms.nextInt(401-200+1)+200;
-			int numerosRan1= valoresRandoms.nextInt(150-50+1)+100;
+			int numerosRan1= valoresRandoms.nextInt(150-50+1)+50;
 			if(obstaculosInferiores[i]==null &&  !p.getEnMovimiento()) { 
-				Obstaculo o= new Obstaculo (400*i+numerosRan, valorY1, anchoObstaculo1+numerosRan1, altoObstaculo); 
+				Obstaculo o= new Obstaculo (400*i+numerosRan, valorY1, anchoObstaculo1, altoObstaculo); 
 				obstaculosInferiores[i]=o; } 
 			if (obstaculosInferiores[i]!=null && p.getEnMovimiento()){ 
 				obstaculosInferiores[i].setX(obstaculosInferiores[i].getX()-2); 
 				} 
+			obstaculosInferiores[i].dibujar(entorno);
 		}
 		//Repeticion de la linea de las bases 
 		detectaElMovimiento(entorno,p);
@@ -437,8 +440,9 @@ if(enemigo.disparoColisionaJugador(p)){
 			Random ran= new Random();
 			int numerosRandoms= ran.nextInt(50-20+1)+20;
 			if(obstaculosBase[i]==null && !p.getEnMovimiento()) {
-				Obstaculo o= new Obstaculo(400*i,595,290+numerosRandoms,40);
-				obstaculosBase[i]=o;}
+				Obstaculo o= new Obstaculo(400*i,595,290,40);
+				obstaculosBase[i]=o;
+			}
 			if(obstaculosBase[i]!=null && p.getEnMovimiento()) {
 				obstaculosBase[i].setX(obstaculosBase[i].getX()-2);
 			}
@@ -446,6 +450,8 @@ if(enemigo.disparoColisionaJugador(p)){
 				castillo.setX(obstaculosBase[i].getX());
 				//castillo.setY(obstaculosBase[i].getY() + castillo.bordeInferior());
 			}
+			obstaculosBase[i].dibujarBase(entorno);
+
 		}
 
 		
@@ -490,13 +496,14 @@ if(enemigo.disparoColisionaJugador(p)){
     			p.colisionaCastillo(castillo);
     			
 	}
-
+ 
 	if (p.siElPersonajeTocaElBordeInferiorDeLaPantalla())//aqui puse que el personaje se teletransporde caundo se cae
 	{
 		vidas = convertirANUllLaVida(entorno, vidas, p);
 	}
 	}
 }
+	
 	else {
 			entorno.dibujarImagen(imagenFondoTermino, 400, 300, 0, 0.08);
 			if (p.isPerdio()) {

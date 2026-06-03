@@ -2,7 +2,6 @@ package juego;
 
 import java.awt.Color;
 import java.awt.Image;
-
 import entorno.Entorno;
 import entorno.Herramientas;
 
@@ -11,6 +10,7 @@ public class Obstaculo {
 	private int y;
 	private int ancho;
 	private int alto;
+	private Image imagen;
 	/*private boolean seMueven;
 	private boolean enPantalla;*/
 	
@@ -19,6 +19,8 @@ public class Obstaculo {
 		this.y = y;
 		this.ancho = ancho;
 		this.alto = alto;
+		Image icono = Herramientas.cargarImagen("juego/baseVerde1.png");
+		this.imagen = icono;		
 		/*this.seMueven=false;
 		this.enPantalla=false;*/
 	}
@@ -26,9 +28,12 @@ public class Obstaculo {
 	
 	
 	public void dibujar(Entorno e) {
-		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.gray);
+		e.dibujarImagen(imagen, x, y, 0, 0.190);
 	}
+	public void dibujarBase(Entorno e) {
 	
+		e.dibujarImagen(imagen, x, y, 0, 0.5);
+	}
 	/*public boolean getEnPantalla() {
 		return enPantalla;
 	}

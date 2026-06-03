@@ -15,6 +15,7 @@ public class Enemigo2 {
     private double aceleracion = 0.5;
 	private  Proyectil disparo;
 	private boolean disparoTocoJugador=false;
+
 	public Enemigo2(int x, int y, int ancho, int alto,String direccion) {
 
 		this.x = x;

@@ -45,13 +45,16 @@ public class Juego extends InterfaceJuego
 	{ 
 		// Inicializa el objeto entorno
 		this.entorno = new Entorno(this, "Super Elizabeth Sis", 800, 600);
-	
+
 
 	
 	
 		// Inicializar lo que haga falta para el juego
 		// ...
 		p = new Personaje(140,300,20,50);
+		if(!p.isPerdio() && !p.isGano()) {
+			Herramientas.play("juego/musica.wav");
+		}
 
 
 		
@@ -239,7 +242,7 @@ public class Juego extends InterfaceJuego
     	        // Colisión con disparo
     	        if (p.getDisparo() != null &&
     	            p.getDisparo().colisionaDisparoConEnemigo2(enemigo)) {
-
+    	        	Herramientas.play("juego/explocion.wav");
     	            enemigos2[i] = null;
     	            p.setDisparo(null);
     	            enemigosVivos2--;
@@ -251,6 +254,7 @@ public class Juego extends InterfaceJuego
 
     	            enemigos2[i] = null;
     	            enemigosVivos2--;
+    	            Herramientas.play("juego/explocion.wav");
     	            continue;
     	        }
 
@@ -260,10 +264,11 @@ public class Juego extends InterfaceJuego
 
     	        // Colisión con jugador
     	        if (enemigo.colisionaConElJugador(p) ) {
-
+    	        
     	            enemigos2[i] = null;
     	            enemigosVivos2--;
     	            vidas = convertirANUllLaVida(entorno, vidas, p);
+    	       
     	            continue;
     	        }
 
@@ -275,6 +280,7 @@ public class Juego extends InterfaceJuego
     	        }else {
     	       
     	        	if(enemigo.getDisparo()==null) {
+    	        		Herramientas.play("juego/disparo.wav");
         	    		enemigo.disparo(p);
         	    		enemigo.setDisparoTocoJugador(false);
         	    
@@ -283,6 +289,7 @@ public class Juego extends InterfaceJuego
          	    		enemigo.getDisparo().dibujar(entorno);
          	    		enemigo.getDisparo().mover();
 if(enemigo.disparoColisionaJugador(p)){
+    Herramientas.play("juego/explocion.wav");
 	vidas=convertirANUllLaVida(entorno, vidas, p);
 }
          	    	}
@@ -319,7 +326,7 @@ if(enemigo.disparoColisionaJugador(p)){
 						enemigos[i]=enemigo;
 						p.setDisparo(null);
 						  enemigosVivos--;
-					
+						  Herramientas.play("juego/explocion.wav");
 					}
 					
 					
@@ -346,7 +353,7 @@ if(enemigo.disparoColisionaJugador(p)){
 					enemigo=null;
 					enemigos[i]=enemigo;
 					enemigosVivos--;
-				
+					  Herramientas.play("juego/explocion.wav");
 				}
 				
 				if(enemigo!=null) {
@@ -355,6 +362,7 @@ if(enemigo.disparoColisionaJugador(p)){
 						enemigo=null;
 						enemigos[i]=enemigo;
 			        	enemigosVivos--;
+			        	  Herramientas.play("juego/explocion.wav");
 						vidas = convertirANUllLaVida(entorno, vidas, p);
 			            
 			        }else {
@@ -371,6 +379,7 @@ if(enemigo.disparoColisionaJugador(p)){
 						else {
 							enemigo.moverDerecha();		
 							if(enemigo.esDestruibleDerecha(entorno)) {
+								
 								enemigo=null;
 								enemigos[i]=enemigo;
 								enemigosVivos--;
@@ -501,6 +510,10 @@ if(enemigo.disparoColisionaJugador(p)){
 	{
 		vidas = convertirANUllLaVida(entorno, vidas, p);
 	}
+	}
+	if (p.isGano() || p.isPerdio()) {
+		Image icono= Herramientas.cargarImagen("juego/Corazon.jpg");
+        this.imagenFondoTermino = icono;
 	}
 }
 	
@@ -638,7 +651,7 @@ if(enemigo.disparoColisionaJugador(p)){
 	if(entorno.sePresiono(entorno.TECLA_ARRIBA)
         && !bloqueaArriba
         && (bloqueaAbajo || p.bordeInferior() >= entorno.alto())) {
-
+		Herramientas.play("juego/retroJump.wav");
         p.setEstaSaltando(true);
         p.setSaltoY(p.getY()-200);
     }
@@ -666,24 +679,24 @@ if(enemigo.disparoColisionaJugador(p)){
 
     if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)
         && p.getDisparo()==null) {
-
+    	Herramientas.play("juego/disparo.wav");
         p.disparo(entorno);
     }
 
-	if (entorno.sePresionoBoton(entorno.BOTON_DERECHO) && p.getDisparo() == null) {
-		p.creacionDeRayo(entorno, entorno.tiempo());
-	}
+
 }
 	public static void controlDelSalto(Personaje p , boolean bloqueaArriba) {
 		if(p.isEstaSaltando()) {
 			if(!bloqueaArriba) {
 				p.setTieneGravedad(false);
 				p.saltar();
+				
 				if(p.getY()<=p.getSaltoY()) {
 					p.setTieneGravedad(true);
 					p.setEstaSaltando(false);
 				}
 			}else {
+			
 				p.setTieneGravedad(true);
 				p.setEstaSaltando(false);
 			}
@@ -699,6 +712,7 @@ if(enemigo.disparoColisionaJugador(p)){
 				v[i] = null;
 			}
 			if (v[0] == null) {
+				Herramientas.play("juego/lose.wav");
 				p.setPerdio(true);
 			}
 		}

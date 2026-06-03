@@ -669,7 +669,11 @@ if(enemigo.disparoColisionaJugador(p)){
 
         p.moverAbajo();
     }
-
+    if (entorno.sePresionoBoton(entorno.BOTON_DERECHO)
+            && p.getBarrera()==null) {
+        
+            p.creacionDeRayo(entorno, entorno.tiempo());
+        }
     if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)
         && p.getDisparo()==null) {
     	Herramientas.play("juego/disparo.wav");

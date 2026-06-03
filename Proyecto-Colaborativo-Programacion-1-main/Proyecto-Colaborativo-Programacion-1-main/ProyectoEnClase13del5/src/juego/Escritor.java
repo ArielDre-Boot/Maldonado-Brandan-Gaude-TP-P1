@@ -9,12 +9,12 @@ public class Escritor {
 	private int y;
 	private String textoGanador;
 	private String textoPerdedor;
-	public Escritor(int x, int y, String textoGanador, String testoPerdedor) {
+	public Escritor(int x, int y, String textoGanador, String textoPerdedor) {
 		super();
 		this.x = x;
 		this.y = y;
 		this.textoGanador = textoGanador;
-		this.textoPerdedor = testoPerdedor;
+		this.textoPerdedor = textoPerdedor;
 		
 		
 	}

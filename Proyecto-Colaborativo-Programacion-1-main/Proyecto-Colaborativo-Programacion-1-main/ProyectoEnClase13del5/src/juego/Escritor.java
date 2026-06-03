@@ -20,7 +20,7 @@ public class Escritor {
 	}
 	
 	public void dibujar(char c, Entorno e) {
-		e.cambiarFont("Arial", 50, Color.black);
+		e.cambiarFont("Arial", 50, Color.white);
 		if (c=='W') {
 			e.escribirTexto(textoGanador, x, y);		
 		}

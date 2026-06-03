@@ -21,7 +21,7 @@ public class Juego extends InterfaceJuego
 
 	private Castillo castillo;
     
-	private Enemigo[] enemigos= new Enemigo[7];
+	private Enemigo[] enemigos= new Enemigo[5];
 
 	private int enemigosVivos=0;
     private Enemigo2[] enemigos2=new Enemigo2[1];
@@ -60,13 +60,6 @@ public class Juego extends InterfaceJuego
 		
 		castillo= new Castillo(400, 525,100, 100);
 	
-		Obstaculo o = new Obstaculo(150,500,200,20); //obstaculo inferior izquierdo 
-		Obstaculo o2 = new Obstaculo(150,400,200,20); //obstaculo superior izquierdo
-		Obstaculo o3 = new Obstaculo(450,400,200,20); //obstaculo superior del medio
-		Obstaculo o4 = new Obstaculo(600,500,300,20);//obstaculo inferior derecho
-		Obstaculo o5= new Obstaculo(650,400, 120,20); //obstaculo superior derecho
-		Obstaculo o7 = new Obstaculo(170,595,340,40); //obstaculo base izquierdo
-		Obstaculo o8 = new Obstaculo(660,595,400,40); //obstaculo base derecho
 		imagenFondo=Herramientas.cargarImagen("juego/fondo1.jpg");
 		
 
@@ -756,3 +749,4 @@ if(enemigo.disparoColisionaJugador(p)){
 		Juego juego = new Juego();
 	}
 }
+

@@ -33,7 +33,7 @@ public class Obstaculo {
 	}
 	public void dibujarBase(Entorno e) {
 		e.dibujarRectangulo(x, y, ancho, alto, 0, Color.gray);
-		e.dibujarImagen(imagen, x, y, 0, 0.5);
+		e.dibujarImagen(imagen, x, y, 0, 0.46);
 	}
 	/*public boolean getEnPantalla() {
 		return enPantalla;

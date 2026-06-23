@@ -68,7 +68,7 @@ public class Juego extends InterfaceJuego
 		//se crean las vidas
 		for(int j = 0; j < p.getVida(); j++) {
 			MostradorDeVida v = new MostradorDeVida(j*50+50, 50);
-			p.getVidas[j]=v;
+			vidas[j]=v;
 		}
 		
 		//crea el texto
@@ -130,9 +130,7 @@ public class Juego extends InterfaceJuego
   controlDeEnemigos2(enemigos2, p, enemigosVivos2, entorno, vidas);
   controlDeEnemigos(enemigos, p, enemigosVivos, entorno, vidas, obstaculosSuperiores, obstaculosInferiores);
     // Dibujo de los enemigos y control de colisiones entre los obstaculos y el jugador
-<<<<<<< HEAD
-	
-=======
+
 	for (int i=0;i<enemigos.length;i++) {
 			Enemigo enemigo=enemigos[i];
 		
@@ -185,7 +183,6 @@ public class Juego extends InterfaceJuego
 		}
 				
 		}
->>>>>>> branch 'main' of https://github.com/ArielDre-Boot/Maldonado-Brandan-Gaude-TP-P1.git
 	
     //Repetición de la linea superior de niveles
 	if(!p.isPerdio()) {

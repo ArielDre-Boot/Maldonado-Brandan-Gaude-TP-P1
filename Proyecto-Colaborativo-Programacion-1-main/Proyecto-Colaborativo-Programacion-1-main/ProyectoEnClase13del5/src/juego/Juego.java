@@ -86,10 +86,8 @@ public class Juego extends InterfaceJuego
 	 * (ver el enunciado del TP para mayor detalle).
 	 */
 	public void tick()
-
-
-{ if (imagenFondoTermino == null) {
-	
+{
+		if (imagenFondoTermino == null) {
 	entorno.dibujarImagen(imagenFondo,entorno.ancho()/2,entorno.alto()/2,0,1);
 	for (MostradorDeVida vida: this.vidas) {
 		if (vida!= null) {
@@ -97,299 +95,42 @@ public class Juego extends InterfaceJuego
 			vida.dibujar(entorno);
 		}
 	}
-	
-
-	
 	/*imagen.dibujarImagen(entorno);*/
     p.dibujar(entorno);
-    
-    ///Valores booleanos usados para los limites
+
+  /// Valores booleanos usados para los límites
     boolean bloqueaIzquierda = false;
     boolean bloqueaDerecha = false;
     boolean bloqueaAbajo = false;
     boolean bloqueaArriba = false;
-	
-  ///Limites de colisión de la linea de los niveles(obstaculos) superiores
-    for (Obstaculo obstaculo : obstaculosSuperiores) {
-    	if(obstaculo!=null) {
-    		
-    		obstaculo.dibujar(entorno);
-        
-    		if (p.colisionaPorIzquierda(obstaculo)) {
-    			bloqueaIzquierda = true;
-    		}
 
-    		if (p.colisionaPorDerecha(obstaculo)) {
-    			bloqueaDerecha = true;
-    		}
+    /// 1. Dibujamos todo en pantalla con un solo método
+    dibujarTodosLosObstaculos(obstaculosSuperiores, obstaculosInferiores, obstaculosBase, entorno);
 
-    		if (p.colisionaPorDebajo(obstaculo)) {
-    			bloqueaAbajo = true;
-    		}
 
-    		if (p.colisionaPorArriba(obstaculo)) {
-    			bloqueaArriba = true;
-    		}      
-    	}
-    }
-   
-    ///Limites de colisión de la linea de niveles inferiores 
-    for (Obstaculo o: obstaculosInferiores) {
-    	if(o!=null) {
-    		o.dibujar(entorno);
-    	
-    		if(p.colisionaPorIzquierda(o)){
-    			bloqueaIzquierda=true;
-    		}
-    	
-    		if(p.colisionaPorDerecha(o)) {
-    			bloqueaDerecha=true;
-    		}
-    	
-    		if(p.colisionaPorArriba(o)) {
-    			bloqueaArriba=true;
-    		}
-    	
-    		if(p.colisionaPorDebajo(o)) {
-    			bloqueaAbajo=true;
-    		}
-    	}
-    }
-    
-    //Limites de las lineas de niveles de la base del juego
-    for(Obstaculo obs: obstaculosBase) {
-    	if(obs!=null) {
-    		obs.dibujar(entorno);
-    		if(p.colisionaPorArriba(obs)) {
-    			bloqueaArriba=true;
-    		}
-    		if(p.colisionaPorDebajo(obs)) {
-    			bloqueaAbajo=true;
-    		}
-    		if(p.colisionaPorDerecha(obs)) {
-    			bloqueaDerecha=true;
-    		}
-    		if(p.colisionaPorIzquierda(obs)) {
-    			bloqueaIzquierda=true;
-    		}
-    	}
-    }  
-    
-    for(Enemigo2 enemigo2:enemigos2) {
-    	
-    	if(enemigo2!=null &&enemigo2.getDisparo()!=null) {
-     	controlDelProyectilEnemigo(enemigo2,entorno);
-    }
-    }
+    bloqueaIzquierda = detectaColisionIzquierda(obstaculosSuperiores, obstaculosInferiores, obstaculosBase, p);
+    bloqueaDerecha   = detectaColisionDerecha(obstaculosSuperiores, obstaculosInferiores, obstaculosBase, p);
+    bloqueaArriba    = detectaColisionArriba(obstaculosSuperiores, obstaculosInferiores, obstaculosBase, p);
+    bloqueaAbajo     = detectaColisionAbajo(obstaculosSuperiores, obstaculosInferiores, obstaculosBase, p);
+
+    // A partir de aquí, usas tus variables booleanas normales para mover o frenar al personaje...ables para frenar al personaje.
+  generarEnemigosRandom(enemigos, p, entorno, enemigosVivos);
+  generarEnemigosRandom2(enemigos2, p, entorno, enemigosVivos2);
+
   //Generacion de los enemigos de forma aleatoria
-      for (int i=0;i<enemigos.length;i++) {
-    	  if(enemigos[i]==null && enemigosVivos<enemigos.length && !p.isGano() && !p.isPerdio()) {
-    			Random randomEnemigos=new Random();
-    			   int numeroAleatorio=randomEnemigos.nextInt(0,2);
-    			   int posAleatoria=randomEnemigos.nextInt(550-300+1)+300;
-    			   int posAleatoria2=randomEnemigos.nextInt(200- 100+1)+100;
-    			   if(numeroAleatorio==0) {
-    				   Enemigo e=new Enemigo(entorno.ancho()+posAleatoria2, posAleatoria, 40, 40,"izquierda");
-    					
-    				   enemigos[i]=e;
-
-    			   }else {
-    				   Enemigo e= new Enemigo(0-posAleatoria2, posAleatoria, 40, 40,"derecha");
-    					
-    				   enemigos[i]=e;
-    			   }
-    			   enemigosVivos++;
-    	  }
-      }
-      for (int i=0;i<enemigos2.length;i++) {
     
-    	  if(enemigos2[i]==null && enemigosVivos2<enemigos2.length  && !p.isGano() && !p.isPerdio()) {
-    			Random randomEnemigos=new Random();
-    				int direccion=randomEnemigos.nextInt(0,2);
-    			   int posAleatoria=randomEnemigos.nextInt(1000-800+1)+800;
-    			   int posAleatoria2=randomEnemigos.nextInt(entorno.ancho()- 0+1)+0;
-    			   	if(direccion==0) {
-    			   	 Enemigo2 e=new Enemigo2(posAleatoria2, 0-posAleatoria, 40, 40,"derecha");
-    			     enemigos2[i]=e;
-    			   	}else {
-    			    	 Enemigo2 e=new Enemigo2(posAleatoria2, 0-posAleatoria, 40, 40,"izquierda");
-    			    	   enemigos2[i]=e;
-    			   	}
-    				  
-    					
-    				
-    				
-    			
-    			   enemigosVivos2++;
+
  
-      }
-      }
     	 
-      for (int i = 0; i < enemigos2.length; i++) {
-
-    	    Enemigo2 enemigo = enemigos2[i];
-
-    	    if (enemigo != null && !p.isGano() && !p.isPerdio()) {
-    	    
-    	    	
-    	        // Colisión con disparo
-    	        if (p.getDisparo() != null &&
-    	            p.getDisparo().colisionaDisparoConEnemigo2(enemigo)) {
-    	        	Herramientas.play("juego/explocion.wav");
-    	            enemigos2[i] = null;
-    	            p.setDisparo(null);
-    	            enemigosVivos2--;
-    	            continue;
-    	        }
-
-    	        // Colisión con barrera
-    	        if (enemigo.colisionaConBarrera(p)) {
-
-    	            enemigos2[i] = null;
-    	            enemigosVivos2--;
-    	            Herramientas.play("juego/explocion.wav");
-    	            continue;
-    	        }
-
-    	      
-    	        // Dibujar enemigo
-    	        enemigo.dibujar(entorno);
-
-    	        // Colisión con jugador
-    	        if (enemigo.colisionaConElJugador(p) ) {
-    	        
-    	            enemigos2[i] = null;
-    	            enemigosVivos2--;
-    	            vidas = convertirANUllLaVida(entorno, vidas, p);
-    	       
-    	            continue;
-    	        }
-
-    	        // Movimiento
-    	        if (enemigo.getY() <= 50) {
-    	        	
-    	            enemigo.moverAbajo();
-    	           
-    	        }else {
-    	       
-    	        	if(enemigo.getDisparo()==null) {
-    	        		Herramientas.play("juego/disparo.wav");
-        	    		enemigo.disparo(p);
-        	    		enemigo.setDisparoTocoJugador(false);
-        	    
-        	    	}
-    	        	 if(enemigo.getDisparo()!=null) {
-         	    		enemigo.getDisparo().dibujar(entorno);
-         	    		enemigo.getDisparo().mover();
-if(enemigo.disparoColisionaJugador(p)){
-    Herramientas.play("juego/explocion.wav");
-	vidas=convertirANUllLaVida(entorno, vidas, p);
-}
-         	    	}
-    	        	if(enemigo.getDireccion().equals("derecha")) {
-    	        		enemigo.moverDerecha();
-    	        		if(enemigo.cambiarDireccionDerecha(entorno)) {
-    	        			enemigo.setDireccion("izquierda");
-    	        		}
-    	        	}else {
-    	        		
-    	        		enemigo.moverIzquierda();
-    	        		if(	enemigo.cambiarDireccionIzquierda(entorno)) {
-    	        			enemigo.setDireccion("derecha");
-    	        		}
-    	        	
-    	        	}
-    	        }
-    	    }
-    	}
+   
 //    while(enemigosVivos<limiteEnemigos) {
 
 //	
 //		}
+  controlDeEnemigos2(enemigos2, p, enemigosVivos2, entorno, vidas);
+  controlDeEnemigos(enemigos, p, enemigosVivos, entorno, vidas, obstaculosSuperiores, obstaculosInferiores);
     // Dibujo de los enemigos y control de colisiones entre los obstaculos y el jugador
-	for (int i=0;i<enemigos.length;i++) {
-			Enemigo enemigo=enemigos[i];
-		
-		
-			if(enemigo!=null) {
-				
-				if(p.getDisparo()!=null) {
-					if(p.getDisparo().colisionaDisparoConEnemigo(enemigo)) {
-						enemigo=null;
-						enemigos[i]=enemigo;
-						p.setDisparo(null);
-						  enemigosVivos--;
-						  Herramientas.play("juego/explocion.wav");
-					}
-					
-					
-				}
-			
-				for(Obstaculo o :obstaculosSuperiores) {
-					if(enemigo!=null && o!=null && enemigo.colisionaConObstaculo(o)) {
-						enemigo=null;
-						enemigos[i]=enemigo;
-						enemigosVivos--;
-				
-					}
-				}
-				for(Obstaculo o1 :obstaculosInferiores) {
-					if(enemigo!=null &&o1!=null && enemigo.colisionaConObstaculo(o1)) {
-						enemigo=null;
-						enemigos[i]=enemigo;
-						enemigosVivos--;
-				
-					}
-				}
-
-				if (enemigo != null && enemigo.colisionaConBarrera(p)) {
-					enemigo=null;
-					enemigos[i]=enemigo;
-					enemigosVivos--;
-					  Herramientas.play("juego/explocion.wav");
-				}
-				
-				if(enemigo!=null) {
-					enemigo.dibujar(entorno);
-					if (enemigo.colisionaConElJugador(p)) {
-						enemigo=null;
-						enemigos[i]=enemigo;
-			        	enemigosVivos--;
-			        	  Herramientas.play("juego/explocion.wav");
-						vidas = convertirANUllLaVida(entorno, vidas, p);
-			            
-			        }else {
-			        	if(enemigo.getDireccion().equals("izquierda")) {
-							enemigo.moverIzquierda();
-							if(enemigo.esDestruiblePorIzquierda(entorno)) {
-								enemigo=null;
-								enemigos[i]=enemigo;
-								enemigosVivos--;
-							
-							}
-						
-						}
-						else {
-							enemigo.moverDerecha();		
-							if(enemigo.esDestruibleDerecha(entorno)) {
-								
-								enemigo=null;
-								enemigos[i]=enemigo;
-								enemigosVivos--;
-							}
-							
-						
-						}
-			        }
-				}
-			
-				
-			
-				
-		
-		}
-				
-		}
+	
 	
     //Repetición de la linea superior de niveles
 	if(!p.isPerdio()) {
@@ -744,8 +485,284 @@ if(enemigo.disparoColisionaJugador(p)){
 		}
 		return enemigos;
 	}
-	
+	// Método rápido para dibujar cualquier grupo de obstáculos
+	public static void dibujarTodosLosObstaculos(Obstaculo[] sup, Obstaculo[] inf, Obstaculo[] base, Entorno e) {
+	    for (Obstaculo o : sup) {
+	        if (o != null) o.dibujar(e);
+	    }
+	    for (Obstaculo o : inf) {
+	        if (o != null) o.dibujar(e);
+	    }
+	    for (Obstaculo o : base) {
+	        if (o != null) o.dibujar(e);
+	    }
+	}
 
+	// Métodos de detección individuales
+	public static boolean detectaColisionIzquierda(Obstaculo[] sup, Obstaculo[] inf, Obstaculo[] base, Personaje p) {
+	    // 1. Revisa los superiores
+	    for (Obstaculo o : sup) {
+	        if (o != null && p.colisionaPorIzquierda(o)) return true;
+	    }
+	    // 2. Revisa los inferiores
+	    for (Obstaculo o : inf) {
+	        if (o != null && p.colisionaPorIzquierda(o)) return true;
+	    }
+	    // 3. Revisa la base
+	    for (Obstaculo o : base) {
+	        if (o != null && p.colisionaPorIzquierda(o)) return true;
+	    }
+	    return false; // Si no chocó con ninguno de los tres, devuelve false
+	}
+
+	public static boolean detectaColisionDerecha(Obstaculo[] sup, Obstaculo[] inf, Obstaculo[] base, Personaje p) {
+	    for (Obstaculo o : sup) {
+	        if (o != null && p.colisionaPorDerecha(o)) return true;
+	    }
+	    for (Obstaculo o : inf) {
+	        if (o != null && p.colisionaPorDerecha(o)) return true;
+	    }
+	    for (Obstaculo o : base) {
+	        if (o != null && p.colisionaPorDerecha(o)) return true;
+	    }
+	    return false;
+	}
+
+	public static boolean detectaColisionArriba(Obstaculo[] sup, Obstaculo[] inf, Obstaculo[] base, Personaje p) {
+	    for (Obstaculo o : sup) {
+	        if (o != null && p.colisionaPorArriba(o)) return true;
+	    }
+	    for (Obstaculo o : inf) {
+	        if (o != null && p.colisionaPorArriba(o)) return true;
+	    }
+	    for (Obstaculo o : base) {
+	        if (o != null && p.colisionaPorArriba(o)) return true;
+	    }
+	    return false;
+	}
+
+	public static boolean detectaColisionAbajo(Obstaculo[] sup, Obstaculo[] inf, Obstaculo[] base, Personaje p) {
+	    for (Obstaculo o : sup) {
+	        if (o != null && p.colisionaPorDebajo(o)) return true;
+	    }
+	    for (Obstaculo o : inf) {
+	        if (o != null && p.colisionaPorDebajo(o)) return true;
+	    }
+	    for (Obstaculo o : base) {
+	        if (o != null && p.colisionaPorDebajo(o)) return true;
+	    }
+	    return false;
+	}
+  public static void generarEnemigosRandom(Enemigo[] enemigos, Personaje p,Entorno entorno,int enemigosVivos) {
+      for (int i=0;i<enemigos.length;i++) {
+    	  if(enemigos[i]==null && enemigosVivos<enemigos.length && !p.isGano() && !p.isPerdio()) {
+    			Random randomEnemigos=new Random();
+    			   int numeroAleatorio=randomEnemigos.nextInt(0,2);
+    			   int posAleatoria=randomEnemigos.nextInt(550-300+1)+300;
+    			   int posAleatoria2=randomEnemigos.nextInt(200- 100+1)+100;
+    			   if(numeroAleatorio==0) {
+    				   Enemigo e=new Enemigo(entorno.ancho()+posAleatoria2, posAleatoria, 40, 40,"izquierda");
+    					
+    				   enemigos[i]=e;
+
+    			   }else {
+    				   Enemigo e= new Enemigo(0-posAleatoria2, posAleatoria, 40, 40,"derecha");
+    					
+    				   enemigos[i]=e;
+    			   }
+    			   enemigosVivos++;
+    	  }
+      }
+  }
+  public static void generarEnemigosRandom2(Enemigo2[] enemigos2, Personaje p,Entorno entorno,int enemigosVivos2) {
+	     for (int i=0;i<enemigos2.length;i++) {
+	    	    
+	    	  if(enemigos2[i]==null && enemigosVivos2<enemigos2.length  && !p.isGano() && !p.isPerdio()) {
+	    			Random randomEnemigos=new Random();
+	    				int direccion=randomEnemigos.nextInt(0,2);
+	    			   int posAleatoria=randomEnemigos.nextInt(1000-800+1)+800;
+	    			   int posAleatoria2=randomEnemigos.nextInt(entorno.ancho()- 0+1)+0;
+	    			   	if(direccion==0) {
+	    			   	 Enemigo2 e=new Enemigo2(posAleatoria2, 0-posAleatoria, 40, 40,"derecha");
+	    			     enemigos2[i]=e;
+	    			   	}else {
+	    			    	 Enemigo2 e=new Enemigo2(posAleatoria2, 0-posAleatoria, 40, 40,"izquierda");
+	    			    	   enemigos2[i]=e;
+	    			   	}
+	    				  
+	    					
+	    				
+	    				
+	    			
+	    			   enemigosVivos2++;
+	 
+	      }
+	      }
+  }
+  public static void controlDeEnemigos2(Enemigo2[] enemigos2,Personaje p, int enemigosVivos2,Entorno entorno,MostradorDeVida[] vidas ) {
+	   for (int i = 0; i < enemigos2.length; i++) {
+
+   	    Enemigo2 enemigo = enemigos2[i];
+
+   	    if (enemigo != null && !p.isGano() && !p.isPerdio()) {
+   	    
+   	    	
+   	        // Colisión con disparo
+   	        if (p.getDisparo() != null &&
+   	            p.getDisparo().colisionaDisparoConEnemigo2(enemigo)) {
+   	        	Herramientas.play("juego/explocion.wav");
+   	            enemigos2[i] = null;
+   	            p.setDisparo(null);
+   	            enemigosVivos2--;
+   	            continue;
+   	        }
+
+   	        // Colisión con barrera
+   	        if (enemigo.colisionaConBarrera(p)) {
+
+   	            enemigos2[i] = null;
+   	            enemigosVivos2--;
+   	            Herramientas.play("juego/explocion.wav");
+   	            continue;
+   	        }
+
+   	      
+   	        // Dibujar enemigo
+   	        enemigo.dibujar(entorno);
+
+   	        // Colisión con jugador
+   	        if (enemigo.colisionaConElJugador(p) ) {
+   	        
+   	            enemigos2[i] = null;
+   	            enemigosVivos2--;
+   	            vidas = convertirANUllLaVida(entorno, vidas, p);
+   	       
+   	            continue;
+   	        }
+
+   	        // Movimiento
+   	        if (enemigo.getY() <= 50) {
+   	        	
+   	            enemigo.moverAbajo();
+   	           
+   	        }else {
+   	       
+   	        	if(enemigo.getDisparo()==null) {
+   	        		Herramientas.play("juego/disparo.wav");
+       	    		enemigo.disparo(p);
+       	    		enemigo.setDisparoTocoJugador(false);
+       	    
+       	    	}
+   	        	 if(enemigo.getDisparo()!=null) {
+        	    		enemigo.getDisparo().dibujar(entorno);
+        	    		enemigo.getDisparo().mover();
+if(enemigo.disparoColisionaJugador(p)){
+   Herramientas.play("juego/explocion.wav");
+	vidas=convertirANUllLaVida(entorno, vidas, p);
+}
+        	    	}
+   	        	if(enemigo.getDireccion().equals("derecha")) {
+   	        		enemigo.moverDerecha();
+   	        		if(enemigo.cambiarDireccionDerecha(entorno)) {
+   	        			enemigo.setDireccion("izquierda");
+   	        		}
+   	        	}else {
+   	        		
+   	        		enemigo.moverIzquierda();
+   	        		if(	enemigo.cambiarDireccionIzquierda(entorno)) {
+   	        			enemigo.setDireccion("derecha");
+   	        		}
+   	        	
+   	        	}
+   	        }
+   	    }
+   	}
+  }
+  public static void controlDeEnemigos(Enemigo[] enemigos,Personaje p, int enemigosVivos,Entorno entorno,MostradorDeVida[] vidas,Obstaculo[] obstaculosSuperiores,Obstaculo[]obstaculosInferiores ) {
+	  for (int i=0;i<enemigos.length;i++) {
+			Enemigo enemigo=enemigos[i];
+		
+		
+			if(enemigo!=null) {
+				
+				if(p.getDisparo()!=null) {
+					if(p.getDisparo().colisionaDisparoConEnemigo(enemigo)) {
+						enemigo=null;
+						enemigos[i]=enemigo;
+						p.setDisparo(null);
+						  enemigosVivos--;
+						  Herramientas.play("juego/explocion.wav");
+					}
+					
+					
+				}
+			
+				for(Obstaculo o :obstaculosSuperiores) {
+					if(enemigo!=null && o!=null && enemigo.colisionaConObstaculo(o)) {
+						enemigo=null;
+						enemigos[i]=enemigo;
+						enemigosVivos--;
+				
+					}
+				}
+				for(Obstaculo o1 :obstaculosInferiores) {
+					if(enemigo!=null &&o1!=null && enemigo.colisionaConObstaculo(o1)) {
+						enemigo=null;
+						enemigos[i]=enemigo;
+						enemigosVivos--;
+				
+					}
+				}
+
+				if (enemigo != null && enemigo.colisionaConBarrera(p)) {
+					enemigo=null;
+					enemigos[i]=enemigo;
+					enemigosVivos--;
+					  Herramientas.play("juego/explocion.wav");
+				}
+				
+				if(enemigo!=null) {
+					enemigo.dibujar(entorno);
+					if (enemigo.colisionaConElJugador(p)) {
+						enemigo=null;
+						enemigos[i]=enemigo;
+			        	enemigosVivos--;
+			        	  Herramientas.play("juego/explocion.wav");
+						vidas = convertirANUllLaVida(entorno, vidas, p);
+			            
+			        }else {
+			        	if(enemigo.getDireccion().equals("izquierda")) {
+							enemigo.moverIzquierda();
+							if(enemigo.esDestruiblePorIzquierda(entorno)) {
+								enemigo=null;
+								enemigos[i]=enemigo;
+								enemigosVivos--;
+							
+							}
+						
+						}
+						else {
+							enemigo.moverDerecha();		
+							if(enemigo.esDestruibleDerecha(entorno)) {
+								
+								enemigo=null;
+								enemigos[i]=enemigo;
+								enemigosVivos--;
+							}
+							
+						
+						}
+			        }
+				}
+			
+				
+			
+				
+		
+		}
+				
+		}
+ }
 	@SuppressWarnings("unused")
 	public static void main(String[] args)
 	{

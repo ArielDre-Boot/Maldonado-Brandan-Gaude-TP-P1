@@ -112,6 +112,42 @@ public class Enemigo {
 		return false;
 	}
 
+	public Enemigo[] estaColicionando(Personaje p, Enemigo[] enemigos, Entorno e, int i, Obstaculo[] obstaculosSuperiores, Obstaculo[] obstaculosInferiores) {
+		Enemigo enemigo = enemigos[i];
+		if (p.getDisparo() != null) {
+			if (p.getDisparo().colisionaDisparoConEnemigo(enemigo)) {
+				enemigo = null;
+				enemigos[i] = enemigo;
+				p.setDisparo(null);
+				Herramientas.play("juego/explocion.wav");
+				return enemigos;
+			}
+
+		}
+		for (Obstaculo o : obstaculosSuperiores) {
+			if (enemigo != null && o != null && enemigo.colisionaConObstaculo(o)) {
+				enemigo = null;
+				enemigos[i] = enemigo;
+				return enemigos;
+			}
+		}
+		for (Obstaculo o1 : obstaculosInferiores) {
+			if (enemigo != null && o1 != null && enemigo.colisionaConObstaculo(o1)) {
+				enemigo = null;
+				enemigos[i] = enemigo;
+				return enemigos;
+			}
+		}
+		if (enemigo != null && enemigo.colisionaConBarrera(p)) {
+			enemigo = null;
+			enemigos[i] = enemigo;
+			Herramientas.play("juego/explocion.wav");
+			return enemigos;
+		}
+		return enemigos;
+		
+	}
+	
 	public int getX() {
 		return x;
 	}

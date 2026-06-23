@@ -68,7 +68,7 @@ public class Juego extends InterfaceJuego
 		//se crean las vidas
 		for(int j = 0; j < p.getVida(); j++) {
 			MostradorDeVida v = new MostradorDeVida(j*50+50, 50);
-			vidas[j]=v;
+			p.getVidas[j]=v;
 		}
 		
 		//crea el texto
@@ -313,40 +313,9 @@ if(enemigo.disparoColisionaJugador(p)){
 		
 			if(enemigo!=null) {
 				
-				if(p.getDisparo()!=null) {
-					if(p.getDisparo().colisionaDisparoConEnemigo(enemigo)) {
-						enemigo=null;
-						enemigos[i]=enemigo;
-						p.setDisparo(null);
-						  enemigosVivos--;
-						  Herramientas.play("juego/explocion.wav");
-					}
-					
-					
-				}
-			
-				for(Obstaculo o :obstaculosSuperiores) {
-					if(enemigo!=null && o!=null && enemigo.colisionaConObstaculo(o)) {
-						enemigo=null;
-						enemigos[i]=enemigo;
-						enemigosVivos--;
-				
-					}
-				}
-				for(Obstaculo o1 :obstaculosInferiores) {
-					if(enemigo!=null &&o1!=null && enemigo.colisionaConObstaculo(o1)) {
-						enemigo=null;
-						enemigos[i]=enemigo;
-						enemigosVivos--;
-				
-					}
-				}
-
-				if (enemigo != null && enemigo.colisionaConBarrera(p)) {
-					enemigo=null;
-					enemigos[i]=enemigo;
+				enemigo.estaColicionando(p, enemigos, entorno, i, obstaculosSuperiores, obstaculosInferiores);
+				if (enemigos[i] ==null) {
 					enemigosVivos--;
-					  Herramientas.play("juego/explocion.wav");
 				}
 				
 				if(enemigo!=null) {

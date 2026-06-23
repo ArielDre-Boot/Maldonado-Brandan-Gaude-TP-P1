@@ -68,7 +68,7 @@ public class Juego extends InterfaceJuego
 		//se crean las vidas
 		for(int j = 0; j < p.getVida(); j++) {
 			MostradorDeVida v = new MostradorDeVida(j*50+50, 50);
-			vidas[j]=v;
+			p.getVidas[j]=v;
 		}
 		
 		//crea el texto
@@ -130,7 +130,62 @@ public class Juego extends InterfaceJuego
   controlDeEnemigos2(enemigos2, p, enemigosVivos2, entorno, vidas);
   controlDeEnemigos(enemigos, p, enemigosVivos, entorno, vidas, obstaculosSuperiores, obstaculosInferiores);
     // Dibujo de los enemigos y control de colisiones entre los obstaculos y el jugador
+<<<<<<< HEAD
 	
+=======
+	for (int i=0;i<enemigos.length;i++) {
+			Enemigo enemigo=enemigos[i];
+		
+		
+			if(enemigo!=null) {
+				
+				enemigo.estaColicionando(p, enemigos, entorno, i, obstaculosSuperiores, obstaculosInferiores);
+				if (enemigos[i] ==null) {
+					enemigosVivos--;
+				}
+				
+				if(enemigo!=null) {
+					enemigo.dibujar(entorno);
+					if (enemigo.colisionaConElJugador(p)) {
+						enemigo=null;
+						enemigos[i]=enemigo;
+			        	enemigosVivos--;
+			        	  Herramientas.play("juego/explocion.wav");
+						vidas = convertirANUllLaVida(entorno, vidas, p);
+			            
+			        }else {
+			        	if(enemigo.getDireccion().equals("izquierda")) {
+							enemigo.moverIzquierda();
+							if(enemigo.esDestruiblePorIzquierda(entorno)) {
+								enemigo=null;
+								enemigos[i]=enemigo;
+								enemigosVivos--;
+							
+							}
+						
+						}
+						else {
+							enemigo.moverDerecha();		
+							if(enemigo.esDestruibleDerecha(entorno)) {
+								
+								enemigo=null;
+								enemigos[i]=enemigo;
+								enemigosVivos--;
+							}
+							
+						
+						}
+			        }
+				}
+			
+				
+			
+				
+		
+		}
+				
+		}
+>>>>>>> branch 'main' of https://github.com/ArielDre-Boot/Maldonado-Brandan-Gaude-TP-P1.git
 	
     //Repetición de la linea superior de niveles
 	if(!p.isPerdio()) {

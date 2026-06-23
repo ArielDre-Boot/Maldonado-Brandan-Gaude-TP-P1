@@ -131,58 +131,7 @@ public class Juego extends InterfaceJuego
   controlDeEnemigos(enemigos, p, enemigosVivos, entorno, vidas, obstaculosSuperiores, obstaculosInferiores);
     // Dibujo de los enemigos y control de colisiones entre los obstaculos y el jugador
 
-	for (int i=0;i<enemigos.length;i++) {
-			Enemigo enemigo=enemigos[i];
-		
-		
-			if(enemigo!=null) {
-				
-				enemigo.estaColicionando(p, enemigos, entorno, i, obstaculosSuperiores, obstaculosInferiores);
-				if (enemigos[i] ==null) {
-					enemigosVivos--;
-				}
-				
-				if(enemigo!=null) {
-					enemigo.dibujar(entorno);
-					if (enemigo.colisionaConElJugador(p)) {
-						enemigo=null;
-						enemigos[i]=enemigo;
-			        	enemigosVivos--;
-			        	  Herramientas.play("juego/explocion.wav");
-						vidas = convertirANUllLaVida(entorno, vidas, p);
-			            
-			        }else {
-			        	if(enemigo.getDireccion().equals("izquierda")) {
-							enemigo.moverIzquierda();
-							if(enemigo.esDestruiblePorIzquierda(entorno)) {
-								enemigo=null;
-								enemigos[i]=enemigo;
-								enemigosVivos--;
-							
-							}
-						
-						}
-						else {
-							enemigo.moverDerecha();		
-							if(enemigo.esDestruibleDerecha(entorno)) {
-								
-								enemigo=null;
-								enemigos[i]=enemigo;
-								enemigosVivos--;
-							}
-							
-						
-						}
-			        }
-				}
-			
-				
-			
-				
-		
-		}
-				
-		}
+
 	
     //Repetición de la linea superior de niveles
 	if(!p.isPerdio()) {

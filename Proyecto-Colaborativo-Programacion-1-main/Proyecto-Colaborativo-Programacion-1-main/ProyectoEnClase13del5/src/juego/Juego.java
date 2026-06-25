@@ -12,24 +12,16 @@ public class Juego extends InterfaceJuego
 	// El objeto Entorno que controla el tiempo y otros
 	private Entorno entorno;
 	private Personaje p;
-
 	private Obstaculo[] obstaculosSuperiores= new Obstaculo[8];
 	private Obstaculo[] obstaculosInferiores=new Obstaculo[9];
 	private Obstaculo[] obstaculosBase= new Obstaculo[11];
-
-
-
 	private Castillo castillo;
-    
 	private Enemigo[] enemigos= new Enemigo[5];
-
 	private int enemigosVivos=0;
     private Enemigo2[] enemigos2=new Enemigo2[1];
-
 	private int enemigosVivos2=0;
 	private Escritor t;
 	private MostradorDeVida[] vidas = new MostradorDeVida[10];
-
 	private double x;
 	private double y;
 	private double angulo;
@@ -99,19 +91,13 @@ public class Juego extends InterfaceJuego
     p.dibujar(entorno);
 
   /// Valores booleanos usados para los límites
-    boolean bloqueaIzquierda = false;
-    boolean bloqueaDerecha = false;
-    boolean bloqueaAbajo = false;
-    boolean bloqueaArriba = false;
-
+    boolean bloqueaIzquierda = detectaColisionIzquierda(obstaculosSuperiores, obstaculosInferiores, obstaculosBase, p);
+    boolean bloqueaDerecha   = detectaColisionDerecha(obstaculosSuperiores, obstaculosInferiores, obstaculosBase, p);
+    boolean bloqueaArriba    = detectaColisionArriba(obstaculosSuperiores, obstaculosInferiores, obstaculosBase, p);
+    boolean bloqueaAbajo     = detectaColisionAbajo(obstaculosSuperiores, obstaculosInferiores, obstaculosBase, p);
+    
     /// 1. Dibujamos todo en pantalla con un solo método
     dibujarTodosLosObstaculos(obstaculosSuperiores, obstaculosInferiores, obstaculosBase, entorno);
-
-
-    bloqueaIzquierda = detectaColisionIzquierda(obstaculosSuperiores, obstaculosInferiores, obstaculosBase, p);
-    bloqueaDerecha   = detectaColisionDerecha(obstaculosSuperiores, obstaculosInferiores, obstaculosBase, p);
-    bloqueaArriba    = detectaColisionArriba(obstaculosSuperiores, obstaculosInferiores, obstaculosBase, p);
-    bloqueaAbajo     = detectaColisionAbajo(obstaculosSuperiores, obstaculosInferiores, obstaculosBase, p);
 
     // A partir de aquí, usas tus variables booleanas normales para mover o frenar al personaje...ables para frenar al personaje.
   generarEnemigosRandom(enemigos, p, entorno, enemigosVivos);
@@ -134,86 +120,20 @@ public class Juego extends InterfaceJuego
 
 	
     //Repetición de la linea superior de niveles
-	if(!p.isPerdio()) {
-		detectaElMovimiento(entorno,p);
-		int valorY=400; 
-		int anchoObstaculo= 120;
-		int altoObstaculo=20;
-		for(int i=0; i<obstaculosSuperiores.length; i++) {
-			Random valoresRandoms= new Random(); 
-			int numerosRan= valoresRandoms.nextInt(501-200+1)+200;
-			if(obstaculosSuperiores[i]==null && !p.getEnMovimiento()) { 
-				Obstaculo o= new Obstaculo (500*i+numerosRan, valorY, anchoObstaculo, altoObstaculo); 
-				obstaculosSuperiores[i]=o; } 
-			if (obstaculosSuperiores[i]!=null && p.getEnMovimiento()){ 
-				obstaculosSuperiores[i].setX(obstaculosSuperiores[i].getX()-2); }
-			obstaculosSuperiores[i].dibujar(entorno);
-		}
-	    
-	    /*for(Obstaculo a: obstaculos) {
-	    		if(p.getEnMovimiento()) {
-	    			a.setX(a.getX()-2);}
-	    		if(a.bordeDerecho()<0) {
-	    			Random ran=new Random();
-	    			int r= ran.nextInt(entorno.alto());
-	    			a.setX(entorno.ancho()+r/2);
-	    	}
-	    		
-	    }*/
+  	repeticionNivelesSuperiores(entorno, p, obstaculosSuperiores);
 	 
-	    //Repetición de la linea inferior de niveles
-	    detectaElMovimiento(entorno,p); 
-	    int anchoObstaculo1= 120;
-		for(int i=0; i<obstaculosInferiores.length; i++) {
-			int valorY1=500;
-			Random valoresRandoms= new Random(); 
-			int numerosRan= valoresRandoms.nextInt(401-200+1)+200;
-			if(obstaculosInferiores[i]==null &&  !p.getEnMovimiento()) { 
-				Obstaculo o= new Obstaculo (400*i+numerosRan, valorY1, anchoObstaculo1, altoObstaculo); 
-				obstaculosInferiores[i]=o; } 
-			if (obstaculosInferiores[i]!=null && p.getEnMovimiento()){ 
-				obstaculosInferiores[i].setX(obstaculosInferiores[i].getX()-2); 
-				} 
-			obstaculosInferiores[i].dibujar(entorno);
-		}
-		//Repeticion de la linea de las bases 
-		detectaElMovimiento(entorno,p);
-		for(int i=0; i<obstaculosBase.length; i++) {
-			if(obstaculosBase[i]==null && !p.getEnMovimiento()) {
-				Obstaculo o= new Obstaculo(400*i,595,290,40);
-				obstaculosBase[i]=o;
-			}
-			if(obstaculosBase[i]!=null && p.getEnMovimiento()) {
-				obstaculosBase[i].setX(obstaculosBase[i].getX()-2);
-			}
-			if (i == obstaculosBase.length -1) {
-				castillo.setX(obstaculosBase[i].getX());
-				//castillo.setY(obstaculosBase[i].getY() + castillo.bordeInferior());
-			}
-			obstaculosBase[i].dibujarBase(entorno);
-
-		}
-
+	//Repetición de la linea inferior de niveles
+  	repeticionNivelesInferiores(entorno, p,  obstaculosInferiores);
 		
-    
-   
+  	//Repeticion de la linea de las bases 
+  	repeticionNivelesBase(entorno, p, obstaculosBase, castillo);
+	
+  	//Creación y posicion castillo
     castillo.dibujar(entorno);
-	if (p.isSeMueve() == true) {
-		castillo.setX(castillo.getX() - 1);
-	}
-   if(p.isGano()) {
-   	
-		t.dibujar('W', entorno);
-	};
+    castilloPosicion(entorno,  p,  castillo,  t);
  
     //posicion del personaje en mitad de pantalla
-    if(p.getX()>entorno.ancho()/2){
-
-		p.setX((entorno.ancho()/2));
-	
-		
-
-	}
+    personajeMitadPantalla(entorno, p);
 
     if(!p.isGano() && !p.isPerdio()) {
     	  controlMovimientoJugador(
@@ -241,20 +161,18 @@ public class Juego extends InterfaceJuego
 	{
 		vidas = convertirANUllLaVida(entorno, vidas, p);
 	}
-	}
+
 	if (p.isGano() || p.isPerdio()) {
 		Image icono= Herramientas.cargarImagen("juego/Corazon.jpg");
         this.imagenFondoTermino = icono;
+			}
 	}
-}
-	
 	else {
 			entorno.dibujarImagen(imagenFondoTermino, 400, 300, 0, 0.08);
 			if (p.isPerdio()) {
 				t.dibujar('L', entorno);
 			}
 			if (p.isGano()) {
-
 				t.dibujar('W', entorno);
 			}
 			if (entorno.sePresiono('r') || entorno.sePresiono('R')) {
@@ -271,12 +189,77 @@ public class Juego extends InterfaceJuego
 				obstaculosBase=new Obstaculo[11];
 			}
 		}
-}	
-	
-
+	}
 	
 	
 	
+	public static void repeticionNivelesBase(Entorno entorno, Personaje p, Obstaculo[] obstaculosBase, Castillo castillo) {
+		detectaElMovimiento(entorno,p);
+		for(int i=0; i<obstaculosBase.length; i++) {
+			if(obstaculosBase[i]==null && !p.getEnMovimiento()) {
+				Obstaculo o= new Obstaculo(400*i,595,290,40);
+				obstaculosBase[i]=o;
+			}
+			if(obstaculosBase[i]!=null && p.getEnMovimiento()) {
+				obstaculosBase[i].setX(obstaculosBase[i].getX()-2);
+			}
+			if (i == obstaculosBase.length -1) {
+				castillo.setX(obstaculosBase[i].getX());
+			}
+			obstaculosBase[i].dibujarBase(entorno);
+		}
+	}
+	
+	public static void repeticionNivelesInferiores(Entorno entorno, Personaje p, Obstaculo[] obstaculosInferiores) {
+		detectaElMovimiento(entorno,p); 
+	    int anchoObstaculo1= 120;
+	    int altoObstaculo=20;
+		for(int i=0; i<obstaculosInferiores.length; i++) {
+			int valorY1=500;
+			Random valoresRandoms= new Random(); 
+			int numerosRan= valoresRandoms.nextInt(401-200+1)+200;
+			if(obstaculosInferiores[i]==null &&  !p.getEnMovimiento()) { 
+				Obstaculo o= new Obstaculo (400*i+numerosRan, valorY1, anchoObstaculo1, altoObstaculo); 
+				obstaculosInferiores[i]=o; } 
+			if (obstaculosInferiores[i]!=null && p.getEnMovimiento()){ 
+				obstaculosInferiores[i].setX(obstaculosInferiores[i].getX()-2); 
+				} 
+			obstaculosInferiores[i].dibujar(entorno);
+		}
+	}
+	
+	public static void repeticionNivelesSuperiores(Entorno entorno, Personaje p, Obstaculo[] obstaculosSuperiores) {
+		if(!p.isPerdio()) {
+			detectaElMovimiento(entorno,p);
+			int valorY=400; 
+			int anchoObstaculo= 120;
+			int altoObstaculo=20;
+			for(int i=0; i<obstaculosSuperiores.length; i++) {
+				Random valoresRandoms= new Random(); 
+				int numerosRan= valoresRandoms.nextInt(501-200+1)+200;
+				if(obstaculosSuperiores[i]==null && !p.getEnMovimiento()) { 
+					Obstaculo o= new Obstaculo (500*i+numerosRan, valorY, anchoObstaculo, altoObstaculo); 
+					obstaculosSuperiores[i]=o; } 
+				if (obstaculosSuperiores[i]!=null && p.getEnMovimiento()){ 
+					obstaculosSuperiores[i].setX(obstaculosSuperiores[i].getX()-2); }
+				obstaculosSuperiores[i].dibujar(entorno);
+			}
+		}
+	}
+	
+	public static void castilloPosicion(Entorno entorno, Personaje p, Castillo castillo, Escritor t) {
+		if (p.isSeMueve() == true) {
+			castillo.setX(castillo.getX() - 1);
+		}
+		if(p.isGano()) {
+			t.dibujar('W', entorno);
+		}
+	}
+	public static void personajeMitadPantalla(Entorno entorno, Personaje p) {
+		if(p.getX()>entorno.ancho()/2){
+			p.setX((entorno.ancho()/2));
+		}
+	}
 	public static void detectaElMovimiento(Entorno a, Personaje b) {
     	if (a.estaPresionada(a.TECLA_DERECHA) && b.getX()>=400) { //se agrego "b.getX()>=400" para que solo se mueba si esta a mitad de pantalla
     		b.setEnMovimiento(true);

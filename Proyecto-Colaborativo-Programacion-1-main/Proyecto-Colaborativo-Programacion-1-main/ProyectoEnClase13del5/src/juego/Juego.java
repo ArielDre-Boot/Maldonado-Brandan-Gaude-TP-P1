@@ -167,16 +167,22 @@ public class Juego extends InterfaceJuego
 				sumarVida(entorno, vidas, p, -1);
 				enemigos = eliminarTodosLosEnemigos(entorno, enemigos);
 				enemigosVivos -= enemigos.length;
-				p.setX(140);
-				p.setY(300);
-				imagenFondoTermino = null;
-				p.setGano(false);
-				p.setPerdio(false);
+				imagenFondoTermino = reiniciar(p, entorno, imagenFondoTermino);
 				obstaculosSuperiores=new Obstaculo[8];
 				obstaculosInferiores=new Obstaculo[9];
 				obstaculosBase=new Obstaculo[11];
 			}
 		}
+}	
+	
+
+	public static Image reiniciar(Personaje p, Entorno entorno, Image imagenFondoTermino) {
+		p.setX(140);
+		p.setY(300);
+		imagenFondoTermino = null;
+		p.setGano(false);
+		p.setPerdio(false);
+		return imagenFondoTermino;
 	}
 	
 	

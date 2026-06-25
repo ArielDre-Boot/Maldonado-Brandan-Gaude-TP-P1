@@ -16,7 +16,7 @@ public class Juego extends InterfaceJuego
 	private Obstaculo[] obstaculosInferiores=new Obstaculo[9];
 	private Obstaculo[] obstaculosBase= new Obstaculo[11];
 	private Castillo castillo;
-	private Enemigo[] enemigos= new Enemigo[5];
+	private Enemigo[] enemigos= new Enemigo[2];
 	private int enemigosVivos=0;
     private Enemigo2[] enemigos2=new Enemigo2[1];
 	private int enemigosVivos2=0;
@@ -87,7 +87,7 @@ public class Juego extends InterfaceJuego
 			vida.dibujar(entorno);
 		}
 	}
-	/*imagen.dibujarImagen(entorno);*/
+	
     p.dibujar(entorno);
 
   /// Valores booleanos usados para los límites
@@ -100,24 +100,12 @@ public class Juego extends InterfaceJuego
     dibujarTodosLosObstaculos(obstaculosSuperiores, obstaculosInferiores, obstaculosBase, entorno);
 
     // A partir de aquí, usas tus variables booleanas normales para mover o frenar al personaje...ables para frenar al personaje.
-  generarEnemigosRandom(enemigos, p, entorno, enemigosVivos);
-  generarEnemigosRandom2(enemigos2, p, entorno, enemigosVivos2);
+    generarEnemigosRandom(enemigos, p, entorno, enemigosVivos);
+  	generarEnemigosRandom2(enemigos2, p, entorno, enemigosVivos2);
 
-  //Generacion de los enemigos de forma aleatoria
+  	controlDeEnemigos2(enemigos2, p, enemigosVivos2, entorno, vidas);
+  	controlDeEnemigos(enemigos, p, enemigosVivos, entorno, vidas, obstaculosSuperiores, obstaculosInferiores);
     
-
- 
-    	 
-   
-//    while(enemigosVivos<limiteEnemigos) {
-
-//	
-//		}
-  controlDeEnemigos2(enemigos2, p, enemigosVivos2, entorno, vidas);
-  controlDeEnemigos(enemigos, p, enemigosVivos, entorno, vidas, obstaculosSuperiores, obstaculosInferiores);
-    // Dibujo de los enemigos y control de colisiones entre los obstaculos y el jugador
-
-
 	
     //Repetición de la linea superior de niveles
   	repeticionNivelesSuperiores(entorno, p, obstaculosSuperiores);
@@ -270,14 +258,6 @@ public class Juego extends InterfaceJuego
     	if(a.estaPresionada(a.TECLA_DERECHA) && a.estaPresionada(a.TECLA_IZQUIERDA)) {
     		b.setEnMovimiento(false);
     		}
-    	/*if(c.getEnPantalla()==true){
-    		for(Obstaculo obs: o) {
-    			obs.setSeMueven(false);
-    		}
-    		for (Obstaculo e: obstaculos) {
-    			e.setSeMueven(false);
-    		}
-    	}*/
 	}
 	
 	public static void controlDelProyectil(Personaje p, Entorno entorno) {
@@ -319,9 +299,7 @@ public class Juego extends InterfaceJuego
 		
 		
 		
-		
-
-		
+	
 		
 		//colicsiones del proyectil
 		if (e.getDisparo()!=null && e.getDisparo().getX() < 0) {
@@ -640,9 +618,11 @@ public class Juego extends InterfaceJuego
    	        	 if(enemigo.getDisparo()!=null) {
         	    		enemigo.getDisparo().dibujar(entorno);
         	    		enemigo.getDisparo().mover();
+        	    		controlDelProyectilEnemigo(enemigo, entorno);
 if(enemigo.disparoColisionaJugador(p)){
    Herramientas.play("juego/explocion.wav");
 	vidas=convertirANUllLaVida(entorno, vidas, p);
+	enemigo.setDisparo(null);
 }
         	    	}
    	        	if(enemigo.getDireccion().equals("derecha")) {

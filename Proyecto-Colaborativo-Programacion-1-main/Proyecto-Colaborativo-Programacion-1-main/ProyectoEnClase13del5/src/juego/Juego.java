@@ -336,9 +336,7 @@ public class Juego extends InterfaceJuego
 		
 		
 		
-		
-
-		
+	
 		
 		//colicsiones del proyectil
 		if (e.getDisparo()!=null && e.getDisparo().getX() < 0) {
@@ -657,9 +655,11 @@ public class Juego extends InterfaceJuego
    	        	 if(enemigo.getDisparo()!=null) {
         	    		enemigo.getDisparo().dibujar(entorno);
         	    		enemigo.getDisparo().mover();
+        	    		controlDelProyectilEnemigo(enemigo, entorno);
 if(enemigo.disparoColisionaJugador(p)){
    Herramientas.play("juego/explocion.wav");
 	vidas=convertirANUllLaVida(entorno, vidas, p);
+	enemigo.setDisparo(null);
 }
         	    	}
    	        	if(enemigo.getDireccion().equals("derecha")) {
